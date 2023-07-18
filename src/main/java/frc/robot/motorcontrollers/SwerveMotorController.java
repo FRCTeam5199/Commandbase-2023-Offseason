@@ -18,7 +18,7 @@ public class SwerveMotorController {
      * @param steeringID        the id of the steering motor to instantiate
      * @param steeringMotorType the type of motor to create. If null, then no steering will be made
      */
-    public SwerveMotorController(int driverID, @Nullable AbstractMotorController.SupportedMotors driverMotorType, int steeringID, @Nullable AbstractMotorController.SupportedMotors steeringMotorType) {
+    public SwerveMotorController(int driverID, AbstractMotorController.SupportedMotors driverMotorType, int steeringID, AbstractMotorController.SupportedMotors steeringMotorType) {
         if (driverMotorType != null) {
             driver = TALON_FX.createMotorOfType("Canivore1", driverID);
             driver.setCurrentLimit(30);

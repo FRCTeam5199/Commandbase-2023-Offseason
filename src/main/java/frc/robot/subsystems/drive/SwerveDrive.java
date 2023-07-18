@@ -35,7 +35,6 @@ public class SwerveDrive extends SubsystemBase
 
     Xbox controller = new Xbox();
 
-    ChassisSpeeds speedpog;
     //Swerves
 
 
