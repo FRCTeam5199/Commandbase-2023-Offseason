@@ -19,7 +19,54 @@ public final class Constants {
 
   }
 
-  public static class DriverConstants {
+  public static class DriveConstants {
     public static final double ROTATION_SPEED = 0.1;
+
+    //Swerve Encoder Ids
+    public static final int ENCODERID_FL = 10;//fix
+    public static final int ENCODERID_FR = 11;//fix
+    public static final int ENCODERID_BL = 12;//fix
+    public static final int ENCODERID_BR = 13;//fix
+
+    //SwerveModule individual motor ids
+    public static final int SWERVEFL_DRIVER = 1;
+    public static final int SWERVEFL_STEER = 2;
+    public static final int SWERVEFR_DRIVER = 3;
+    public static final int SWERVEFR_STEER = 4;
+    public static final int SWERVEBL_DRIVER = 5;
+    public static final int SWERVEBL_STEER = 6;
+    public static final int SWERVEBR_DRIVER = 7;
+    public static final int SWERVEBR_STEER = 8;
+
+    //SwerveModule characteristics
+    public static final double SWERVE_GEAR_RATIO = 6.12;
+    public static final double SWERVE_ANGLE_OFFSET = 1.6;////random number for now
+    public static final double WHEEL_DIAMETER = 0.1016;//meters
+    public static final double[] SWERVEFL_POSITION = {2.0, 3.0};//random number for now
+    public static final double[] SWERVEFR_POSITION = {-2.0, 3.0};//random number for now
+    public static final double[] SWERVEBL_POSITION = {2.0, -3.0};//random number for now
+    public static final double[] SWERVEBR_POSITION = {-2.0, -3.0};//random number for now
+    public static final double MAX_SPEED = 6380;//Rotation per min
+    public static final double SWERVE_RAMP_RATE = 1;//Time it takes to go from 0 to max speed in seconds.
+    public static final double[] PIDF = {.514, .0514, 0, 5.14};
+
+    //Encoder Characteristics
+    public static final double ENCODER_PULSE_RATE = 2048;//hertz
+
+
+    //Pigeon2 ID
+    public static final int Pigeon_2 = 100;//fix
+
+
+
+    
+
+
+
+    
+
+
+
+
   }
 }

@@ -28,6 +28,9 @@ public abstract class AbstractMotorControl {
     
     public abstract void setRealFactorFromMotorRPM(double r2rf, double t2tf);
 
+    //time to max speed.
+    public abstract AbstractMotorControl setOpenLoopRampRate(double timeToMaxSpeed);
+
 
 
     

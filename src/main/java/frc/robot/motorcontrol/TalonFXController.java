@@ -83,6 +83,15 @@ public class TalonFXController extends AbstractMotorControl {
         sensorToRealTimeFactor = t2tf * 60D * 10D / 1D;
     }
 
+    @Override
+    public AbstractMotorControl setOpenLoopRampRate(double timeToMaxSpeed) {
+        talon.configOpenloopRamp(timeToMaxSpeed);
+        return this;
+        
+    }
+
+    
+
 
 
     
