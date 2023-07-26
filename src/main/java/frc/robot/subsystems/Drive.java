@@ -90,9 +90,10 @@ public class Drive extends SubsystemBase {
     public void drive(){
         rotation = controller.getRightX() * Constants.DriveConstants.ROTATION_SPEED;
   
-        swerver.drive(new Translation2d(controller.getLeftX(), controller.getLeftY()), rotation, false, true);
+        swerver.drive(new Translation2d(controller.getLeftX(), controller.getLeftY()), rotation, false, false);
 
         }
+        
         
 
     public void setDrivingPID(){
@@ -118,10 +119,10 @@ public class Drive extends SubsystemBase {
         flsteermotor = new TalonFXSwerve(2, false);
         frdrivermotor = new TalonFXSwerve(3, true);
         frsteermotor = new TalonFXSwerve(4, false);
-        bldrivermotor = new TalonFXSwerve(5, true);
-        blsteermotor = new TalonFXSwerve(6, false);
-        brdrivermotor = new TalonFXSwerve(7, true);
-        brsteermotor = new TalonFXSwerve(8, false);
+        bldrivermotor = new TalonFXSwerve(7, true);
+        blsteermotor = new TalonFXSwerve(8, false);
+        brdrivermotor = new TalonFXSwerve(5, true);
+        brsteermotor = new TalonFXSwerve(6, false);
 
         fldrivermotor.configurePIDF(flDrivePIDF);
         flsteermotor.configurePIDF(flSteerPIDF);
@@ -135,10 +136,10 @@ public class Drive extends SubsystemBase {
     }
 
     public void encoderInit(){
-        fl = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_FL);
-        fr = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_FR);
-        bl = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BL);
-        br = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BR);
+        fl = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_FL, "Canivore1");
+        fr = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_FR, "Canivore1");
+        bl = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BL, "Canivore1");
+        br = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BR, "Canivore1");
     }
 
     public void Swerver(){
@@ -168,7 +169,7 @@ public class Drive extends SubsystemBase {
     public void swerveInit(){
 
 
-        swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "Canivore1"), 6380, false);
+        swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "rio"), 6380, false);
         
         swerveConfiguration = new SwerveControllerConfiguration(swerve, new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]));
         

@@ -72,7 +72,8 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Field": "Field2d",
-      "/SmartDashboard/Pigeon 2 [100]": "Gyro"
+      "/SmartDashboard/Pigeon 2 [100]": "Gyro",
+      "/SmartDashboard/Pigeon 2 [22]": "Gyro"
     }
   }
 }
