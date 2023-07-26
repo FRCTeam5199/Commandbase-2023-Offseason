@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -14,10 +15,12 @@ import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveModuleConfiguration;
 import swervelib.parser.SwerveModulePhysicalCharacteristics;
 import swervelib.SwerveController;
+import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
 
 
-public class SwerveDrive extends SubsystemBase {
+
+public class Drive extends SubsystemBase {
     CommandXboxController controller;
     TalonFXSwerve fldrivermotor;
     TalonFXSwerve flsteermotor;
@@ -27,7 +30,7 @@ public class SwerveDrive extends SubsystemBase {
     TalonFXSwerve blsteermotor;
     TalonFXSwerve brdrivermotor;
     TalonFXSwerve brsteermotor;
-
+    
     CANCoderSwerve fl;
     CANCoderSwerve fr;
     CANCoderSwerve br;
@@ -44,10 +47,12 @@ public class SwerveDrive extends SubsystemBase {
     SwerveModulePhysicalCharacteristics frontRight;
     SwerveModulePhysicalCharacteristics backLeft;
     SwerveModulePhysicalCharacteristics backRight;
+    SwerveIMU swerveIMU;
     SwerveModuleConfiguration frontL;
     SwerveModuleConfiguration frontR;
     SwerveModuleConfiguration backL;
     SwerveModuleConfiguration backR;
+    SwerveDriveConfiguration swerve;
     SwerveModuleConfiguration swerveConfigs[] = {frontL, frontR, backL, backR};
     SwerveModule frontLModule;
     SwerveModule frontRModule;
@@ -55,22 +60,16 @@ public class SwerveDrive extends SubsystemBase {
     SwerveModule backRModule;
 
 
-    SwerveDriveConfiguration swerve;
 
 
-    SwerveIMU swerveIMU;
 
     SwerveControllerConfiguration swerveConfiguration;
 
     SwerveController swerveController;
 
+    SwerveDrive swerver;
+
     
-
-
-
-
-
-
 
 
 
@@ -91,7 +90,7 @@ public class SwerveDrive extends SubsystemBase {
     public void drive(){
         rotation = controller.getRightX() * Constants.DriveConstants.ROTATION_SPEED;
   
-        swerveController.getRawTargetSpeeds(controller.getLeftX(), controller.getLeftY(), rotation);
+        swerver.drive(new Translation2d(controller.getLeftX(), controller.getLeftY()), rotation, false, true);
 
         }
         
@@ -142,31 +141,42 @@ public class SwerveDrive extends SubsystemBase {
         br = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BR);
     }
 
+    public void Swerver(){
+        frontLModule = new SwerveModule(1, frontL);
+        frontRModule = new SwerveModule(2, frontR);
+        backLModule = new SwerveModule(3, backL);
+        backRModule = new SwerveModule(4, backR);
+    }
+
     public void swerveModuleConfiguration(){
         frontLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
         frontRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
         backLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
         backRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
 
-        frontL = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, 6380.0, frontLeft, "Front Left Swerve Module");
-        frontR = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, 6380, frontRight, "Front Right Swerve Module");
-        backL = new SwerveModuleConfiguration(bldrivermotor, blsteermotor, bl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBL_POSITION[0], Constants.DriveConstants.SWERVEBL_POSITION[1], blSteerPIDF, blDrivePIDF, 6380, backLeft, "Back Left Swerve Module");
-        backR = new SwerveModuleConfiguration(brdrivermotor, brsteermotor, br, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBR_POSITION[0], Constants.DriveConstants.SWERVEBR_POSITION[1], brSteerPIDF, brDrivePIDF, 6380, backRight, "Back Right Swerve Module");
+        swerveConfigs[0] = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, 6380.0, frontLeft, "Front Left Swerve Module");
+        swerveConfigs[1] = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, 6380, frontRight, "Front Right Swerve Module");
+        swerveConfigs[2] = new SwerveModuleConfiguration(bldrivermotor, blsteermotor, bl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBL_POSITION[0], Constants.DriveConstants.SWERVEBL_POSITION[1], blSteerPIDF, blDrivePIDF, 6380, backLeft, "Back Left Swerve Module");
+        swerveConfigs[3] = new SwerveModuleConfiguration(brdrivermotor, brsteermotor, br, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBR_POSITION[0], Constants.DriveConstants.SWERVEBR_POSITION[1], brSteerPIDF, brDrivePIDF, 6380, backRight, "Back Right Swerve Module");
+
+        
+
+
     }
 
 
     public void swerveInit(){
-        frontLModule = new SwerveModule(1, frontL);
-        frontRModule = new SwerveModule(2, frontR);
-        backLModule = new SwerveModule(3, backL);
-        backRModule = new SwerveModule(4, backR);
-        
-        
+
+
         swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "Canivore1"), 6380, false);
         
         swerveConfiguration = new SwerveControllerConfiguration(swerve, new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]));
         
         swerveController = new SwerveController(swerveConfiguration);
+
+        swerver = new SwerveDrive(swerve, swerveConfiguration);
+
+
 
     
     }
