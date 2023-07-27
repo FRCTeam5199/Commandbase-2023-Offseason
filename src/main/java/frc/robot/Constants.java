@@ -15,6 +15,8 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final double LEFT_Y_DEADBAND = 0;
+    public static final double LEFT_X_DEADBAND = 0;
 
 
   }
@@ -47,8 +49,8 @@ public final class Constants {
     public static final double[] SWERVEBL_POSITION = {2.0, -3.0};//random number for now
     public static final double[] SWERVEBR_POSITION = {-2.0, -3.0};//random number for now
     public static final double MAX_SPEED = 6380;//Rotation per min
-    public static final double SWERVE_RAMP_RATE = 1;//Time it takes to go from 0 to max speed in seconds.
-    public static final double[] PIDF = {.514, .0514, 0, 5.14};
+    public static final double SWERVE_RAMP_RATE = .01;//Time it takes to go from 0 to max speed in seconds.
+    public static final double[] PIDF = {.0001, .00001, 0, .00011};
 
     //Encoder Characteristics
     public static final double ENCODER_PULSE_RATE = 2048;//hertz

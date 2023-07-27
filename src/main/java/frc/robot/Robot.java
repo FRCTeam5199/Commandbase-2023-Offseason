@@ -19,8 +19,10 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
+  
   private Drive swerve = new Drive();
+
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,7 +50,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    swerve.drive();
+  
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -82,12 +84,13 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.setDriveMode();
+    
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    swerve.drive();
   }
 
   @Override

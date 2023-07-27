@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
 
+import java.io.File;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -14,6 +18,9 @@ import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveModuleConfiguration;
 import swervelib.parser.SwerveModulePhysicalCharacteristics;
+import swervelib.parser.SwerveParser;
+import swervelib.telemetry.SwerveDriveTelemetry;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
@@ -21,7 +28,7 @@ import swervelib.SwerveModule;
 
 
 public class Drive extends SubsystemBase {
-    CommandXboxController controller;
+    XboxController controller;
     TalonFXSwerve fldrivermotor;
     TalonFXSwerve flsteermotor;
     TalonFXSwerve frdrivermotor;
@@ -67,7 +74,7 @@ public class Drive extends SubsystemBase {
 
     SwerveController swerveController;
 
-    SwerveDrive swerver;
+    public SwerveDrive swerver;
 
     
 
@@ -75,8 +82,9 @@ public class Drive extends SubsystemBase {
 
     double rotation;
 
+
     public void init(){
-        controller = new CommandXboxController(0);
+        controller = new XboxController(0);
         setDrivingPID();
         setSteeringPID();
         motorInit();
@@ -87,14 +95,13 @@ public class Drive extends SubsystemBase {
 
     }
 
-    public void drive(){
-        rotation = controller.getRightX() * Constants.DriveConstants.ROTATION_SPEED;
-  
-        swerver.drive(new Translation2d(controller.getLeftX(), controller.getLeftY()), rotation, false, false);
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop){
 
-        }
+        swerver.drive(translation, rotation, false, false);        
+
+
         
-        
+    }
 
     public void setDrivingPID(){
         flDrivePIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
@@ -115,14 +122,14 @@ public class Drive extends SubsystemBase {
     }
 
     public void motorInit(){
-        fldrivermotor = new TalonFXSwerve(1, true);
-        flsteermotor = new TalonFXSwerve(2, false);
-        frdrivermotor = new TalonFXSwerve(3, true);
-        frsteermotor = new TalonFXSwerve(4, false);
-        bldrivermotor = new TalonFXSwerve(7, true);
-        blsteermotor = new TalonFXSwerve(8, false);
-        brdrivermotor = new TalonFXSwerve(5, true);
-        brsteermotor = new TalonFXSwerve(6, false);
+        fldrivermotor = new TalonFXSwerve(1, "Canivore1", true);
+        flsteermotor = new TalonFXSwerve(2, "Canivore1", false);
+        frdrivermotor = new TalonFXSwerve(3, "Canivore1", true);
+        frsteermotor = new TalonFXSwerve(4, "Canivore1", false);
+        bldrivermotor = new TalonFXSwerve(5, "Canivore1", true);
+        blsteermotor = new TalonFXSwerve(6, "Canivore1", false);
+        brdrivermotor = new TalonFXSwerve(7, "Canivore1", true);
+        brsteermotor = new TalonFXSwerve(8, "Canivore1", false);
 
         fldrivermotor.configurePIDF(flDrivePIDF);
         flsteermotor.configurePIDF(flSteerPIDF);
@@ -168,17 +175,67 @@ public class Drive extends SubsystemBase {
 
     public void swerveInit(){
 
+        swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "rio"), 1, false);
 
-        swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "rio"), 6380, false);
-        
         swerveConfiguration = new SwerveControllerConfiguration(swerve, new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]));
         
         swerveController = new SwerveController(swerveConfiguration);
 
         swerver = new SwerveDrive(swerve, swerveConfiguration);
 
-
-
     
+    }
+    public SwerveController getSwerveController(){
+
+        setDrivingPID();
+        setSteeringPID();
+        fldrivermotor = new TalonFXSwerve(1, "Canivore1", true);
+        flsteermotor = new TalonFXSwerve(2, "Canivore1", false);
+        frdrivermotor = new TalonFXSwerve(3, "Canivore1", true);
+        frsteermotor = new TalonFXSwerve(4, "Canivore1", false);
+        bldrivermotor = new TalonFXSwerve(5, "Canivore1", true);
+        blsteermotor = new TalonFXSwerve(6, "Canivore1", false);
+        brdrivermotor = new TalonFXSwerve(7, "Canivore1", true);
+        brsteermotor = new TalonFXSwerve(8, "Canivore1", false);
+
+
+        fldrivermotor.configurePIDF(flDrivePIDF);
+        flsteermotor.configurePIDF(flSteerPIDF);
+        frdrivermotor.configurePIDF(frDrivePIDF);
+        frsteermotor.configurePIDF(frSteerPIDF);
+        bldrivermotor.configurePIDF(blDrivePIDF);
+        blsteermotor.configurePIDF(blSteerPIDF);
+        brdrivermotor.configurePIDF(brDrivePIDF);
+        brsteermotor.configurePIDF(brSteerPIDF);
+
+        frontLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
+        frontRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
+        backLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
+        backRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, 1, 1, 2048, 2048);
+
+        swerveConfigs[0] = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, 6380.0, frontLeft, "Front Left Swerve Module");
+        swerveConfigs[1] = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, 6380, frontRight, "Front Right Swerve Module");
+        swerveConfigs[2] = new SwerveModuleConfiguration(bldrivermotor, blsteermotor, bl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBL_POSITION[0], Constants.DriveConstants.SWERVEBL_POSITION[1], blSteerPIDF, blDrivePIDF, 6380, backLeft, "Back Left Swerve Module");
+        swerveConfigs[3] = new SwerveModuleConfiguration(brdrivermotor, brsteermotor, br, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBR_POSITION[0], Constants.DriveConstants.SWERVEBR_POSITION[1], brSteerPIDF, brDrivePIDF, 6380, backRight, "Back Right Swerve Module");
+
+
+        swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "rio"), 1, false);
+
+        
+        swerveConfiguration = new SwerveControllerConfiguration(swerve, new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]));
+        
+        swerveController = new SwerveController(swerveConfiguration);
+
+        return swerveController;
+    }
+
+    public Rotation2d getHeading(){
+        swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "rio"), 1, false);
+
+        swerveConfiguration = new SwerveControllerConfiguration(swerve, new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]));
+        swerver = new SwerveDrive(swerve, swerveConfiguration);
+
+        
+      return swerver.getYaw();
     }
 }
