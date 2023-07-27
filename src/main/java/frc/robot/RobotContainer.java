@@ -43,7 +43,7 @@ Teleop simClosedFieldRel = new Teleop(drivebase,
           OperatorConstants.LEFT_Y_DEADBAND),
 () -> MathUtil.applyDeadband(m_driverController.getLeftX(),
           OperatorConstants.LEFT_X_DEADBAND),
-() -> m_driverController.getRawAxis(2), () -> true, false, true);
+() -> m_driverController.getRawAxis(0), () -> true, false, true);
 
 
 
