@@ -108,25 +108,22 @@ public class Drive extends SubsystemBase {
 
         swerver.drive(translation, rotation, false, false);    
         
-        SmartDashboard.putNumber("Front Left Encoder", fr.getAbsolutePosition());
-        SmartDashboard.putNumber("Front Right Encoder", fr.getAbsolutePosition());
-        SmartDashboard.putNumber("Back Left Encoder", bl.getAbsolutePosition());
-        SmartDashboard.putNumber("Back Right Encoder", br.getAbsolutePosition());
+
        
     }
 
     public void setDrivingPID(){
-        flDrivePIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
-        frDrivePIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
-        blDrivePIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
-        brDrivePIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
+        flDrivePIDF = new PIDFConfig(Constants.DriveConstants.DRIVING_PIDF[0], Constants.DriveConstants.DRIVING_PIDF[1], Constants.DriveConstants.DRIVING_PIDF[2], Constants.DriveConstants.DRIVING_PIDF[3]);
+        frDrivePIDF = new PIDFConfig(Constants.DriveConstants.DRIVING_PIDF[0], Constants.DriveConstants.DRIVING_PIDF[1], Constants.DriveConstants.DRIVING_PIDF[2], Constants.DriveConstants.DRIVING_PIDF[3]);
+        blDrivePIDF = new PIDFConfig(Constants.DriveConstants.DRIVING_PIDF[0], Constants.DriveConstants.DRIVING_PIDF[1], Constants.DriveConstants.DRIVING_PIDF[2], Constants.DriveConstants.DRIVING_PIDF[3]);
+        brDrivePIDF = new PIDFConfig(Constants.DriveConstants.DRIVING_PIDF[0], Constants.DriveConstants.DRIVING_PIDF[1], Constants.DriveConstants.DRIVING_PIDF[2], Constants.DriveConstants.DRIVING_PIDF[3]);
         }
 
     public void setSteeringPID(){
-        flSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
-        frSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
-        blSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
-        brSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
+        flSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PIDF[0], Constants.DriveConstants.HEADING_PIDF[1], Constants.DriveConstants.HEADING_PIDF[2], Constants.DriveConstants.HEADING_PIDF[3]);
+        frSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PIDF[0], Constants.DriveConstants.HEADING_PIDF[1], Constants.DriveConstants.HEADING_PIDF[2], Constants.DriveConstants.HEADING_PIDF[3]);
+        blSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PIDF[0], Constants.DriveConstants.HEADING_PIDF[1], Constants.DriveConstants.HEADING_PIDF[2], Constants.DriveConstants.HEADING_PIDF[3]);
+        brSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PIDF[0], Constants.DriveConstants.HEADING_PIDF[1], Constants.DriveConstants.HEADING_PIDF[2], Constants.DriveConstants.HEADING_PIDF[3]);
     }
 
     public void motorInit(){
@@ -156,7 +153,6 @@ public class Drive extends SubsystemBase {
         bl = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BL, "Canivore1");
         br = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BR, "Canivore1");
 
-        
     }
 
     public void swerveModuleConfiguration(){
@@ -165,10 +161,10 @@ public class Drive extends SubsystemBase {
         backLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
         backRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
     
-        swerveConfigs[0] = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontLeft, "Front Left Swerve Module");
-        swerveConfigs[1] = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontRight, "Front Right Swerve Module");
-        swerveConfigs[2] = new SwerveModuleConfiguration(bldrivermotor, blsteermotor, bl, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBL_POSITION[0], Constants.DriveConstants.SWERVEBL_POSITION[1], blSteerPIDF, blDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backLeft, "Back Left Swerve Module");
-        swerveConfigs[3] = new SwerveModuleConfiguration(brdrivermotor, brsteermotor, br, Constants.DriveConstants.SWERVE_ANGLE_OFFSET, Constants.DriveConstants.SWERVEBR_POSITION[0], Constants.DriveConstants.SWERVEBR_POSITION[1], brSteerPIDF, brDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backRight, "Back Right Swerve Module");
+        swerveConfigs[0] = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, -212.519531, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontLeft, "Front Left Swerve Module");
+        swerveConfigs[1] = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, -212.519531, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontRight, "Front Right Swerve Module");
+        swerveConfigs[2] = new SwerveModuleConfiguration(bldrivermotor, blsteermotor, bl, -95.888672, Constants.DriveConstants.SWERVEBL_POSITION[0], Constants.DriveConstants.SWERVEBL_POSITION[1], blSteerPIDF, blDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backLeft, "Back Left Swerve Module");
+        swerveConfigs[3] = new SwerveModuleConfiguration(brdrivermotor, brsteermotor, br, -158.730469, Constants.DriveConstants.SWERVEBR_POSITION[0], Constants.DriveConstants.SWERVEBR_POSITION[1], brSteerPIDF, brDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backRight, "Back Right Swerve Module");
     }
 
 
@@ -176,7 +172,7 @@ public class Drive extends SubsystemBase {
 
         swerve = new SwerveDriveConfiguration(swerveConfigs, new Pigeon2Swerve(Constants.DriveConstants.Pigeon_2, "rio"), Constants.DriveConstants.MAX_SPEED_MPS, false);
 
-        swerveConfiguration = new SwerveControllerConfiguration(swerve, new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]));
+        swerveConfiguration = new SwerveControllerConfiguration(swerve, new PIDFConfig(Constants.DriveConstants.DRIVING_PIDF[0], Constants.DriveConstants.DRIVING_PIDF[1], Constants.DriveConstants.DRIVING_PIDF[2], Constants.DriveConstants.DRIVING_PIDF[3]));
         
         swerveController = new SwerveController(swerveConfiguration);
 
@@ -212,12 +208,19 @@ public class Drive extends SubsystemBase {
     }
   
     public void setPoseO(){
-        flsteermotor.setPosition(0);
-        frsteermotor.setPosition(0);
-        blsteermotor.setPosition(0);
-        brsteermotor.setPosition(0);
+        flsteermotor.setPosition(212.519531);
+        frsteermotor.setPosition(212.519531);
+        blsteermotor.setPosition(95.888672);
+        brsteermotor.setPosition(158.730469);
 
     
+    }
+
+    public void displayEncoder(){
+        SmartDashboard.putNumber("Front Left Encoder", fr.getAbsolutePosition());
+        SmartDashboard.putNumber("Front Right Encoder", fr.getAbsolutePosition());
+        SmartDashboard.putNumber("Back Left Encoder", bl.getAbsolutePosition());
+        SmartDashboard.putNumber("Back Right Encoder", br.getAbsolutePosition());
     }
 
     public boolean reset(){
