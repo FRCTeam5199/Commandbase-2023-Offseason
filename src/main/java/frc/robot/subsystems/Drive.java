@@ -3,9 +3,11 @@ package frc.robot.subsystems;
 
 import java.io.File;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -25,6 +27,10 @@ import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveModule;
 import java.util.Objects;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.smartdashboard.*;
+
 
 
 
@@ -67,6 +73,7 @@ public class Drive extends SubsystemBase {
     SwerveModule backLModule;
     SwerveModule backRModule;
 
+    SmartDashboard smartyboy;
 
 
 
@@ -82,6 +89,7 @@ public class Drive extends SubsystemBase {
 
 
     double rotation;
+    public Command setPoseO;
 
 
     public void init(){
@@ -98,10 +106,13 @@ public class Drive extends SubsystemBase {
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop){
 
-        swerver.drive(translation, rotation, false, false);        
-
-
+        swerver.drive(translation, rotation, false, false);    
         
+        SmartDashboard.putNumber("Front Left Encoder", fr.getAbsolutePosition());
+        SmartDashboard.putNumber("Front Right Encoder", fr.getAbsolutePosition());
+        SmartDashboard.putNumber("Back Left Encoder", bl.getAbsolutePosition());
+        SmartDashboard.putNumber("Back Right Encoder", br.getAbsolutePosition());
+       
     }
 
     public void setDrivingPID(){
@@ -112,10 +123,10 @@ public class Drive extends SubsystemBase {
         }
 
     public void setSteeringPID(){
-        flSteerPIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
-        frSteerPIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
-        blSteerPIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
-        brSteerPIDF = new PIDFConfig(Constants.DriveConstants.PIDF[0], Constants.DriveConstants.PIDF[1], Constants.DriveConstants.PIDF[2], Constants.DriveConstants.PIDF[3]);
+        flSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
+        frSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
+        blSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
+        brSteerPIDF = new PIDFConfig(Constants.DriveConstants.HEADING_PID[0], Constants.DriveConstants.HEADING_PID[1], Constants.DriveConstants.HEADING_PID[2], Constants.DriveConstants.HEADING_PID[3]);
     }
 
     public void motorInit(){
@@ -144,6 +155,8 @@ public class Drive extends SubsystemBase {
         fr = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_FR, "Canivore1");
         bl = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BL, "Canivore1");
         br = new CANCoderSwerve(Constants.DriveConstants.ENCODERID_BR, "Canivore1");
+
+        
     }
 
     public void swerveModuleConfiguration(){
@@ -180,4 +193,42 @@ public class Drive extends SubsystemBase {
         
       return swerver.getYaw();
     }
+
+    public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle)
+    {
+      xInput = Math.pow(xInput, 3);
+      yInput = Math.pow(yInput, 3);
+      return swerver.swerveController.getTargetSpeeds(xInput, yInput, angle.getRadians(), getHeading().getRadians());
+    }
+
+    public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX, double headingY){
+      xInput = Math.pow(xInput, 3);
+      yInput = Math.pow(yInput, 3);
+      return swerver.swerveController.getTargetSpeeds(xInput, yInput, headingX, headingY, getHeading().getRadians());
+    }
+
+    public void postTrajectory(Trajectory trajectory){
+      swerver.postTrajectory(trajectory);
+    }
+  
+    public void setPoseO(){
+        flsteermotor.setPosition(0);
+        frsteermotor.setPosition(0);
+        blsteermotor.setPosition(0);
+        brsteermotor.setPosition(0);
+
+    
+    }
+
+    public boolean reset(){
+        return controller.getXButton();
+    }
+    
+    public void resetSwerveOdometry(){
+        swerver.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+        
+    }
+  
+
+    
 }

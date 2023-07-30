@@ -44,18 +44,19 @@ public final class Constants {
     public static final double SWERVE_GEAR_RATIO = 6.12;
     public static final double SWERVE_ANGLE_OFFSET = 0;//random number for now
     public static final double WHEEL_DIAMETER = 0.1016;//meters
-    public static final double[] SWERVEFL_POSITION = {2.0, 3.0};//random number for now
-    public static final double[] SWERVEFR_POSITION = {-2.0, 3.0};//random number for now
-    public static final double[] SWERVEBL_POSITION = {2.0, -3.0};//random number for now
-    public static final double[] SWERVEBR_POSITION = {-2.0, -3.0};//random number for now
+    public static final double[] SWERVEFL_POSITION = {-.254, .33};//random number for now
+    public static final double[] SWERVEFR_POSITION = {.254, .33};//random number for now
+    public static final double[] SWERVEBL_POSITION = {-.254, -.33};//random number for now
+    public static final double[] SWERVEBR_POSITION = {.254, -.33};//random number for now
     public static final double MAX_SPEED_RPM = 6380;
     public static final double MAX_SPEED_MPS = 3.5;
-    public static final double SWERVE_DRIVE_RAMP_RATE = 1;//Time it takes to go from 0 to max speed in seconds.
-    public static final double SWERVE_STEER_RAMP_RATE = 1;
-    public static final double[] PIDF = {.0001, .00001, 0, .00011};
+    public static final double SWERVE_DRIVE_RAMP_RATE = 2;//Time it takes to go from 0 to max speed in seconds.
+    public static final double SWERVE_STEER_RAMP_RATE = 2;
+    public static final double[] PIDF = {0.15, 0.000, 2.0, 5.14};
+    public static final double[] HEADING_PID = { 0.0001, .0000, 0.006, 0, 5.14};
 
     //Encoder Characteristics
-    public static final int ENCODER_PULSE_RATE = 2048;//hertz
+    public static final int ENCODER_PULSE_RATE = 4096;
 
 
     //Pigeon2 ID

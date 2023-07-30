@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ResetPose;
 import frc.robot.commands.Teleop;
 import frc.robot.subsystems.ExampleSubsystem;
 
@@ -39,11 +40,9 @@ public class RobotContainer {
   final Drive drivebase = new Drive();
 
 Teleop simClosedFieldRel = new Teleop(drivebase,
-() -> MathUtil.applyDeadband(m_driverController.getLeftY(),
-          OperatorConstants.LEFT_Y_DEADBAND),
-() -> MathUtil.applyDeadband(m_driverController.getLeftX(),
-          OperatorConstants.LEFT_X_DEADBAND),
-() -> m_driverController.getRawAxis(0), () -> true, false, true);
+() -> MathUtil.applyDeadband(m_driverController.getLeftX(), OperatorConstants.LEFT_Y_DEADBAND),
+() -> MathUtil.applyDeadband(m_driverController.getLeftY(), OperatorConstants.LEFT_X_DEADBAND),
+() -> m_driverController.getRightX(), () -> false, false, true);
 
 
 
@@ -72,9 +71,11 @@ Teleop simClosedFieldRel = new Teleop(drivebase,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-
-
+    new Trigger(drivebase::reset).onTrue(new ResetPose(drivebase));    
+      
   }
+
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
