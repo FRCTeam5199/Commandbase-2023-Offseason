@@ -41,7 +41,8 @@ public final class Constants {
     public static final int SWERVEBR_STEER = 6;
 
     //SwerveModule characteristics
-    public static final double SWERVE_GEAR_RATIO = 6.12;
+    public static final double SWERVEDRIVER_GEAR_RATIO = 6.12;
+    public static final double SWERVESTEER_GEAR_RATIO = 12.8;
     public static final double SWERVE_ANGLE_OFFSET = 0;//random number for now
     public static final double WHEEL_DIAMETER = 0.1016;//meters
     public static final double[] SWERVEFL_POSITION = {-.33, -.254};//Prob correct. Meters

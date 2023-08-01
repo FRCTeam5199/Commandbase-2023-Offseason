@@ -144,7 +144,8 @@ public class Drive extends SubsystemBase {
         blsteermotor.configurePIDF(blSteerPIDF);
         brdrivermotor.configurePIDF(brDrivePIDF);
         brsteermotor.configurePIDF(brSteerPIDF);
-        
+
+    
     }
 
     public void encoderInit(){
@@ -156,10 +157,10 @@ public class Drive extends SubsystemBase {
     }
 
     public void swerveModuleConfiguration(){
-        frontLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
-        frontRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
-        backLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
-        backRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
+        frontLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVEDRIVER_GEAR_RATIO, Constants.DriveConstants.SWERVESTEER_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
+        frontRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVEDRIVER_GEAR_RATIO, Constants.DriveConstants.SWERVESTEER_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
+        backLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVEDRIVER_GEAR_RATIO, Constants.DriveConstants.SWERVESTEER_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
+        backRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVEDRIVER_GEAR_RATIO, Constants.DriveConstants.SWERVESTEER_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
     
         swerveConfigs[0] = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, 121.64, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontLeft, "Front Left Swerve Module");
         swerveConfigs[1] = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, 213.93, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontRight, "Front Right Swerve Module");
@@ -177,6 +178,7 @@ public class Drive extends SubsystemBase {
         swerveController = new SwerveController(swerveConfiguration);
 
         swerver = new SwerveDrive(swerve, swerveConfiguration);
+        
 
     
     }
@@ -208,10 +210,11 @@ public class Drive extends SubsystemBase {
     }
   
     public void setPoseO(){
-        flsteermotor.setPosition(0);
-        frsteermotor.setPosition(0);
-        blsteermotor.setPosition(0);
-        brsteermotor.setPosition(0);
+        flsteermotor.setPosition(121.64);
+        frsteermotor.setPosition(213.93);
+        blsteermotor.setPosition(96.42);
+        brsteermotor.setPosition(158.12);
+        
 
     
     }
