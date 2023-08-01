@@ -44,10 +44,10 @@ public final class Constants {
     public static final double SWERVE_GEAR_RATIO = 6.12;
     public static final double SWERVE_ANGLE_OFFSET = 0;//random number for now
     public static final double WHEEL_DIAMETER = 0.1016;//meters
-    public static final double[] SWERVEFL_POSITION = {-.254, .33};//Prob correct. Meters
-    public static final double[] SWERVEFR_POSITION = {.254, .33};//prob correct. Meters
-    public static final double[] SWERVEBL_POSITION = {-.254, -.33};//prob correct. Meters
-    public static final double[] SWERVEBR_POSITION = {.254, -.33};//prob correct. Meters
+    public static final double[] SWERVEFL_POSITION = {-.33, -.254};//Prob correct. Meters
+    public static final double[] SWERVEFR_POSITION = {-.33, .254};//prob correct. Meters
+    public static final double[] SWERVEBL_POSITION = {.33, -.254};//prob correct. Meters
+    public static final double[] SWERVEBR_POSITION = {.33, .254};//prob correct. Meters
     public static final double MAX_SPEED_RPM = 6380;
     public static final double MAX_SPEED_MPS = 3.5;
     public static final double SWERVE_DRIVE_RAMP_RATE = 2;//Time it takes to go from 0 to max speed in seconds.

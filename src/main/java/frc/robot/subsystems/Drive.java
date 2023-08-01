@@ -131,10 +131,10 @@ public class Drive extends SubsystemBase {
         flsteermotor = new TalonFXSwerve(2, "Canivore1", false);
         frdrivermotor = new TalonFXSwerve(3, "Canivore1", true);
         frsteermotor = new TalonFXSwerve(4, "Canivore1", false);
-        bldrivermotor = new TalonFXSwerve(5, "Canivore1", true);
-        blsteermotor = new TalonFXSwerve(6, "Canivore1", false);
-        brdrivermotor = new TalonFXSwerve(7, "Canivore1", true);
-        brsteermotor = new TalonFXSwerve(8, "Canivore1", false);
+        bldrivermotor = new TalonFXSwerve(7, "Canivore1", true);
+        blsteermotor = new TalonFXSwerve(8, "Canivore1", false);
+        brdrivermotor = new TalonFXSwerve(5, "Canivore1", true);
+        brsteermotor = new TalonFXSwerve(6, "Canivore1", false);
 
         fldrivermotor.configurePIDF(flDrivePIDF);
         flsteermotor.configurePIDF(flSteerPIDF);
@@ -161,10 +161,10 @@ public class Drive extends SubsystemBase {
         backLeft = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
         backRight = new SwerveModulePhysicalCharacteristics(Constants.DriveConstants.SWERVE_GEAR_RATIO, Constants.DriveConstants.SWERVE_GEAR_RATIO , Constants.DriveConstants.WHEEL_DIAMETER, Constants.DriveConstants.SWERVE_DRIVE_RAMP_RATE, Constants.DriveConstants.SWERVE_STEER_RAMP_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE, Constants.DriveConstants.ENCODER_PULSE_RATE);
     
-        swerveConfigs[0] = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, -212.519531, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontLeft, "Front Left Swerve Module");
-        swerveConfigs[1] = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, -212.519531, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontRight, "Front Right Swerve Module");
-        swerveConfigs[2] = new SwerveModuleConfiguration(bldrivermotor, blsteermotor, bl, -95.888672, Constants.DriveConstants.SWERVEBL_POSITION[0], Constants.DriveConstants.SWERVEBL_POSITION[1], blSteerPIDF, blDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backLeft, "Back Left Swerve Module");
-        swerveConfigs[3] = new SwerveModuleConfiguration(brdrivermotor, brsteermotor, br, -158.730469, Constants.DriveConstants.SWERVEBR_POSITION[0], Constants.DriveConstants.SWERVEBR_POSITION[1], brSteerPIDF, brDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backRight, "Back Right Swerve Module");
+        swerveConfigs[0] = new SwerveModuleConfiguration(fldrivermotor, flsteermotor, fl, 121.64, Constants.DriveConstants.SWERVEFL_POSITION[0],  Constants.DriveConstants.SWERVEFL_POSITION[1], flSteerPIDF, flDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontLeft, "Front Left Swerve Module");
+        swerveConfigs[1] = new SwerveModuleConfiguration(frdrivermotor, frsteermotor, fr, 213.93, Constants.DriveConstants.SWERVEFR_POSITION[0], Constants.DriveConstants.SWERVEFR_POSITION[1], frSteerPIDF, frDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, frontRight, "Front Right Swerve Module");
+        swerveConfigs[2] = new SwerveModuleConfiguration(bldrivermotor, blsteermotor, bl, 96.42, Constants.DriveConstants.SWERVEBL_POSITION[0], Constants.DriveConstants.SWERVEBL_POSITION[1], blSteerPIDF, blDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backLeft, "Back Left Swerve Module");
+        swerveConfigs[3] = new SwerveModuleConfiguration(brdrivermotor, brsteermotor, br, 158.12, Constants.DriveConstants.SWERVEBR_POSITION[0], Constants.DriveConstants.SWERVEBR_POSITION[1], brSteerPIDF, brDrivePIDF, Constants.DriveConstants.MAX_SPEED_RPM, backRight, "Back Right Swerve Module");
     }
 
 
@@ -208,16 +208,16 @@ public class Drive extends SubsystemBase {
     }
   
     public void setPoseO(){
-        flsteermotor.setPosition(212.519531);
-        frsteermotor.setPosition(212.519531);
-        blsteermotor.setPosition(95.888672);
-        brsteermotor.setPosition(158.730469);
+        flsteermotor.setPosition(0);
+        frsteermotor.setPosition(0);
+        blsteermotor.setPosition(0);
+        brsteermotor.setPosition(0);
 
     
     }
 
     public void displayEncoder(){
-        SmartDashboard.putNumber("Front Left Encoder", fr.getAbsolutePosition());
+        SmartDashboard.putNumber("Front Left Encoder", fl.getAbsolutePosition());
         SmartDashboard.putNumber("Front Right Encoder", fr.getAbsolutePosition());
         SmartDashboard.putNumber("Back Left Encoder", bl.getAbsolutePosition());
         SmartDashboard.putNumber("Back Right Encoder", br.getAbsolutePosition());
