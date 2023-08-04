@@ -1,14 +1,23 @@
 package swervelib.motors;
 
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import com.ctre.phoenixpro.hardware.TalonFX;
+import com.ctre.phoenixpro.hardware.core.CoreTalonFX;
+import com.ctre.phoenixpro.configs.TalonFXConfigurator;
+import com.ctre.phoenixpro.configs.TalonFXConfiguration;
+
+
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.math.SwerveMath;
 import swervelib.parser.PIDFConfig;
@@ -28,7 +37,12 @@ public class TalonFXSwerve extends SwerveMotor
   /**
    * Current TalonFX configuration.
    */
-  private final TalonFXConfiguration configuration          = new TalonFXConfiguration();
+  private final TalonFXConfiguration configuration = new TalonFXConfiguration();
+
+
+  private final TalonFXConfiguration talonconfig;
+  private final TalonFXConfigurator talonconfigurator;
+
   /**
    * Whether the absolute encoder is integrated.
    */
@@ -36,8 +50,8 @@ public class TalonFXSwerve extends SwerveMotor
   /**
    * TalonFX motor controller.
    */
-  WPI_TalonFX motor;
-  TalonFX talonFX;
+  TalonFX motor;
+  CoreTalonFX coremotor;
   /**
    * The position conversion factor to convert raw sensor units to Meters Per 100ms, or Ticks to Degrees.
    */
@@ -57,10 +71,11 @@ public class TalonFXSwerve extends SwerveMotor
    * @param motor        Motor to use.
    * @param isDriveMotor Whether this motor is a drive motor.
    */
-  public TalonFXSwerve(WPI_TalonFX motor, boolean isDriveMotor)
+  public TalonFXSwerve(TalonFX motor, boolean isDriveMotor, CoreTalonFX coreMotor)
   {
     this.isDriveMotor = isDriveMotor;
     this.motor = motor;
+    this.coremotor = coreMotor;
 
     factoryDefaults();
     clearStickyFaults();
@@ -81,8 +96,7 @@ public class TalonFXSwerve extends SwerveMotor
    */
   public TalonFXSwerve(int id, String canbus, boolean isDriveMotor)
   {
-    this(new WPI_TalonFX(id, canbus), isDriveMotor);
-    new TalonFX(id, canbus);
+    this(new TalonFX(id, canbus), isDriveMotor, new CoreTalonFX(id, canbus));
   }
 
 
@@ -95,21 +109,22 @@ public class TalonFXSwerve extends SwerveMotor
    */
   public TalonFXSwerve(int id, boolean isDriveMotor)
   {
-    this(new WPI_TalonFX(id), isDriveMotor);
+    this(new TalonFX(id), isDriveMotor, new CoreTalonFX(id));
   }
 
   /**
    * Configure the factory defaults.
    */
   @Override
+  
   public void factoryDefaults()
-  {
+
     if (!factoryDefaultOccurred)
     {
-      motor.configFactoryDefault();
-      motor.setSensorPhase(true);
-      motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 30);
-      motor.configNeutralDeadband(0.001);
+      coremotor.getConfigurator().apply(new TalonFXConfiguration());
+      ((IMotorController) motor).setSensorPhase(true);
+      ((IMotorController) motor).configSelectedFeedbackCoefficient(TalonFXFeedbackDevice.IntegratedSensor, 0, 30);
+      ((BaseMotorController) motor).configNeutralDeadband(0.001);
     }
   }
 
