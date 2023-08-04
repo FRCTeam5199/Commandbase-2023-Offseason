@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenixpro.hardware.TalonFX;
 import edu.wpi.first.wpilibj.Timer;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.math.SwerveMath;
@@ -36,6 +37,7 @@ public class TalonFXSwerve extends SwerveMotor
    * TalonFX motor controller.
    */
   WPI_TalonFX motor;
+  TalonFX talonFX;
   /**
    * The position conversion factor to convert raw sensor units to Meters Per 100ms, or Ticks to Degrees.
    */
@@ -69,6 +71,7 @@ public class TalonFXSwerve extends SwerveMotor
     }
   }
 
+
   /**
    * Construct the TalonFX swerve motor given the ID and CANBus.
    *
@@ -79,7 +82,10 @@ public class TalonFXSwerve extends SwerveMotor
   public TalonFXSwerve(int id, String canbus, boolean isDriveMotor)
   {
     this(new WPI_TalonFX(id, canbus), isDriveMotor);
+    new TalonFX(id, canbus);
   }
+
+
 
   /**
    * Construct the TalonFX swerve motor given the ID.

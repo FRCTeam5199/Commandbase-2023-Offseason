@@ -4,10 +4,18 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.MagnetFieldStrength;
+import com.ctre.phoenixpro.configs.CANcoderConfiguration;
+import com.ctre.phoenixpro.configs.MagnetSensorConfigs;
+import com.ctre.phoenixpro.hardware.CANcoder;
+import com.ctre.phoenixpro.configs.CANcoderConfigurator;
+import com.ctre.phoenixpro.hardware.DeviceIdentifier;
+import com.ctre.phoenixpro.signals.AbsoluteSensorRangeValue;
+
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import edu.wpi.first.wpilibj.DriverStation;
+
 
 /**
  * Swerve Absolute Encoder for CTRE CANCoders.
@@ -19,6 +27,11 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
    * CANCoder with WPILib sendable and support.
    */
   public WPI_CANCoder encoder;
+  public CANcoderConfiguration config;
+  public CANcoder coder;
+  public CANcoderConfiguration coderconfig;
+  public CANcoderConfigurator coderconfigurator;
+  public DeviceIdentifier idfier;
 
   /**
    * Initialize the CANCoder on the standard CANBus.
@@ -28,6 +41,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   public CANCoderSwerve(int id)
   {
     encoder = new WPI_CANCoder(id);
+    coder = new CANcoder(id);
   }
 
   /**
@@ -39,6 +53,12 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   public CANCoderSwerve(int id, String canbus)
   {
     encoder = new WPI_CANCoder(id, canbus);
+    coder = new CANcoder(id, canbus);
+  }
+
+  public void deviceIdentifier(int id, String model, String canbus){
+    idfier = new DeviceIdentifier(id, model, canbus);
+
   }
 
   /**
@@ -57,6 +77,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   public void clearStickyFaults()
   {
     encoder.clearStickyFaults();
+    coder.clearStickyFaults();
   }
 
   /**
@@ -74,6 +95,15 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
         SensorInitializationStrategy.BootToAbsolutePosition;
     canCoderConfiguration.sensorTimeBase = SensorTimeBase.PerSecond;
     encoder.configAllSettings(canCoderConfiguration);
+
+    CANcoderConfiguration coderconfig = new CANcoderConfiguration();
+    MagnetSensorConfigs magnetconfig = new MagnetSensorConfigs();
+    coderconfigurator = new CANcoderConfigurator(idfier);
+    coderconfigurator.apply(coderconfig);
+    coderconfigurator.apply(magnetconfig);
+
+
+
   }
 
   /**
@@ -86,6 +116,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   {
     readingError = false;
     MagnetFieldStrength strength = encoder.getMagnetFieldStrength();
+
 
     if (strength != MagnetFieldStrength.Good_GreenLED)
     {
