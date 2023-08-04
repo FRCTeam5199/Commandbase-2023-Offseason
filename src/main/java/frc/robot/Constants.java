@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.motorcontrol.AbstractMotorControl;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -39,7 +41,8 @@ public final class Constants {
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
-  }
+}
+
 
   public static class OperatorConstants {
 
