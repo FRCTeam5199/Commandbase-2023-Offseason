@@ -62,6 +62,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   public CANCoderSwerve(int id, String canbus)
   {
     coder = new CANcoder(id, canbus);
+    deviceIdentifier(id, "CANCoder", "Canivore1");
   }
 
   public void deviceIdentifier(int id, String model, String canbus){
@@ -93,9 +94,12 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
     CANcoderConfiguration canConfigurate = new CANcoderConfiguration();
     CANcoderConfigurator canConfigurator = new CANcoderConfigurator(idfier);
     canConfigurate.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-    canConfigurate.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    canConfigurate.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     canConfigurate.MagnetSensor.MagnetOffset = 0;
-    canConfigurator.apply(canConfigurate); 
+
+    canConfigurator.refresh(canConfigurate);
+    canConfigurator.apply(canConfigurate);
+    
 
 
 

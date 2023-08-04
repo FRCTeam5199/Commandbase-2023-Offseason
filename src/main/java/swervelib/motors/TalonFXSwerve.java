@@ -57,7 +57,7 @@ public class TalonFXSwerve extends SwerveMotor
   CoreTalonFX coremotor;
 
   private final TalonFXConfiguration talonconfig = new TalonFXConfiguration();
-  private final TalonFXConfigurator talonconfigurator = motor.getConfigurator();
+  private final TalonFXConfigurator talonconfigurator;
   /**
    * The position conversion factor to convert raw sensor units to Meters Per 100ms, or Ticks to Degrees.
    */
@@ -87,6 +87,8 @@ public class TalonFXSwerve extends SwerveMotor
 
     factoryDefaults();
     clearStickyFaults();
+
+    talonconfigurator = motor.getConfigurator();
 
     if (SwerveDriveTelemetry.isSimulation)
     {
@@ -130,7 +132,6 @@ public class TalonFXSwerve extends SwerveMotor
     if (!factoryDefaultOccurred)
     {
       motor.getConfigurator().apply(new TalonFXConfiguration());
-      ((IMotorController) motor).setSensorPhase(true);
       MotorOutputConfigs oconfig = new MotorOutputConfigs();
       oconfig.DutyCycleNeutralDeadband = .001;
     }
@@ -381,10 +382,14 @@ public class TalonFXSwerve extends SwerveMotor
   @Override
   public void setPosition(double position)
   {
+
+    PositionDutyCycle positionmove;
     if (!absoluteEncoder && !SwerveDriveTelemetry.isSimulation)
     {
       position = position < 0 ? (position % 360) + 360 : position;
-      ((IMotorController) motor).setSelectedSensorPosition(position / positionConversionFactor, 0, 250);
+      positionmove = new PositionDutyCycle(position);
+
+      motor.setControl(positionmove);
     }
   }
 
