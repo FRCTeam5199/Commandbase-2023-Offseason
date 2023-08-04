@@ -1,4 +1,4 @@
-package frc.controllers.basecontrollers;
+package frc.robot.controllers.basecontrollers;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.controllers.ButtonPanelController;
@@ -6,7 +6,6 @@ import frc.controllers.ButtonPanelController;
 import java.util.function.Function;
 
 import static frc.controllers.basecontrollers.ControllerInterfaces.*;
-import static frc.controllers.basecontrollers.DefaultControllerEnums.*;
 
 /**
  * for ANY CONTROLLER, put EVERY GET METHOD in here as well as in the proper class! This allows for the COMPLETE HOT
@@ -43,7 +42,7 @@ public abstract class BaseController {
         return controller.getRawAxis(channel);
     }
 
-    public ButtonStatus get(IDiscreteInput n) {
+    public DefaultControllerEnums.ButtonStatus get(IDiscreteInput n) {
         throw new UnsupportedOperationException("This controller does not support getting a button status. " + GENERIC_ERROR_CLAUSE);
     }
 
@@ -55,11 +54,11 @@ public abstract class BaseController {
         throw new UnsupportedOperationException("This controller does not support getting a continuous input. " + GENERIC_ERROR_CLAUSE);
     }
 
-    public boolean hatIsExactly(RawCompassInput direction) {
+    public boolean hatIsExactly(DefaultControllerEnums.RawCompassInput direction) {
         throw new UnsupportedOperationException("This controller does not have a hat. " + GENERIC_ERROR_CLAUSE);
     }
 
-    public boolean hatIs(ResolvedCompassInput direction) {
+    public boolean hatIs(DefaultControllerEnums.ResolvedCompassInput direction) {
         throw new UnsupportedOperationException("This controller does not have a hat." + GENERIC_ERROR_CLAUSE);
     }
 
