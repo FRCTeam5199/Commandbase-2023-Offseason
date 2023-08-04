@@ -1,7 +1,5 @@
 package frc.robot.controllers.basecontrollers;
 
-import frc.robot.controllers.basecontrollers.ControllerInterfaces;
-
 public class ControllerInterfaces {
     /**
      * This is the basic interface inherited by controller mapping enums. It is not needed and instead can
