@@ -1,11 +1,13 @@
 package frc.robot.controllers.basecontrollers;
 
+import frc.robot.Constants;
+
 import static frc.robot.Constants.*;
 
 public class DefaultControllerEnums {
 
     /**
-     * @see WiiController
+     * @see WiiAxis
      */
     public enum WiiAxis implements ControllerInterfaces.IContinuousInput {
         LEFT_RIGHT_NUMBERPAD(0), UP_DOWN_NUMBERPAD(1), ROTATIONAL_TILT(3), FORWARD_TILT(4);
@@ -23,7 +25,7 @@ public class DefaultControllerEnums {
     }
 
     /**
-     * @see WiiController
+     * @see WiiButton
      */
     public enum WiiButton implements ControllerInterfaces.IDiscreteInput {
         ONE(1), TWO(2), A(3), B(4), PLUS(5), MINUS(6), HOME(7);
@@ -112,7 +114,7 @@ public class DefaultControllerEnums {
      * @see XBoxController
      */
     public enum XboxAxes implements ControllerInterfaces.IContinuousInput {
-        LEFT_JOY_X(0, robotSettings.XBOX_CONTROLLER_DEADZONE), LEFT_JOY_Y(1, robotSettings.XBOX_CONTROLLER_DEADZONE), LEFT_TRIGGER(2, 0), RIGHT_TRIGGER(3, 0), RIGHT_JOY_X(4, robotSettings.XBOX_CONTROLLER_DEADZONE), RIGHT_JOY_Y(5, robotSettings.XBOX_CONTROLLER_DEADZONE);
+        LEFT_JOY_X(0, Constants.PieceManipulation.XBOX_CONTROLLER_DEADZONE), LEFT_JOY_Y(1, Constants.PieceManipulation.XBOX_CONTROLLER_DEADZONE), LEFT_TRIGGER(2, 0), RIGHT_TRIGGER(3, 0), RIGHT_JOY_X(4, Constants.PieceManipulation.XBOX_CONTROLLER_DEADZONE), RIGHT_JOY_Y(5, Constants.PieceManipulation.XBOX_CONTROLLER_DEADZONE);
 
         public final int AXIS_VALUE;
         public final double DEADZONE;
@@ -162,7 +164,7 @@ public class DefaultControllerEnums {
     }
 
     /**
-     * @see JoystickController
+     * @see JoystickAxis
      */
     public enum JoystickAxis implements ControllerInterfaces.IContinuousInput {
         X_AXIS(0), Y_AXIS(1), Z_ROTATE(2), SLIDER(3);
@@ -180,7 +182,7 @@ public class DefaultControllerEnums {
     }
 
     /**
-     * @see JoystickController
+     * @see JoystickHatDirection
      */
     public enum JoystickHatDirection {
         UP(315, 0, 45), DOWN(135, 180, 225), LEFT(270), RIGHT(90);
@@ -193,7 +195,7 @@ public class DefaultControllerEnums {
     }
 
     /**
-     * @see JoystickController
+     * @see JoystickButtons
      */
     public enum JoystickButtons implements ControllerInterfaces.IDiscreteInput {
         ONE(1), TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7), EIGHT(8), NINE(9), TEN(10), ELEVEN(11), TWELVE(12);
