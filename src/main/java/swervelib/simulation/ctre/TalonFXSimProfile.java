@@ -2,7 +2,9 @@ package swervelib.simulation.ctre;
 
 import static swervelib.simulation.ctre.PhysicsSim.random;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenixpro.hardware.TalonFX;
+import com.ctre.phoenixpro.sim.TalonFXSimState
+;
 import swervelib.simulation.ctre.PhysicsSim.SimProfile;
 
 /**
@@ -32,7 +34,7 @@ class TalonFXSimProfile extends SimProfile
    * @param sensorPhase     The phase of the TalonFX sensors
    */
   public TalonFXSimProfile(
-      final TalonFX falcon,
+      final com.ctre.phoenixpro.hardware.TalonFX falcon,
       final double accelToFullTime,
       final double fullVel,
       final boolean sensorPhase)
@@ -57,7 +59,7 @@ class TalonFXSimProfile extends SimProfile
 
     /// DEVICE SPEED SIMULATION
 
-    double outPerc = _falcon.getSimCollection().getMotorOutputLeadVoltage() / 12;
+    double outPerc = 5 / 12;
     if (_sensorPhase)
     {
       outPerc *= -1;
@@ -79,14 +81,5 @@ class TalonFXSimProfile extends SimProfile
 
     /// SET SIM PHYSICS INPUTS
 
-    _falcon.getSimCollection().addIntegratedSensorPosition((int) (_vel * period / 100));
-    _falcon.getSimCollection().setIntegratedSensorVelocity((int) _vel);
-
-    double supplyCurrent = Math.abs(outPerc) * 30 * random(0.95, 1.05);
-    double statorCurrent = outPerc == 0 ? 0 : supplyCurrent / Math.abs(outPerc);
-    _falcon.getSimCollection().setSupplyCurrent(supplyCurrent);
-    _falcon.getSimCollection().setStatorCurrent(statorCurrent);
-
-    _falcon.getSimCollection().setBusVoltage(12 - outPerc * outPerc * 3 / 4 * random(0.95, 1.05));
   }
 }

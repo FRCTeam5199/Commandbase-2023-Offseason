@@ -33,9 +33,8 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   /**
    * CANCoder with WPILib sendable and support.
    */
-  public WPI_CANCoder encoder;
   public CANcoderConfiguration config;
-  public CoreCANcoder coder;
+  public CANcoder coder;
   public CANcoderConfiguration coderconfig;
   public CANcoderConfigurator coderconfigurator;
   public DeviceIdentifier idfier;
@@ -51,7 +50,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
    */
   public CANCoderSwerve(int id)
   {
-    coder = new CoreCANcoder(id);
+    coder = new CANcoder(id);
   }
 
   /**
@@ -62,7 +61,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
    */
   public CANCoderSwerve(int id, String canbus)
   {
-    coder = new CoreCANcoder(id, canbus);
+    coder = new CANcoder(id, canbus);
   }
 
   public void deviceIdentifier(int id, String model, String canbus){
@@ -116,12 +115,12 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
 
     if (magnetstrength.getValue() != MagnetHealthValue.Magnet_Green){
       DriverStation.reportWarning(
-          "CANCoder " + encoder.getDeviceID() + " magnetic field is less than ideal.\n", false);
+          "CANCoder " + coder.getDeviceID() + " magnetic field is less than ideal.\n", false);
     }
     if (magnetstrength.getValue() == MagnetHealthValue.Magnet_Invalid)
     {
       readingError = true;
-      DriverStation.reportWarning("CANCoder " + encoder.getDeviceID() + " reading was faulty.\n", false);
+      DriverStation.reportWarning("CANCoder " + coder.getDeviceID() + " reading was faulty.\n", false);
       return 0;
     }
     StatusSignalValue<Double> angle = coder.getAbsolutePosition();
