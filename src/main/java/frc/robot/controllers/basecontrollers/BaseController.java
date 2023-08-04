@@ -1,11 +1,9 @@
 package frc.robot.controllers.basecontrollers;
 
 import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.controllers.ButtonPanelController;
 
 import java.util.function.Function;
 
-import static ;
 
 /**
  * for ANY CONTROLLER, put EVERY GET METHOD in here as well as in the proper class! This allows for the COMPLETE HOT
@@ -42,15 +40,15 @@ public abstract class BaseController {
         return controller.getRawAxis(channel);
     }
 
-    public DefaultControllerEnums.ButtonStatus get(IDiscreteInput n) {
+    public DefaultControllerEnums.ButtonStatus get(ControllerInterfaces.IDiscreteInput n) {
         throw new UnsupportedOperationException("This controller does not support getting a button status. " + GENERIC_ERROR_CLAUSE);
     }
 
-    public double get(IContinuousInput axis) {
+    public double get(ControllerInterfaces.IContinuousInput axis) {
         throw new UnsupportedOperationException("This controller does not support getting a continuous input. " + GENERIC_ERROR_CLAUSE);
     }
 
-    public double getPositive(IContinuousInput axis) {
+    public double getPositive(ControllerInterfaces.IContinuousInput axis) {
         throw new UnsupportedOperationException("This controller does not support getting a continuous input. " + GENERIC_ERROR_CLAUSE);
     }
 
@@ -73,12 +71,7 @@ public abstract class BaseController {
     }
 
     public enum DefaultControllers implements IValidController {
-        BOP_IT_CONTROLLER(BopItBasicController::new),
-        DRUM_CONTROLLER(DrumTimeController::new),
         JOYSTICK_CONTROLLER(JoystickController::new),
-        SIX_BUTTON_GUITAR_CONTROLLER(SixButtonGuitarController::new),
-        WII_CONTROLLER(WiiController::new),
-        BUTTON_PANEL(ButtonPanelController::new),
         XBOX_CONTROLLER(XBoxController::new);
 
         private final Function<Integer, BaseController> constructor;
