@@ -5,7 +5,7 @@ import frc.robot.controllers.ButtonPanelController;
 
 import java.util.function.Function;
 
-import static frc.robot.controllers.basecontrollers.ControllerInterfaces;
+import static frc.controllers.basecontrollers.ControllerInterfaces;
 
 /**
  * for ANY CONTROLLER, put EVERY GET METHOD in here as well as in the proper class! This allows for the COMPLETE HOT
