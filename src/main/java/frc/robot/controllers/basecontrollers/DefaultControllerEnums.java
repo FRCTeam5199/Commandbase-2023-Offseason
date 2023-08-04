@@ -1,6 +1,6 @@
 package frc.robot.controllers.basecontrollers;
 
-import static frc.robot.Robot.robotSettings;
+import static frc.robot.Constants.*;
 
 public class DefaultControllerEnums {
 
