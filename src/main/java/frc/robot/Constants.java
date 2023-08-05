@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import frc.robot.misc.PID;
 import frc.robot.motorcontrol.AbstractMotorControl;
 
 import edu.wpi.first.math.geometry.Translation3d;
@@ -59,42 +61,69 @@ public final class Constants {
     public static final int WIRST_MOTOR_ID = 36,
         ELEVATOR_MOTOR_ID = 30,
         ARM_MOTOR_ID = 31,
+        WRIST_MOTOR_ID = 0,
         PCM_ID = 50,
         INTAKE_IN_ID = 12,
         INTAKE_OUT_ID = 2,
         SPIKE_IN_ID = 3,
         SPIKE_OUT_ID = 13;
+
+    //////////////////////////
+    //  Controller Ports    //
+    //////////////////////////
+    public static final int XBOX_CONTROLLER_USB_SLOT = 0,
+            XBOX_CONTROLLER_USB_SLOT_2 = 1,
+            BUTTON_PANEL_USB_SLOT1 = 2,
+            BUTTON_PANEL_USB_SLOT2= 3;
+
     public static class PieceManipulation {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Elevator
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static final Boolean ENABLE_ELEVATOR = true;
-        public static final double ELEVATOR_GEARING = 1 / 9.0;
         public static final String ELEVATOR_MOTOR_CANBUS = "rio";
-        //public static final ELEVATOR_MOTOR_TYPE = AbstractMotorController.SupportedMotors.CAN_SPARK_MAX;
-        public static final double ELEVATOR_SPROCKET_DIAMETER = 2; //in 
-        // public static final double ELEVATORPID =  new PID(.3, 0.0, 0.0);
+        public static final PID ELEVATORPID = new PID(.3, 0, 0, 0);
         public static final Boolean ARM_ELEVATOR_MANUAL = true;
+
+        /////////////////////////////////////////////
+        //  VV  Elevator Physical Properties  VV  //
+        ///////////////////////////////////////////
+
+        public static final double ELEVATOR_GEARING = 1 / 9.0;
+        public static final double ELEVATOR_SPROCKET_DIAMETER = 2; //in
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // ARM
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //ARM_MOTOR_TYPE = AbstractMotorController.SupportedMotors.CAN_SPARK_MAX;
+        public final boolean ENABLE_ARM = true;
+        public static final String ARM_MOTOR_CANBUS = "rio";
+        public static final PID ARM_PID = new PID(.5  , 0, 0, 0);
+
+        ////////////////////////////////////////
+        //  VV  ARM Physical Properties  VV  //
+        ///////////////////////////////////////
+
         public static final double ARM_GEARING = (1 / 15D) * (28 / 52D) * (15 / 61D);
         public static final double ARM_SPROCKET_DIAMETER = 1;
-        //ARM_MOTOR_CANBUS = "rio";
-        public static final boolean ENABLE_ARM = true;
-        //public static final double ARM_PID = new PID(.5, 0.0, 0);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // INTAKE
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //INTAKE_MOTOR_TYPE =  AbstractMotorController.SupportedMotors.CAN_SPARK_MAX;
-        // INTAKE_MOTOR_CANBUS = "rio";
-        public static final boolean INTAKE_MANUAL = true;
         public static final boolean ENABLE_INTAKE = true;
+        public static final String INTAKE_MOTOR_CANBUS = "rio";
+        public static final boolean INTAKE_MANUAL = true;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //  Wrist
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public String WRIST_MOTOR_CANBUS = "rio";
+        public boolean WRIST_MANUAL = true;
+        public static final PID WRIST_PID = new PID(.08, 0.0001, 0.045, 0);
+
     }
+
+
 }
