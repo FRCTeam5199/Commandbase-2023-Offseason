@@ -34,7 +34,7 @@ class TalonFXSimProfile extends SimProfile
    * @param sensorPhase     The phase of the TalonFX sensors
    */
   public TalonFXSimProfile(
-      final com.ctre.phoenixpro.hardware.TalonFX falcon,
+      final TalonFX falcon,
       final double accelToFullTime,
       final double fullVel,
       final boolean sensorPhase)

@@ -33,12 +33,10 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   /**
    * CANCoder with WPILib sendable and support.
    */
-  public CANcoderConfiguration config;
   public CANcoder coder;
-  public CANcoderConfiguration coderconfig;
-  public CANcoderConfigurator coderconfigurator;
+  public CANcoderConfiguration canConfiguration = new CANcoderConfiguration();
+  public CANcoderConfigurator canConfigurator;
   public DeviceIdentifier idfier;
-  public StatusCode statusCode;
 
 
   /**
@@ -60,19 +58,20 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   public CANCoderSwerve(int id, String canbus)
   {
     coder = new CANcoder(id, canbus);
-    deviceIdentifier(id, "CANCoder", "Canivore1");
+    idfier = new DeviceIdentifier(id, "CANCoder", canbus);
+    canConfigurator = new CANcoderConfigurator(idfier);
+  
+    factoryDefault();
+    clearStickyFaults();
+    configure(true);
+
+    canConfigurator.refresh(canConfiguration);
   }
 
-  public void deviceIdentifier(int id, String model, String canbus){
-    idfier = new DeviceIdentifier(id, model, canbus);
-
-
-  }
 
   /**
    * Reset the encoder to factory defaults.
    */
-
   /**
    * Clear sticky faults on the encoder.
    */
@@ -90,19 +89,12 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   @Override
   public void configure(boolean inverted)
   {
-    CANcoderConfiguration canConfigurate = new CANcoderConfiguration();
 
-    canConfigurate.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-    canConfigurate.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    canConfigurate.MagnetSensor.MagnetOffset = 0;
+    canConfiguration.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+    canConfiguration.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    canConfiguration.MagnetSensor.MagnetOffset = 0;
 
-    CANcoderConfigurator canConfigurator = new CANcoderConfigurator(idfier);
-
-    canConfigurator.refresh(canConfigurate);
-    canConfigurator.apply(canConfigurate);
-    
-
-
+    canConfigurator.apply(canConfiguration);
 
   }
 
@@ -128,9 +120,8 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
       DriverStation.reportWarning("CANCoder " + coder.getDeviceID() + " reading was faulty.\n", false);
       return 0;
     }
-    StatusSignalValue<Double> angle = coder.getAbsolutePosition();
 
-    return angle.getValue();
+    return coder.getAbsolutePosition().getValue();
 
     // Taken from democat's library.
     // Source: https://github.com/democat3457/swerve-lib/blob/7c03126b8c22f23a501b2c2742f9d173a5bcbc40/src/main/java/com/swervedrivespecialties/swervelib/ctre/CanCoderFactoryBuilder.java#L51-L74
@@ -150,7 +141,6 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
 
   @Override
   public void factoryDefault() {
-    // TODO Auto-generated method stub
-    
+    canConfigurator.apply(new CANcoderConfiguration());
   }
 }

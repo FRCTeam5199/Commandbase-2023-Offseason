@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+
 import com.ctre.phoenixpro.configs.*;
 import com.ctre.phoenixpro.hardware.TalonFX;
 import com.ctre.phoenixpro.controls.*;
@@ -20,6 +21,8 @@ import com.ctre.phoenixpro.hardware.DeviceIdentifier;
 
 import com.ctre.phoenixpro.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenixpro.signals.NeutralModeValue;
+import com.ctre.phoenixpro.hardware.DeviceIdentifier;
+
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
@@ -89,7 +92,9 @@ public class TalonFXSwerve extends SwerveMotor
     factoryDefaults();
     clearStickyFaults();
 
-    talonconfigurator = motor.getConfigurator();
+    talonconfigurator = new TalonFXConfigurator(deviceIdentifier);
+    motor.getConfigurator().refresh(talonConfig);
+  
 
     if (SwerveDriveTelemetry.isSimulation)
     {
@@ -149,7 +154,13 @@ public class TalonFXSwerve extends SwerveMotor
     talonConfig.FutureProofConfigs = true;
     talonConfig.Audio.BeepOnBoot = true;
 
+    talonConfig.Feedback.FeedbackRemoteSensorID = motor.getDeviceID();
+    talonConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    talonConfig.Feedback.RotorToSensorRatio = 12.8;
+    talonConfig.Feedback.SensorToMechanismRatio = 1;
+
     motor.getConfigurator().apply(talonConfig);
+
   }
 
   /**
@@ -248,7 +259,7 @@ public class TalonFXSwerve extends SwerveMotor
     slot0.kS = config.iz;
     configChanged = true;
 
-    motor.getConfigurator().apply(slot0);
+    motor.getConfigurator().apply(slot0, .05);
   }
 
   /**
@@ -387,7 +398,11 @@ public class TalonFXSwerve extends SwerveMotor
   @Override
   public double getPosition()
   {
-    return motor.getPosition().getValue() * positionConversionFactor;
+    StatusSignalValue<Double> rotorPosSignal = motor.getRotorPosition();
+
+    double rotorpos = rotorPosSignal.getValue() * positionConversionFactor;
+
+    return rotorpos;
   }
 
   /**
@@ -404,7 +419,6 @@ public class TalonFXSwerve extends SwerveMotor
     {
       position = position < 0 ? (position % 360) + 360 : position;
       positionmove = new PositionDutyCycle(position);
-
       motor.setControl(positionmove);
     }
   }
