@@ -39,6 +39,16 @@ public class Pigeon2Swerve extends SwerveIMU
   {
     imu = new Pigeon2(canid, canbus);
     Pigeon2Configuration config = new Pigeon2Configuration();
+    config.FutureProofConfigs = true;
+    config.Pigeon2Features.EnableCompass = true;
+    config.Pigeon2Features.DisableNoMotionCalibration = true;
+    config.Pigeon2Features.DisableTemperatureCompensation = true;
+    config.GyroTrim.GyroScalarX = 0;
+    config.GyroTrim.GyroScalarY = 0;
+    config.GyroTrim.GyroScalarZ = 0;
+    config.MountPose.MountPosePitch = 0;
+    config.MountPose.MountPoseRoll = 0;
+    config.MountPose.MountPoseYaw = 0;
     imu.getConfigurator().apply(config);
     SmartDashboard.putData(imu);
   }

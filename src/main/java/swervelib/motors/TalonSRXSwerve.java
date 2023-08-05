@@ -421,4 +421,9 @@ public class TalonSRXSwerve extends SwerveMotor
   {
     return absoluteEncoder;
   }
+
+  @Override
+  public void talonConfigure() {
+
+  }
 }

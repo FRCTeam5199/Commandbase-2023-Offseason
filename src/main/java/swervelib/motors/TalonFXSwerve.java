@@ -11,16 +11,16 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import com.ctre.phoenixpro.configs.*;
 import com.ctre.phoenixpro.hardware.TalonFX;
-import com.ctre.phoenixpro.hardware.core.CoreTalonFX;
-import com.ctre.phoenixpro.configs.TalonFXConfigurator;
-import com.ctre.phoenixpro.configs.VoltageConfigs;
-import com.ctre.phoenixpro.configs.TalonFXConfiguration;
 import com.ctre.phoenixpro.controls.*;
-import com.ctre.phoenixpro.configs.ClosedLoopRampsConfigs;
-import com.ctre.phoenixpro.configs.MotorOutputConfigs;
-import com.ctre.phoenixpro.configs.OpenLoopRampsConfigs;
+import com.ctre.phoenixpro.StatusCode;
+import com.ctre.phoenixpro.StatusSignalValue;
+import com.ctre.phoenixpro.hardware.DeviceIdentifier;
 
+import com.ctre.phoenixpro.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenixpro.signals.NeutralModeValue;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import swervelib.encoders.SwerveAbsoluteEncoder;
@@ -29,12 +29,14 @@ import swervelib.parser.PIDFConfig;
 import swervelib.simulation.ctre.PhysicsSim;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
+
 /**
  * {@link com.ctre.phoenix.motorcontrol.can.TalonFX} Swerve Motor. Made by Team 1466 WebbRobotics.
  */
 public class TalonFXSwerve extends SwerveMotor
 {
 
+  DeviceIdentifier deviceIdentifier;
   /**
    * Factory default already occurred.
    */
@@ -54,9 +56,8 @@ public class TalonFXSwerve extends SwerveMotor
    * TalonFX motor controller.
    */
   TalonFX motor;
-  CoreTalonFX coremotor;
 
-  private final TalonFXConfiguration talonconfig = new TalonFXConfiguration();
+  private final TalonFXConfiguration talonConfig = new TalonFXConfiguration();
   private final TalonFXConfigurator talonconfigurator;
   /**
    * The position conversion factor to convert raw sensor units to Meters Per 100ms, or Ticks to Degrees.
@@ -107,6 +108,8 @@ public class TalonFXSwerve extends SwerveMotor
   public TalonFXSwerve(int id, String canbus, boolean isDriveMotor)
   {
     this(new TalonFX(id, canbus), isDriveMotor);
+
+    deviceIdentifier = new DeviceIdentifier(id, "TalonFX", "Canivore1");
   }
 
 
@@ -120,6 +123,7 @@ public class TalonFXSwerve extends SwerveMotor
   public TalonFXSwerve(int id, boolean isDriveMotor)
   {
     this(new TalonFX(id), isDriveMotor);
+
   }
 
   /**
@@ -132,9 +136,20 @@ public class TalonFXSwerve extends SwerveMotor
     if (!factoryDefaultOccurred)
     {
       motor.getConfigurator().apply(new TalonFXConfiguration());
-      MotorOutputConfigs oconfig = new MotorOutputConfigs();
-      oconfig.DutyCycleNeutralDeadband = .001;
     }
+  }
+
+  public void talonConfigure(){
+    talonConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    talonConfig.MotorOutput.DutyCycleNeutralDeadband = .01;
+    talonConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = .25;
+    talonConfig.Feedback.FeedbackRotorOffset = 0;
+    talonConfig.Feedback.FeedbackRemoteSensorID = 1;
+    talonConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    talonConfig.FutureProofConfigs = true;
+    talonConfig.Audio.BeepOnBoot = true;
+
+    motor.getConfigurator().apply(talonConfig);
   }
 
   /**
@@ -212,8 +227,7 @@ public class TalonFXSwerve extends SwerveMotor
                                        int CANStatus10, int CANStatus12, int CANStatus13, int CANStatus14,
                                        int CANStatus21, int CANStatusCurrent)
   {
-    //Work on later
-
+    StatusCode statusCode;
     // TODO: Configure Status Frame 2 thru 21 if necessary
     // https://v5.docs.ctr-electronics.com/en/stable/ch18_CommonAPI.html#setting-status-frame-periods
   }
@@ -226,12 +240,15 @@ public class TalonFXSwerve extends SwerveMotor
   @Override
   public void configurePIDF(PIDFConfig config)
   {
-    talonconfig.Slot0.kP = config.p;
-    talonconfig.Slot0.kI = config.i;
-    talonconfig.Slot0.kD = config.d;
-    talonconfig.Slot0.kV = config.f;
-    talonconfig.Slot0.kS = config.iz;
+    Slot0Configs slot0 = new Slot0Configs();
+    slot0.kP = config.p;
+    slot0.kI = config.i;
+    slot0.kD = config.d;
+    slot0.kV = config.f;
+    slot0.kS = config.iz;
     configChanged = true;
+
+    motor.getConfigurator().apply(slot0);
   }
 
   /**
@@ -277,7 +294,6 @@ public class TalonFXSwerve extends SwerveMotor
   {
     if (configChanged)
     {
-      motor.getConfigurator();
       configChanged = false;
     }
   }
@@ -340,7 +356,7 @@ public class TalonFXSwerve extends SwerveMotor
     if (isDriveMotor)
     {
 
-      motor.setControl(new PositionDutyCycle(convertToNativeSensorUnits(setpoint, position), 
+      motor.setControl(new VelocityDutyCycle(convertToNativeSensorUnits(setpoint, position),
       true,
       feedforward/nominalVoltage, 
       0, 
@@ -405,9 +421,9 @@ public class TalonFXSwerve extends SwerveMotor
     vConfigs.SupplyVoltageTimeConstant = .01;
     vConfigs.PeakForwardVoltage = nominalVoltage;
     vConfigs.PeakReverseVoltage = nominalVoltage;
-    talonconfig.Voltage = vConfigs;
     configChanged = true;
     this.nominalVoltage = nominalVoltage;
+    motor.getConfigurator().apply(vConfigs);
   }
 
   /**
@@ -419,9 +435,12 @@ public class TalonFXSwerve extends SwerveMotor
   @Override
   public void setCurrentLimit(int currentLimit)
   {
-    talonconfig.CurrentLimits.SupplyCurrentLimit = currentLimit;
-    talonconfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
+    currentLimits.SupplyCurrentLimit = currentLimit;
+    currentLimits.SupplyCurrentLimitEnable = true;
     configChanged = true;
+
+    motor.getConfigurator().apply(currentLimits);
   }
 
   /**
@@ -436,9 +455,10 @@ public class TalonFXSwerve extends SwerveMotor
     OpenLoopRampsConfigs openRamp = new OpenLoopRampsConfigs();
     openRamp.DutyCycleOpenLoopRampPeriod = rampRate;
     closedRamp.DutyCycleClosedLoopRampPeriod = rampRate;
-    talonconfig.ClosedLoopRamps = closedRamp;
-    talonconfig.OpenLoopRamps = openRamp;
     configChanged = true;
+
+    motor.getConfigurator().apply(closedRamp);
+    motor.getConfigurator().apply(openRamp);
   }
 
   /**
