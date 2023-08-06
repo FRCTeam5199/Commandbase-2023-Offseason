@@ -90,14 +90,20 @@ public class TalonFXSwerve extends SwerveMotor
     this.isDriveMotor = isDriveMotor;
     this.motor = motor;
     TalonFXSimState talonsim = motor.getSimState();
+    
 
     factoryDefaults();
     clearStickyFaults();
 
-    talonconfigurator = new TalonFXConfigurator(deviceIdentifier);
-    motor.getConfigurator().refresh(talonConfig);
-  
+    deviceIdentifier = new DeviceIdentifier(motor.getDeviceID(), motor.getDescription(), motor.getCANBus());
 
+    talonconfigurator = new TalonFXConfigurator(deviceIdentifier);
+
+    talonConfigure();
+    
+    talonconfigurator.apply(talonConfig);
+    
+    motor.getConfigurator();
     if (SwerveDriveTelemetry.isSimulation)
     {
       PhysicsSim.getInstance().addTalonFX(motor, talonsim, .25, 6800);
@@ -116,7 +122,6 @@ public class TalonFXSwerve extends SwerveMotor
   {
     this(new TalonFX(id, canbus), isDriveMotor);
 
-    deviceIdentifier = new DeviceIdentifier(id, "TalonFX", "Canivore1");
   }
 
 
@@ -157,11 +162,10 @@ public class TalonFXSwerve extends SwerveMotor
     talonConfig.Audio.BeepOnBoot = true;
 
     talonConfig.Feedback.FeedbackRemoteSensorID = motor.getDeviceID();
-    talonConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     talonConfig.Feedback.RotorToSensorRatio = 12.8;
     talonConfig.Feedback.SensorToMechanismRatio = 1;
 
-    motor.getConfigurator().apply(talonConfig);
+    talonconfigurator.apply(talonConfig);
 
   }
 
@@ -420,7 +424,7 @@ public class TalonFXSwerve extends SwerveMotor
     if (!absoluteEncoder && !SwerveDriveTelemetry.isSimulation)
     {
       position = position < 0 ? (position % 360) + 360 : position;
-      positionmove = new PositionDutyCycle(position);
+      positionmove = new PositionDutyCycle(position, true, .1, 0, false);
       motor.setControl(positionmove);
     }
   }

@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Optional;
+
+import com.ctre.phoenixpro.hardware.DeviceIdentifier;
 import com.ctre.phoenixpro.hardware.Pigeon2;
 import com.ctre.phoenixpro.StatusSignalValue;
 import com.ctre.phoenixpro.configs.Pigeon2Configuration;
@@ -27,6 +29,7 @@ public class Pigeon2Swerve extends SwerveIMU
   /**
    * Offset for the Pigeon 2.
    */
+
   private Rotation3d offset = new Rotation3d();
 
   /**
@@ -38,7 +41,10 @@ public class Pigeon2Swerve extends SwerveIMU
   public Pigeon2Swerve(int canid, String canbus)
   {
     imu = new Pigeon2(canid, canbus);
+    DeviceIdentifier pidgerID = new DeviceIdentifier(canid, "Pigeon2", "rio");
+    Pigeon2Configurator pidgeyConfigurator = new Pigeon2Configurator(pidgerID);
     Pigeon2Configuration config = new Pigeon2Configuration();
+    factoryDefault();
     config.FutureProofConfigs = true;
     config.Pigeon2Features.EnableCompass = true;
     config.Pigeon2Features.DisableNoMotionCalibration = true;
@@ -49,7 +55,8 @@ public class Pigeon2Swerve extends SwerveIMU
     config.MountPose.MountPosePitch = 0;
     config.MountPose.MountPoseRoll = 0;
     config.MountPose.MountPoseYaw = 0;
-    imu.getConfigurator().apply(config);
+    pidgeyConfigurator.apply(config);
+    imu.getConfigurator().equals(pidgeyConfigurator);
     SmartDashboard.putData(imu);
   }
 

@@ -63,9 +63,11 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   
     factoryDefault();
     clearStickyFaults();
-    configure(true);
+    configure(false);
 
-    canConfigurator.refresh(canConfiguration);
+    canConfigurator.apply(canConfiguration);
+
+    coder.getConfigurator();
   }
 
 
