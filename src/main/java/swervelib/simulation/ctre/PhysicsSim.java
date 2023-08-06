@@ -1,6 +1,7 @@
 package swervelib.simulation.ctre;
 
 import com.ctre.phoenixpro.hardware.TalonFX;
+import com.ctre.phoenixpro.sim.TalonFXSimState;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import java.util.ArrayList;
@@ -81,9 +82,9 @@ public class PhysicsSim
    * @param accelToFullTime The time the motor takes to accelerate from 0 to full, in seconds
    * @param fullVel         The maximum motor velocity, in ticks per 100ms
    */
-  public void addTalonFX(TalonFX falcon, final double accelToFullTime, final double fullVel)
+  public void addTalonFX(TalonFX falcon, TalonFXSimState falconsim, final double accelToFullTime, final double fullVel)
   {
-    addTalonFX(falcon, accelToFullTime, fullVel, false);
+    addTalonFX(falcon, falconsim, accelToFullTime, fullVel, false);
   }
 
   /**
@@ -96,6 +97,7 @@ public class PhysicsSim
    */
   public void addTalonFX(
       TalonFX falcon,
+      TalonFXSimState falconsim,
       final double accelToFullTime,
       final double fullVel,
       final boolean sensorPhase)
@@ -103,7 +105,7 @@ public class PhysicsSim
     if (falcon != null)
     {
       TalonFXSimProfile simFalcon =
-          new TalonFXSimProfile(falcon, accelToFullTime, fullVel, sensorPhase);
+          new TalonFXSimProfile(falcon, falconsim, accelToFullTime, fullVel, sensorPhase);
       _simProfiles.add(simFalcon);
     }
   }

@@ -21,6 +21,7 @@ import com.ctre.phoenixpro.hardware.DeviceIdentifier;
 
 import com.ctre.phoenixpro.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenixpro.signals.NeutralModeValue;
+import com.ctre.phoenixpro.sim.TalonFXSimState;
 import com.ctre.phoenixpro.hardware.DeviceIdentifier;
 
 import edu.wpi.first.wpilibj.DutyCycle;
@@ -88,6 +89,7 @@ public class TalonFXSwerve extends SwerveMotor
   {
     this.isDriveMotor = isDriveMotor;
     this.motor = motor;
+    TalonFXSimState talonsim = motor.getSimState();
 
     factoryDefaults();
     clearStickyFaults();
@@ -98,7 +100,7 @@ public class TalonFXSwerve extends SwerveMotor
 
     if (SwerveDriveTelemetry.isSimulation)
     {
-      PhysicsSim.getInstance().addTalonFX(motor, .25, 6800);
+      PhysicsSim.getInstance().addTalonFX(motor, talonsim, .25, 6800);
     }
   }
 
