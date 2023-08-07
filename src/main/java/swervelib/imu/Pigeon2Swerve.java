@@ -1,18 +1,17 @@
 package swervelib.imu;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Optional;
 
-import com.ctre.phoenixpro.hardware.DeviceIdentifier;
-import com.ctre.phoenixpro.hardware.Pigeon2;
-import com.ctre.phoenixpro.StatusSignalValue;
-import com.ctre.phoenixpro.configs.Pigeon2Configuration;
-import com.ctre.phoenixpro.configs.Pigeon2Configurator;
-import com.ctre.phoenixpro.configs.Pigeon2FeaturesConfigs;
+import com.ctre.phoenix6.hardware.DeviceIdentifier;
+import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.configs.Pigeon2Configurator;
+import com.ctre.phoenix6.configs.Pigeon2FeaturesConfigs;
 
 
 
@@ -41,8 +40,6 @@ public class Pigeon2Swerve extends SwerveIMU
   public Pigeon2Swerve(int canid, String canbus)
   {
     imu = new Pigeon2(canid, canbus);
-    DeviceIdentifier pidgerID = new DeviceIdentifier(canid, "Pigeon2", "rio");
-    Pigeon2Configurator pidgeyConfigurator = new Pigeon2Configurator(pidgerID);
     Pigeon2Configuration config = new Pigeon2Configuration();
     factoryDefault();
     config.FutureProofConfigs = true;
@@ -55,8 +52,7 @@ public class Pigeon2Swerve extends SwerveIMU
     config.MountPose.MountPosePitch = 0;
     config.MountPose.MountPoseRoll = 0;
     config.MountPose.MountPoseYaw = 0;
-    pidgeyConfigurator.apply(config);
-    imu.getConfigurator().equals(pidgeyConfigurator);
+    imu.getConfigurator().apply(config);
     SmartDashboard.putData(imu);
   }
 
@@ -113,10 +109,10 @@ public class Pigeon2Swerve extends SwerveIMU
     double x;
     double y;
     double z;
-    w = imu.getQuatW().getValue();
-    x = imu.getQuatX().getValue();
-    y = imu.getQuatY().getValue();
-    z = imu.getQuatZ().getValue();
+    w = imu.getQuatW().refresh().getValue();
+    x = imu.getQuatX().refresh().getValue();
+    y = imu.getQuatY().refresh().getValue();
+    z = imu.getQuatZ().refresh().getValue();
         return new Rotation3d(new Quaternion(w, x, y, z));
   }
 
@@ -143,9 +139,9 @@ public class Pigeon2Swerve extends SwerveIMU
     double x;
     double y;
     double z;
-    x = imu.getAccelerationX().getValue();
-    y = imu.getAccelerationY().getValue();
-    z = imu.getAccelerationZ().getValue();
+    x = imu.getAccelerationX().refresh().getValue();
+    y = imu.getAccelerationY().refresh().getValue();
+    z = imu.getAccelerationZ().refresh().getValue();
     return Optional.of(new Translation3d(x, y, z).times(9.81 / 16384.0));
   }
 

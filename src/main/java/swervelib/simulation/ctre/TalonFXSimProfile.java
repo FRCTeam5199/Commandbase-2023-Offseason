@@ -2,8 +2,8 @@ package swervelib.simulation.ctre;
 
 import static swervelib.simulation.ctre.PhysicsSim.random;
 
-import com.ctre.phoenixpro.hardware.TalonFX;
-import com.ctre.phoenixpro.sim.TalonFXSimState;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.sim.TalonFXSimState;
 
 
 import swervelib.simulation.ctre.PhysicsSim.SimProfile;

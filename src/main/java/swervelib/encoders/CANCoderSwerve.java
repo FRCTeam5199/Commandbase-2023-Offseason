@@ -1,26 +1,20 @@
 package swervelib.encoders;
 
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.MagnetFieldStrength;
-import com.ctre.phoenixpro.configs.CANcoderConfiguration;
-import com.ctre.phoenixpro.configs.MagnetSensorConfigs;
-import com.ctre.phoenixpro.configs.jni.ConfigJNI;
-import com.ctre.phoenixpro.hardware.CANcoder;
-import com.ctre.phoenixpro.configs.CANcoderConfigurator;
-import com.ctre.phoenixpro.hardware.DeviceIdentifier;
-import com.ctre.phoenixpro.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenixpro.signals.MagnetHealthValue;
-import com.ctre.phoenixpro.signals.SensorDirectionValue;
-import com.ctre.phoenixpro.spns.SpnValue;
+
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.jni.ConfigJNI;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
+import com.ctre.phoenix6.hardware.DeviceIdentifier;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.MagnetHealthValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.spns.SpnValue;
 import com.ctre.phoenixpro.hardware.core.*;
-import com.ctre.phoenixpro.StatusCode;
-import com.ctre.phoenixpro.StatusSignalValue;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.ctre.phoenix.sensors.SensorTimeBase;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 
@@ -35,8 +29,6 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
    */
   public CANcoder coder;
   public CANcoderConfiguration canConfiguration = new CANcoderConfiguration();
-  public CANcoderConfigurator canConfigurator;
-  public DeviceIdentifier idfier;
 
 
   /**
@@ -58,16 +50,13 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   public CANCoderSwerve(int id, String canbus)
   {
     coder = new CANcoder(id, canbus);
-    idfier = new DeviceIdentifier(id, "CANCoder", canbus);
-    canConfigurator = new CANcoderConfigurator(idfier);
   
     factoryDefault();
     clearStickyFaults();
     configure(false);
 
-    canConfigurator.apply(canConfiguration);
 
-    coder.getConfigurator();
+    coder.getConfigurator().apply(canConfiguration);
   }
 
 
@@ -96,8 +85,6 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
     canConfiguration.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     canConfiguration.MagnetSensor.MagnetOffset = 0;
 
-    canConfigurator.apply(canConfiguration);
-
   }
 
   /**
@@ -109,7 +96,8 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
   public double getAbsolutePosition()
   {
     readingError = false;
-    StatusSignalValue<MagnetHealthValue> magnetstrength = coder.getMagnetHealth();
+    coder.getMagnetHealth().refresh();
+    StatusSignal<MagnetHealthValue> magnetstrength = coder.getMagnetHealth();
 
 
     if (magnetstrength.getValue() != MagnetHealthValue.Magnet_Green){
@@ -122,8 +110,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
       DriverStation.reportWarning("CANCoder " + coder.getDeviceID() + " reading was faulty.\n", false);
       return 0;
     }
-
-    return coder.getAbsolutePosition().getValue();
+    return coder.getAbsolutePosition().refresh().getValue();
 
     // Taken from democat's library.
     // Source: https://github.com/democat3457/swerve-lib/blob/7c03126b8c22f23a501b2c2742f9d173a5bcbc40/src/main/java/com/swervedrivespecialties/swervelib/ctre/CanCoderFactoryBuilder.java#L51-L74
@@ -143,6 +130,6 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder
 
   @Override
   public void factoryDefault() {
-    canConfigurator.apply(new CANcoderConfiguration());
+    coder.getConfigurator().apply(new CANcoderConfiguration());
   }
 }

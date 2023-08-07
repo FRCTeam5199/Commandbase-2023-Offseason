@@ -2,27 +2,23 @@ package swervelib.motors;
 
 import javax.swing.text.Position;
 
-import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.IMotorController;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 
-import com.ctre.phoenixpro.configs.*;
-import com.ctre.phoenixpro.hardware.TalonFX;
-import com.ctre.phoenixpro.controls.*;
-import com.ctre.phoenixpro.StatusCode;
+
+import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.controls.CoastOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenixpro.StatusSignalValue;
-import com.ctre.phoenixpro.hardware.DeviceIdentifier;
+import com.ctre.phoenixpro.controls.*;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.hardware.DeviceIdentifier;
 
-import com.ctre.phoenixpro.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenixpro.signals.NeutralModeValue;
-import com.ctre.phoenixpro.sim.TalonFXSimState;
-import com.ctre.phoenixpro.hardware.DeviceIdentifier;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.Timer;
@@ -62,7 +58,6 @@ public class TalonFXSwerve extends SwerveMotor
   TalonFX motor;
 
   private final TalonFXConfiguration talonConfig = new TalonFXConfiguration();
-  private final TalonFXConfigurator talonconfigurator;
   /**
    * The position conversion factor to convert raw sensor units to Meters Per 100ms, or Ticks to Degrees.
    */
@@ -75,8 +70,6 @@ public class TalonFXSwerve extends SwerveMotor
    * Nominal voltage default to use with feedforward.
    */
   private double  nominalVoltage           = 12.0;
-
-  NeutralOut nOut = new NeutralOut();
 
 
   /**
@@ -95,18 +88,13 @@ public class TalonFXSwerve extends SwerveMotor
     factoryDefaults();
     clearStickyFaults();
 
-    deviceIdentifier = new DeviceIdentifier(motor.getDeviceID(), motor.getDescription(), motor.getCANBus());
-
-    talonconfigurator = new TalonFXConfigurator(deviceIdentifier);
-
     talonConfigure();
     
-    talonconfigurator.apply(talonConfig);
     
-    motor.getConfigurator();
+    motor.getConfigurator().apply(talonConfig);
     if (SwerveDriveTelemetry.isSimulation)
     {
-      PhysicsSim.getInstance().addTalonFX(motor, talonsim, .25, 6800);
+      PhysicsSim.getInstance().addTalonFX(motor, talonsim, .25, 6800.0);
     }
   }
 
@@ -164,8 +152,6 @@ public class TalonFXSwerve extends SwerveMotor
     talonConfig.Feedback.FeedbackRemoteSensorID = motor.getDeviceID();
     talonConfig.Feedback.RotorToSensorRatio = 12.8;
     talonConfig.Feedback.SensorToMechanismRatio = 1;
-
-    talonconfigurator.apply(talonConfig);
 
   }
 
@@ -288,7 +274,7 @@ public class TalonFXSwerve extends SwerveMotor
   @Override
   public void setMotorBrake(boolean isBrakeMode)
   {
-    motor.setControl(nOut);
+    motor.setControl(new CoastOut());
   }
 
   /**
@@ -372,7 +358,7 @@ public class TalonFXSwerve extends SwerveMotor
 
     if (isDriveMotor)
     {
-
+      motor.getConfigurator().refresh(talonConfig);
       motor.setControl(new VelocityDutyCycle(convertToNativeSensorUnits(setpoint, position),
       true,
       feedforward/nominalVoltage, 
@@ -381,7 +367,9 @@ public class TalonFXSwerve extends SwerveMotor
 
     } else
     {
+      motor.getConfigurator().refresh(talonConfig);
       motor.setControl(new PositionDutyCycle(convertToNativeSensorUnits(setpoint, position), true, feedforward, 0, false));
+
     }
   }
 
@@ -393,7 +381,8 @@ public class TalonFXSwerve extends SwerveMotor
   @Override
   public double getVelocity()
   {
-    return (motor.getVelocity().getValue() * 10) * positionConversionFactor;
+    motor.getConfigurator().refresh(talonConfig);
+    return (motor.getVelocity().refresh().getValue() * 10) * positionConversionFactor;
   }
 
   /**
@@ -404,9 +393,11 @@ public class TalonFXSwerve extends SwerveMotor
   @Override
   public double getPosition()
   {
-    StatusSignalValue<Double> rotorPosSignal = motor.getRotorPosition();
+    motor.getConfigurator().refresh(talonConfig);
 
-    double rotorpos = rotorPosSignal.getValue() * positionConversionFactor;
+    StatusSignal<Double> rotorPosSignal = motor.getRotorPosition();
+
+    double rotorpos = rotorPosSignal.refresh().getValue() * positionConversionFactor;
 
     return rotorpos;
   }
@@ -423,6 +414,7 @@ public class TalonFXSwerve extends SwerveMotor
     PositionDutyCycle positionmove;
     if (!absoluteEncoder && !SwerveDriveTelemetry.isSimulation)
     {
+      motor.getConfigurator().refresh(talonConfig);
       position = position < 0 ? (position % 360) + 360 : position;
       positionmove = new PositionDutyCycle(position, true, .1, 0, false);
       motor.setControl(positionmove);

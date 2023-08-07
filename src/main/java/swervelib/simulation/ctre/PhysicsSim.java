@@ -1,9 +1,8 @@
 package swervelib.simulation.ctre;
 
-import com.ctre.phoenixpro.hardware.TalonFX;
-import com.ctre.phoenixpro.sim.TalonFXSimState;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.sim.TalonFXSimState;
+
 import java.util.ArrayList;
 
 /**
@@ -48,11 +47,12 @@ public class PhysicsSim
    * @param accelToFullTime The time the motor takes to accelerate from 0 to full, in seconds
    * @param fullVel         The maximum motor velocity, in ticks per 100ms
    */
+  /* 
   public void addTalonSRX(TalonSRX talon, final double accelToFullTime, final double fullVel)
   {
     addTalonSRX(talon, accelToFullTime, fullVel, false);
   }
-
+  */
   /**
    * Adds a TalonSRX controller to the simulator.
    *
@@ -60,7 +60,7 @@ public class PhysicsSim
    * @param accelToFullTime The time the motor takes to accelerate from 0 to full, in seconds
    * @param fullVel         The maximum motor velocity, in ticks per 100ms
    * @param sensorPhase     The phase of the TalonSRX sensors
-   */
+   
   public void addTalonSRX(
       TalonSRX talon,
       final double accelToFullTime,
@@ -74,7 +74,7 @@ public class PhysicsSim
       _simProfiles.add(simTalon);
     }
   }
-
+  */
   /**
    * Adds a TalonFX controller to the simulator.
    *
@@ -115,6 +115,7 @@ public class PhysicsSim
    *
    * @param victor The VictorSPX device
    */
+  /* 
   public void addVictorSPX(VictorSPX victor)
   {
     if (victor != null)
@@ -123,7 +124,7 @@ public class PhysicsSim
       _simProfiles.add(simVictor);
     }
   }
-
+  */
   /**
    * Runs the simulator: - enable the robot - simulate sensors
    */
