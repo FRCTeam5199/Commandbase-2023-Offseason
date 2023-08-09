@@ -143,4 +143,14 @@ public class SparkMaxController extends AbstractMotorControl {
             else
                 failureFlag = true;
     }
+
+    @Override
+    public AbstractMotorControl setCurrentLimit(int limit) {
+        if (sparkmax.setSmartCurrentLimit(limit) != REVLibError.kOk)
+            if (!Robot.SECOND_TRY)
+                throw new IllegalStateException("Spark motor controller with ID " + sparkmax.getDeviceId() + " could not set current limit");
+            else
+                failureFlag = true;
+        return this;
+    }
 }

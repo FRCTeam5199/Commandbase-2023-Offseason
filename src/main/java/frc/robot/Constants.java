@@ -53,28 +53,32 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND = 0.01;
   }
 
+
+  public static class MotorIDs {
 /*
         ID Section
         Declare all motor ID's here
         Try and keep it organized by subsystem please
  */
-    public static final int WIRST_MOTOR_ID = 36,
-        ELEVATOR_MOTOR_ID = 30,
-        ARM_MOTOR_ID = 31,
-        WRIST_MOTOR_ID = 0,
-        PCM_ID = 50,
-        INTAKE_IN_ID = 12,
-        INTAKE_OUT_ID = 2,
-        SPIKE_IN_ID = 3,
-        SPIKE_OUT_ID = 13;
+    public static final int WRIST_MOTOR_ID = 36;
+    public static final int ELEVATOR_MOTOR_ID = 30;
+    public static final int ARM_MOTOR_ID = 31;
+    public static final int PCM_ID = 50;
+    public static final int INTAKE_IN_ID = 12;
+    public static final int INTAKE_OUT_ID = 2;
+    public static final int SPIKE_IN_ID = 3;
+    public static final int SPIKE_OUT_ID = 13;
 
-    //////////////////////////
-    //  Controller Ports    //
-    //////////////////////////
-    public static final int XBOX_CONTROLLER_USB_SLOT = 0,
-            XBOX_CONTROLLER_USB_SLOT_2 = 1,
-            BUTTON_PANEL_USB_SLOT1 = 2,
-            BUTTON_PANEL_USB_SLOT2= 3;
+
+}
+
+      //////////////////////////
+      //  Controller Ports    //
+      //////////////////////////
+        public static final int XBOX_CONTROLLER_USB_SLOT = 0,
+        XBOX_CONTROLLER_USB_SLOT_2 = 1,
+        BUTTON_PANEL_USB_SLOT1 = 2,
+        BUTTON_PANEL_USB_SLOT2= 3;
 
     public static class PieceManipulation {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

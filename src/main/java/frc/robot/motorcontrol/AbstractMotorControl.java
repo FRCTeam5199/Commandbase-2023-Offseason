@@ -51,6 +51,8 @@ public abstract class AbstractMotorControl {
     public abstract double getRotations();
 
     public abstract double getAbsoluteRotations();
+
+    public abstract AbstractMotorControl setCurrentLimit(int limit);
     
 
 
