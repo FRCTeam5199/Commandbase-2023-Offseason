@@ -1,84 +1,72 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "CANCoder[10]": {
+      "SPARK MAX [1]": {
         "header": {
           "open": true
         }
       },
-      "CANCoder[11]": {
+      "Talon FX[50]": {
         "header": {
           "open": true
         }
       },
-      "Pigeon 2[100]": {
+      "Talon FX[51]/Integrated Sensor": {
         "header": {
           "open": true
         }
       },
-      "Talon FX[1]": {
+      "Talon FX[52]/Integrated Sensor": {
         "header": {
           "open": true
         }
       },
-      "Talon FX[1]/Fwd Limit": {
+      "Talon FX[8]/Integrated Sensor": {
         "header": {
           "open": true
         }
-      },
-      "Talon FX[1]/Integrated Sensor": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[2]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[3]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[4]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[5]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[5]/Integrated Sensor": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[6]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[6]/Fwd Limit": {
-        "header": {
-          "open": true
-        }
-      }
-    },
-    "RoboRIO": {
-      "window": {
-        "visible": true
       }
     }
   },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/SwerveSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/Pigeon 2 [13]": "Gyro",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Field": "Field2d",
-      "/SmartDashboard/Pigeon 2 [100]": "Gyro",
-      "/SmartDashboard/Pigeon 2 [22]": "Gyro"
+      "/SmartDashboard/Pigeon 2 [13]": "Gyro",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/navX-Sensor[1]": "Gyro"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "XModules": {
+          "arrowColor": [
+            0.09611687064170837,
+            0.17414122819900513,
+            0.9803921580314636,
+            255.0
+          ],
+          "arrowSize": 33,
+          "arrowWeight": 3.0,
+          "style": "Hidden"
+        },
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "open": true,
+        "swerve": {
+          "open": true
+        }
+      }
     }
   }
 }
