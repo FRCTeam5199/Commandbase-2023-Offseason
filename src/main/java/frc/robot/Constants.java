@@ -4,16 +4,12 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import frc.robot.misc.PID;
-import frc.robot.motorcontrol.AbstractMotorControl;
-
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.misc.PID;
 import swervelib.math.Matter;
 import swervelib.parser.PIDFConfig;
-
-import java.security.PublicKey;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
@@ -55,22 +51,40 @@ public final class Constants {
 
 
   public static class MotorIDs {
-/*
+    /*
         ID Section
         Declare all motor ID's here
         Try and keep it organized by subsystem please
- */
+    */
+    
+    // Elevator
+    public static final int ELEVATOR_MOTOR_ID = 40;
+    
+    // Arm
+    public static final int ARM_EXTEND_MOTOR_ID = 35;
+    public static final int ARM_ROTATE_MOTOR_ID = 43;
+
+    // Wrist
     public static final int WRIST_MOTOR_ID = 36;
-    public static final int ELEVATOR_MOTOR_ID = 30;
-    public static final int ARM_MOTOR_ID = 31;
-    public static final int PCM_ID = 50;
+
+    // Intake
     public static final int INTAKE_IN_ID = 12;
     public static final int INTAKE_OUT_ID = 2;
     public static final int SPIKE_IN_ID = 3;
     public static final int SPIKE_OUT_ID = 13;
+  }
 
+  public static class Pneumatics {
+    // Pneumatics Control Module
+    public static final int PCM_ID = 50;
 
-}
+    // Compressor
+    public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
+
+    // Claw
+    public static final int CLAW_IN_ID = 2;
+    public static final int CLAW_OUT_ID = 12;
+  }
 
       //////////////////////////
       //  Controller Ports    //
@@ -128,6 +142,4 @@ public final class Constants {
         public static final PID WRIST_PID = new PID(.08, 0.0001, 0.045, 0);
 
     }
-
-
 }

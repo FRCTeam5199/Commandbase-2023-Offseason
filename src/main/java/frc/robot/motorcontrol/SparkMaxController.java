@@ -5,17 +5,17 @@ import static com.revrobotics.CANSparkMax.ControlType.kVelocity;
 import static com.revrobotics.CANSparkMax.IdleMode.kBrake;
 import static com.revrobotics.CANSparkMax.IdleMode.kCoast;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.misc.PID;
 
 import frc.robot.Robot;
+import frc.robot.misc.PID;
 
-public class SparkMaxController extends AbstractMotorControl {
+public class SparkMaxController extends AbstractMotorController {
     CANSparkMax sparkmax;
     SparkMaxPIDController myPid;
     RelativeEncoder encoder;
@@ -45,7 +45,7 @@ public class SparkMaxController extends AbstractMotorControl {
     }
 
     @Override
-    public AbstractMotorControl setInverted(boolean invert) {
+    public AbstractMotorController setInverted(boolean invert) {
         sparkmax.setInverted(invert);
 
         return this;
@@ -53,7 +53,7 @@ public class SparkMaxController extends AbstractMotorControl {
     }
 
     @Override
-    public AbstractMotorControl follow(AbstractMotorControl leader, boolean invert) {
+    public AbstractMotorController follow(AbstractMotorController leader, boolean invert) {
         return leader;
     }
 
@@ -100,11 +100,11 @@ public class SparkMaxController extends AbstractMotorControl {
 
     @Override
     public void setPercent(double percent) {
-        // doesnt work with sparkMax
+        sparkmax.set(percent);
     }
 
     @Override
-    public AbstractMotorControl setPID(PID pid) {
+    public AbstractMotorController setPID(PID pid) {
         if (myPid.setP(pid.getP(), 0) != REVLibError.kOk || myPid.setI(pid.getI(), 0) != REVLibError.kOk || myPid.setD(pid.getD(), 0) != REVLibError.kOk || myPid.setFF(pid.getF(), 0) != REVLibError.kOk)
             if (!Robot.SECOND_TRY)
                 throw new IllegalStateException("Spark motor controller with ID " + sparkmax.getDeviceId() + " F in PIDF couldnt be reset");
@@ -120,7 +120,7 @@ public class SparkMaxController extends AbstractMotorControl {
     }
 
     @Override
-    public AbstractMotorControl setOpenLoopRampRate(double timeToMaxSpeed) {
+    public AbstractMotorController setOpenLoopRampRate(double timeToMaxSpeed) {
         if (sparkmax.setOpenLoopRampRate(timeToMaxSpeed) != REVLibError.kOk)
             if (!Robot.SECOND_TRY)
                 throw new IllegalStateException("Spark motor controller with ID " + sparkmax.getDeviceId() + " could not set open loop ramp");
@@ -130,7 +130,7 @@ public class SparkMaxController extends AbstractMotorControl {
     }
     
     @Override
-    public AbstractMotorControl setBrake(boolean brake) {
+    public AbstractMotorController setBrake(boolean brake) {
         sparkmax.setIdleMode(brake ? kBrake : kCoast);
         return this;
     }
@@ -145,7 +145,7 @@ public class SparkMaxController extends AbstractMotorControl {
     }
 
     @Override
-    public AbstractMotorControl setCurrentLimit(int limit) {
+    public AbstractMotorController setCurrentLimit(int limit) {
         if (sparkmax.setSmartCurrentLimit(limit) != REVLibError.kOk)
             if (!Robot.SECOND_TRY)
                 throw new IllegalStateException("Spark motor controller with ID " + sparkmax.getDeviceId() + " could not set current limit");
