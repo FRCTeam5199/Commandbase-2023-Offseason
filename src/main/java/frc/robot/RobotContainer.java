@@ -10,10 +10,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
@@ -22,6 +24,10 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import java.io.File;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.CloseAction;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -46,6 +52,8 @@ public class RobotContainer
 
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  final IntakeSubsystem intake = new IntakeSubsystem();
+
   XboxController driverXbox = new XboxController(0);
 
   CommandXboxController commandXboxController = new CommandXboxController(1);
@@ -91,6 +99,7 @@ public class RobotContainer
         () -> -driverXbox.getRawAxis(4), () -> true, false, true);
 
     drivebase.setDefaultCommand(simClosedFieldRel);
+    
   }
 
   /**
@@ -106,6 +115,19 @@ public class RobotContainer
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
     
+//    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+
+    // left and rigth bumper
+    new JoystickButton(driverXbox, 0).onTrue(new InstantCommand(intake::runIntakes));
+    new JoystickButton(driverXbox, 4).onTrue(new InstantCommand(intake::deployPiston));
+    new JoystickButton(driverXbox, 5).onTrue(new InstantCommand(intake::retractPiston));
+    
+
+    // rigth button next to xbox sign     true == cone / false == cube
+    
+    
+    commandXboxController.button(7).onTrue(intake.switchCubeCone());
+
     commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
     commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
     
@@ -119,8 +141,12 @@ public class RobotContainer
     commandXboxController.x().onTrue(arm./*raise*/moveArm(5));
     // commandXboxController.x().onTrue(elevator.lowerElevator(5));
 
+    
+
     // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
+
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

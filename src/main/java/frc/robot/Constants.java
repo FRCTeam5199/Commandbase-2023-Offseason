@@ -67,9 +67,15 @@ public final class Constants {
     // Wrist
     public static final int WRIST_MOTOR_ID = 36;
 
-    // Intake
+    //Top Intake 
     public static final int INTAKE_IN_ID = 12;
     public static final int INTAKE_OUT_ID = 2;
+    
+    public static final int TopIntakeLeft_ID = 44;
+    public static final int TopIntakeRigth_ID = 27;
+
+    //Bottom Intake
+    public static final int BottomIntakeMotor_ID = 54;
     public static final int SPIKE_IN_ID = 3;
     public static final int SPIKE_OUT_ID = 13;
   }
@@ -132,7 +138,7 @@ public final class Constants {
         public static final boolean ENABLE_INTAKE = true;
         public static final String INTAKE_MOTOR_CANBUS = "rio";
         public static final boolean INTAKE_MANUAL = true;
-
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //  Wrist
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
