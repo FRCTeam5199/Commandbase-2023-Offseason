@@ -86,6 +86,9 @@ public class SwerveModule
     angleMotor.factoryDefaults();
     driveMotor.factoryDefaults();
 
+    angleMotor.talonConfigure();
+    driveMotor.talonConfigure();
+
     // Configure voltage comp, current limit, and ramp rate.
     angleMotor.setVoltageCompensation(configuration.physicalCharacteristics.optimalVoltage);
     driveMotor.setVoltageCompensation(configuration.physicalCharacteristics.optimalVoltage);

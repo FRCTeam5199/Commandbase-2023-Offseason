@@ -2,7 +2,10 @@ package swervelib.simulation.ctre;
 
 import static swervelib.simulation.ctre.PhysicsSim.random;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.sim.TalonFXSimState;
+
+
 import swervelib.simulation.ctre.PhysicsSim.SimProfile;
 
 /**
@@ -12,6 +15,7 @@ class TalonFXSimProfile extends SimProfile
 {
 
   private final TalonFX _falcon;
+  private final TalonFXSimState _falconsim;
   private final double  _accelToFullTime;
   private final double  _fullVel;
   private final boolean _sensorPhase;
@@ -33,14 +37,18 @@ class TalonFXSimProfile extends SimProfile
    */
   public TalonFXSimProfile(
       final TalonFX falcon,
+      TalonFXSimState falconsim,
       final double accelToFullTime,
       final double fullVel,
       final boolean sensorPhase)
   {
     this._falcon = falcon;
+    this._falconsim = falconsim;
     this._accelToFullTime = accelToFullTime;
     this._fullVel = fullVel;
     this._sensorPhase = sensorPhase;
+    falconsim = falcon.getSimState();
+  
   }
 
   /**
@@ -57,7 +65,7 @@ class TalonFXSimProfile extends SimProfile
 
     /// DEVICE SPEED SIMULATION
 
-    double outPerc = _falcon.getSimCollection().getMotorOutputLeadVoltage() / 12;
+    double outPerc =  _falconsim.getMotorVoltage()/ 12;
     if (_sensorPhase)
     {
       outPerc *= -1;
@@ -72,21 +80,20 @@ class TalonFXSimProfile extends SimProfile
     {
       _vel -= accelAmount;
     } else
-    {
+    { 
+      _falcon.getPosition();
+      _falcon.getVelocity();
       _vel += 0.9 * (theoreticalVel - _vel);
+
+      double supplyCurrent = Math.abs(outPerc) * 30 * random(0.95, 1.05);
+      double statorCurrent = outPerc == 0 ? 0 : supplyCurrent / Math.abs(outPerc);
+
+      _falconsim.setSupplyVoltage(statorCurrent);
+
     }
     // _pos += _vel * period / 100;
 
     /// SET SIM PHYSICS INPUTS
 
-    _falcon.getSimCollection().addIntegratedSensorPosition((int) (_vel * period / 100));
-    _falcon.getSimCollection().setIntegratedSensorVelocity((int) _vel);
-
-    double supplyCurrent = Math.abs(outPerc) * 30 * random(0.95, 1.05);
-    double statorCurrent = outPerc == 0 ? 0 : supplyCurrent / Math.abs(outPerc);
-    _falcon.getSimCollection().setSupplyCurrent(supplyCurrent);
-    _falcon.getSimCollection().setStatorCurrent(statorCurrent);
-
-    _falcon.getSimCollection().setBusVoltage(12 - outPerc * outPerc * 3 / 4 * random(0.95, 1.05));
   }
 }

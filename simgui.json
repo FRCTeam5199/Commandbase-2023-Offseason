@@ -1,7 +1,82 @@
 {
   "HALProvider": {
     "Other Devices": {
+      "CANCoder (Pro)[11]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Pigeon 2 (Pro)[22]": {
+        "header": {
+          "open": true
+        }
+      },
       "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[1]/Fwd Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[1]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[1]/Rotor Sensor": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[2]/Rotor Sensor": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[4]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[4]/Fwd Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[4]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[4]/Rotor Sensor": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[7]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[7]/Fwd Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (Pro)[7]/Rotor Sensor": {
         "header": {
           "open": true
         }
@@ -36,6 +111,7 @@
       "/LiveWindow/Ungrouped/Pigeon 2 [13]": "Gyro",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Pigeon 2 (Pro) [22]": "Gyro",
       "/SmartDashboard/Pigeon 2 [13]": "Gyro",
       "/SmartDashboard/Pigeon 2 [22]": "Gyro",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",

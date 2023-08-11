@@ -4,25 +4,24 @@
 
 package frc.robot;
 
+import java.io.File;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import java.io.File;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.CloseAction;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -35,12 +34,22 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/falcon"));
+
+  final ClawSubsystem claw = new ClawSubsystem();
+  
+  final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  
+  final ArmSubsystem arm = new ArmSubsystem();
+  
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
+
+  CommandXboxController commandXboxController = new CommandXboxController(1);
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -55,9 +64,9 @@ public class RobotContainer
                                                           // are back-right positive while robot
                                                           // controls are front-left positive
                                                           () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                                       OperatorConstants.LEFT_Y_DEADBAND),
+                                                                                        Constants.OperatorConstants.LEFT_Y_DEADBAND),
                                                           () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                                                       OperatorConstants.LEFT_X_DEADBAND),
+                                                                                        Constants.OperatorConstants.LEFT_X_DEADBAND),
                                                           () -> -driverXbox.getRightX(),
                                                           () -> -driverXbox.getRightY(),
                                                           false);
@@ -65,20 +74,20 @@ public class RobotContainer
     AbsoluteFieldDrive closedFieldAbsoluteDrive = new AbsoluteFieldDrive(drivebase,
                                                                          () ->
                                                                              MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                                                    OperatorConstants.LEFT_Y_DEADBAND),
+                                                                             Constants.OperatorConstants.LEFT_Y_DEADBAND),
                                                                          () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                                                                      OperatorConstants.LEFT_X_DEADBAND),
+                                                                         Constants.OperatorConstants.LEFT_X_DEADBAND),
                                                                          () -> driverXbox.getRawAxis(2), false);
     TeleopDrive simClosedFieldRel = new TeleopDrive(drivebase,
                                                     () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                                 OperatorConstants.LEFT_Y_DEADBAND),
+                                                                                 Constants.OperatorConstants.LEFT_Y_DEADBAND),
                                                     () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                                                 OperatorConstants.LEFT_X_DEADBAND),
+                                                    Constants.OperatorConstants.LEFT_X_DEADBAND),
                                                     () -> driverXbox.getRawAxis(4), () -> true, false, false);
     TeleopDrive closedFieldRel = new TeleopDrive(
         drivebase,
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), Constants.OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), Constants.OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(4), () -> true, false, true);
 
     drivebase.setDefaultCommand(simClosedFieldRel);
@@ -93,11 +102,24 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-//    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    
+    commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
+    commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
+    
+    commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
+
+    commandXboxController.a().onTrue(claw.openPiston());
+    commandXboxController.y().onTrue(claw.closePiston());
+    
+    commandXboxController.b().onTrue(elevator./*raise*/moveElevator(5));
+    
+    commandXboxController.x().onTrue(arm./*raise*/moveArm(5));
+    // commandXboxController.x().onTrue(elevator.lowerElevator(5));
+
+    // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**
@@ -109,7 +131,7 @@ public class RobotContainer
   {
     // An example command will be run in autonomous
     return Autos.exampleAuto(drivebase);
-  }
+  } 
 
   public void setDriveMode()
   {
