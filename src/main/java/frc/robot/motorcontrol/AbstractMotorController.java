@@ -22,7 +22,7 @@ public abstract class AbstractMotorController {
 
     /**
      * Sets current encoder position to be the zero position. If you are absolutely crazy and want to set the encoder to
-     * an artifical position, create an abstract method in {@link AbstractMotorControllerler} that takes an position Then,
+     * an artifical position, create an abstract method in {@link AbstractMotorController} that takes an position Then,
      * implement this method to call your overloaded method and pass a default of 0. But really dont do that please
      */
     public abstract void resetEncoder();
