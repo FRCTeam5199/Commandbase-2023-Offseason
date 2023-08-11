@@ -1,7 +1,6 @@
 package swervelib.imu;
 
-import com.ctre.phoenix.sensors.Pigeon2Configuration;
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -9,42 +8,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Optional;
 
 /**
- * SwerveIMU interface for the Pigeon2
+ * SwerveIMU interface for the Pigeon.
  */
-public class Pigeon2Swerve extends SwerveIMU
+public class PigeonSwerve extends SwerveIMU
 {
 
   /**
-   * Pigeon2 IMU device.
+   * Pigeon v1 IMU device.
    */
-  WPI_Pigeon2 imu;
+  WPI_PigeonIMU imu;
   /**
-   * Offset for the Pigeon 2.
+   * Offset for the Pigeon.
    */
   private Rotation3d offset = new Rotation3d();
 
   /**
    * Generate the SwerveIMU for pigeon.
    *
-   * @param canid  CAN ID for the pigeon
-   * @param canbus CAN Bus name the pigeon resides on.
+   * @param canid CAN ID for the pigeon, does not support CANBus.
    */
-  public Pigeon2Swerve(int canid, String canbus)
+  public PigeonSwerve(int canid)
   {
-    imu = new WPI_Pigeon2(canid, canbus);
-    Pigeon2Configuration config = new Pigeon2Configuration();
-    imu.configAllSettings(config);
+    imu = new WPI_PigeonIMU(canid);
+    offset = new Rotation3d();
     SmartDashboard.putData(imu);
-  }
-
-  /**
-   * Generate the SwerveIMU for pigeon.
-   *
-   * @param canid CAN ID for the pigeon
-   */
-  public Pigeon2Swerve(int canid)
-  {
-    this(canid, "");
   }
 
   /**
@@ -54,7 +41,6 @@ public class Pigeon2Swerve extends SwerveIMU
   public void factoryDefault()
   {
     imu.configFactoryDefault();
-    imu.configEnableCompass(false); // Compass utilization causes readings to jump dramatically in some cases.
   }
 
   /**
