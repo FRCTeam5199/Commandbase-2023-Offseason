@@ -46,8 +46,6 @@ public class IntakeSubsystem extends SubsystemBase {
       topLeftIntake.setCurrentLimit(20);
       topLeftIntake.setCurrentLimit(20);
 
-      bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
-
     }
 
     ////////////
