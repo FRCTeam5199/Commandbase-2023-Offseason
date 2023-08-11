@@ -3,11 +3,11 @@ package frc.robot.subsystems.piecemanipulation;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.motorcontrol.AbstractMotorControl;
+import frc.robot.motorcontrol.AbstractMotorController;
 import frc.robot.motorcontrol.SparkMaxController;
 
 public class WristSubsystem extends SubsystemBase{
-    public SparkMaxController wrist;
+    public AbstractMotorController wrist;
 
 
 

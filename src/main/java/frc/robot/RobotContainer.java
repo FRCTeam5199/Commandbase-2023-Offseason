@@ -118,7 +118,7 @@ public class RobotContainer
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
     // left and rigth bumper
-    new JoystickButton(driverXbox, 0).onTrue(new InstantCommand(intake::runIntakes));
+    new JoystickButton(driverXbox, 6).onTrue(new InstantCommand(intake::runIntakes));
     new JoystickButton(driverXbox, 4).onTrue(new InstantCommand(intake::deployPiston));
     new JoystickButton(driverXbox, 5).onTrue(new InstantCommand(intake::retractPiston));
     
