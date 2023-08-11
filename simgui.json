@@ -113,7 +113,6 @@
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Pigeon 2 (Pro) [22]": "Gyro",
       "/SmartDashboard/Pigeon 2 [13]": "Gyro",
-      "/SmartDashboard/Pigeon 2 [22]": "Gyro",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/navX-Sensor[1]": "Gyro"
     },
