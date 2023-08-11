@@ -104,6 +104,11 @@ public class SparkMaxController extends AbstractMotorControl {
     }
 
     @Override
+    public void setCurrentLimit(double currentLimit){
+        sparkmax.setSmartCurrentLimit(currentLimit);
+    }
+
+    @Override
     public AbstractMotorControl setPID(PID pid) {
         if (myPid.setP(pid.getP(), 0) != REVLibError.kOk || myPid.setI(pid.getI(), 0) != REVLibError.kOk || myPid.setD(pid.getD(), 0) != REVLibError.kOk || myPid.setFF(pid.getF(), 0) != REVLibError.kOk)
             if (!Robot.SECOND_TRY)

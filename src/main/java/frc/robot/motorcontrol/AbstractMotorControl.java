@@ -39,6 +39,8 @@ public abstract class AbstractMotorControl {
 
     public abstract void setPercent(double percent);
 
+    public abstract void setCurrentLimit(double currentLimit);
+
     public abstract AbstractMotorControl setPID(PID pid);
     
     public abstract void setRealFactorFromMotorRPM(double r2rf, double t2tf);
@@ -51,6 +53,7 @@ public abstract class AbstractMotorControl {
     public abstract double getRotations();
 
     public abstract double getAbsoluteRotations();
+
     
 
 
