@@ -66,6 +66,8 @@ public final class Autos
     } else
     {
       List<PathPlannerTrajectory> example1 = PathPlanner.loadPathGroup("SamplePath", new PathConstraints(4, 3));
+      List<PathPlannerTrajectory> example2 = PathPlanner.loadPathGroup("path1", new PathConstraints(4, 3));
+
       // This is just an example event map. It would be better to have a constant, global event map
       // in your code that will be used by all path following commands.
       HashMap<String, Command> eventMap = new HashMap<>();

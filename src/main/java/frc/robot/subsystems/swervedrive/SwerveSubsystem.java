@@ -194,8 +194,8 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX, double headingY)
   {
-    xInput = Math.pow(xInput, 1);
-    yInput = Math.pow(yInput, 1);
+    xInput = Math.pow(xInput, 3);
+    yInput = Math.pow(yInput, 3);
     return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, headingX, headingY, getHeading().getRadians());
   }
 
@@ -209,8 +209,8 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle)
   {
-    xInput = Math.pow(xInput, 1);
-    yInput = Math.pow(yInput, 1);
+    xInput = Math.pow(xInput, 3);
+    yInput = Math.pow(yInput, 3);
     return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, angle.getRadians(), getHeading().getRadians());
   }
 
@@ -280,6 +280,13 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp(), true, 4);
   }
 
+
+
+
+
+
+
+  
   /**
    * Factory to fetch the PathPlanner command to follow the defined path.
    *
