@@ -11,10 +11,11 @@ import swervelib.imu.ADXRS450Swerve;
 import swervelib.imu.AnalogGyroSwerve;
 import swervelib.imu.NavXSwerve;
 import swervelib.imu.Pigeon2Swerve;
+import swervelib.imu.PigeonSwerve;
 import swervelib.imu.SwerveIMU;
 import swervelib.motors.SwerveMotor;
 import swervelib.motors.TalonFXSwerve;
-
+import swervelib.motors.TalonSRXSwerve;
 
 /**
  * Device JSON parsed class. Used to access the JSON data.
@@ -85,7 +86,7 @@ public class DeviceJson
       case "navx":
         return new NavXSwerve(Port.kMXP);
       case "pigeon":
-        return null;
+        return new PigeonSwerve(id);
       case "pigeon2":
         return new Pigeon2Swerve(id, canbus != null ? canbus : "");
       default:
@@ -107,7 +108,7 @@ public class DeviceJson
       case "talonfx":
         return new TalonFXSwerve(id, canbus != null ? canbus : "", isDriveMotor);
       case "talonsrx":
-        return null;
+        return new TalonSRXSwerve(id, isDriveMotor);
       default:
         throw new RuntimeException(type + " is not a recognized absolute encoder type.");
     }

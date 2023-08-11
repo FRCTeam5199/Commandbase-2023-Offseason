@@ -153,6 +153,4 @@ public abstract class SwerveMotor
    * @return connected absolute encoder state.
    */
   public abstract boolean isAttachedAbsoluteEncoder();
-
-  public abstract void talonConfigure();
 }

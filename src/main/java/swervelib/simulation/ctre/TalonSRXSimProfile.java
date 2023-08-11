@@ -2,15 +2,15 @@ package swervelib.simulation.ctre;
 
 import static swervelib.simulation.ctre.PhysicsSim.random;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import swervelib.simulation.ctre.PhysicsSim.SimProfile;
 
 /**
  * Holds information about a simulated TalonSRX.
  */
- 
 class TalonSRXSimProfile extends SimProfile
 {
-/* 
+
   private final TalonSRX _talon;
   private final double   _accelToFullTime;
   private final double   _fullVel;
@@ -22,7 +22,7 @@ class TalonSRXSimProfile extends SimProfile
    * The current velocity
    */
   private double _vel = 0;
-  
+
   /**
    * Creates a new simulation profile for a TalonSRX device.
    *
@@ -31,7 +31,6 @@ class TalonSRXSimProfile extends SimProfile
    * @param fullVel         The maximum motor velocity, in ticks per 100ms
    * @param sensorPhase     The phase of the TalonSRX sensors
    */
-  /* 
   public TalonSRXSimProfile(
       final TalonSRX talon,
       final double accelToFullTime,
@@ -51,7 +50,6 @@ class TalonSRXSimProfile extends SimProfile
    * our products in simulation using our examples out of the box. Users may modify this to utilize more accurate
    * physics simulation.
    */
-  /* 
   public void run()
   {
     final double period      = getPeriod();
@@ -91,5 +89,4 @@ class TalonSRXSimProfile extends SimProfile
 
     _talon.getSimCollection().setBusVoltage(12 - outPerc * outPerc * 3 / 4 * random(0.95, 1.05));
   }
-  */
 }
