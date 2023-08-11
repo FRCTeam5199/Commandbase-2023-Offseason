@@ -36,13 +36,15 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     public void init() {
       bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
-      bottomIntake = new SparkMaxController(Constants.MotorIDs.BottomIntakeMotor_ID, MotorType.kBrushless);
+      bottomIntake = new SparkMaxController(Constants.MotorIDs.BottomIntakeMotor_ID, MotorType.kBrushed);
       bottomIntake.setBrake(true);
 
       topLeftIntake = new SparkMaxController(Constants.MotorIDs.TopIntakeLeft_ID);
       topRightIntake = new SparkMaxController(Constants.MotorIDs.TopIntakeRigth_ID);
       topLeftIntake.setBrake(true);
       topRightIntake.setBrake(true);
+      topLeftIntake.setCurrentLimit(20);
+      topLeftIntake.setCurrentLimit(20);
 
       bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
 
