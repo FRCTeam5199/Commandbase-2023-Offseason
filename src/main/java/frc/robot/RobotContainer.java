@@ -19,6 +19,9 @@ import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 
@@ -38,9 +41,15 @@ public class RobotContainer
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
+  final ClawSubsystem claw = new ClawSubsystem();
 
+  final ElevatorSubsystem elevator = new ElevatorSubsystem();
+
+  final ArmSubsystem arm = new ArmSubsystem();
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
+
+  CommandXboxController commandXboxController = new CommandXboxController(1);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -98,6 +107,21 @@ public class RobotContainer
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+
+    commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
+    commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
+
+    commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
+
+    commandXboxController.a().onTrue(claw.openPiston());
+    commandXboxController.y().onTrue(claw.closePiston());
+
+    commandXboxController.b().onTrue(elevator./*raise*/moveElevator(5));
+
+    commandXboxController.x().onTrue(arm./*raise*/moveArm(5));
+    // commandXboxController.x().onTrue(elevator.lowerElevator(5));
+
+    // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   /**

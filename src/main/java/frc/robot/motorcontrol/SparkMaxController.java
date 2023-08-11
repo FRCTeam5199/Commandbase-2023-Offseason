@@ -10,10 +10,9 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.misc.PID;
 
 import frc.robot.Robot;
+import frc.robot.misc.PID;
 
 public class SparkMaxController extends AbstractMotorControl {
     CANSparkMax sparkmax;
@@ -77,6 +76,11 @@ public class SparkMaxController extends AbstractMotorControl {
     }
 
     @Override
+    public void setCurrentLimit(double currentLimit) {
+
+    }
+
+    @Override
     public double getVoltage() {
         return sparkmax.getBusVoltage();
     }
@@ -104,8 +108,13 @@ public class SparkMaxController extends AbstractMotorControl {
     }
 
     @Override
-    public void setCurrentLimit(double currentLimit){
-        sparkmax.setSmartCurrentLimit(currentLimit);
+    public AbstractMotorControl setCurrentLimit(int limit){
+            if (sparkmax.setSmartCurrentLimit(limit) != REVLibError.kOk)
+                if (!Robot.SECOND_TRY)
+                    throw new IllegalStateException("Spark motor controller with ID " + sparkmax.getDeviceId() + " could not set current limit");
+                else
+                    failureFlag = true;
+        return this;
     }
 
     @Override

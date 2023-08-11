@@ -39,10 +39,10 @@ public abstract class AbstractMotorControl {
 
     public abstract void setPercent(double percent);
 
-    public abstract void setCurrentLimit(double currentLimit);
+    public abstract AbstractMotorControl setCurrentLimit(int limit);
 
     public abstract AbstractMotorControl setPID(PID pid);
-    
+
     public abstract void setRealFactorFromMotorRPM(double r2rf, double t2tf);
 
     //time to max speed.
@@ -54,8 +54,6 @@ public abstract class AbstractMotorControl {
 
     public abstract double getAbsoluteRotations();
 
-    
 
-
-    
+    public abstract void setCurrentLimit(double currentLimit);
 }
