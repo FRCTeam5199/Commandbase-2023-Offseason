@@ -62,16 +62,16 @@ public class ClawSubsystem extends SubsystemBase {
   /**
    * Opens the Claw piston
    */
-  public CommandBase openPiston() {
-    System.out.println("Claw - Opening Piston...");
-    return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kForward));
-  }
+  // public CommandBase openPiston() {
+  //   System.out.println("Claw - Opening Piston...");
+  //   return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kForward));
+  // }
 
-  /**
-   * Closes the Claw piston
-   */
-  public CommandBase closePiston() {
-    System.out.println("Claw - Closing Piston...");
-    return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kReverse));
-  }
+  // /**
+  //  * Closes the Claw piston
+  //  */
+  // public CommandBase closePiston() {
+  //   System.out.println("Claw - Closing Piston...");
+  //   return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kReverse));
+  // }
 }

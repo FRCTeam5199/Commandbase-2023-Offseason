@@ -32,18 +32,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 		elevatorMotor = new SparkMaxController(Constants.MotorIDs.ELEVATOR_MOTOR_ID);
 	}
 
-	public CommandBase resetEncoder() {
-		return this.runOnce(() -> elevatorMotor.resetEncoder());
-	}
+	// public CommandBase resetEncoder() {
+	// 	return this.runOnce(() -> elevatorMotor.resetEncoder());
+	// }
 
-	/**
-	 * Moves the Elevator by a percent between -1 and 1 and stops it when finished.
-	 */
-	public CommandBase moveElevator(int percent) {
-		System.out.println("Elevator - moveElevator()");
+	// /**
+	//  * Moves the Elevator by a percent between -1 and 1 and stops it when finished.
+	//  */
+	// public CommandBase moveElevator(int percent) {
+	// 	System.out.println("Elevator - moveElevator()");
 
-		return this.runEnd(() -> elevatorMotor.setPercent(percent), () -> elevatorMotor.setPercent(0));
-	}
+	// 	return this.runEnd(() -> elevatorMotor.setPercent(percent), () -> elevatorMotor.setPercent(0));
+	// }
 
 // 	public CommandBase raiseElevator(int position) {
 // 		System.out.println("Elevator - raiseElevator()");

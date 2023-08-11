@@ -56,6 +56,7 @@ public class RobotContainer
    */
   public RobotContainer()
   {
+    intake.init();
     // Configure the trigger bindings
     configureBindings();
 
@@ -108,6 +109,7 @@ public class RobotContainer
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
+<<<<<<< Updated upstream
     commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
     commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
 
@@ -119,6 +121,30 @@ public class RobotContainer
     commandXboxController.b().onTrue(elevator./*raise*/moveElevator(5));
 
     commandXboxController.x().onTrue(arm./*raise*/moveArm(5));
+=======
+    // left and rigth bumper
+    new JoystickButton(driverXbox, 2).onTrue(new InstantCommand(intake::runIntakes));
+    new JoystickButton(driverXbox, 5).onTrue(new InstantCommand(intake::deployPiston));
+    new JoystickButton(driverXbox, 6).onTrue(new InstantCommand(intake::retractPiston));
+    
+
+    // rigth button next to xbox sign     true == cone / false == cube
+    
+    
+    commandXboxController.button(7).onTrue(intake.switchCubeCone());
+
+    // commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
+    // commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
+    
+    // commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
+
+    // commandXboxController.a().onTrue(claw.openPiston());
+    // commandXboxController.y().onTrue(claw.closePiston());
+    
+    // commandXboxController.b().onTrue(elevator./*raise*/moveElevator(5));
+    
+    // commandXboxController.x().onTrue(arm./*raise*/moveArm(5));
+>>>>>>> Stashed changes
     // commandXboxController.x().onTrue(elevator.lowerElevator(5));
 
     // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

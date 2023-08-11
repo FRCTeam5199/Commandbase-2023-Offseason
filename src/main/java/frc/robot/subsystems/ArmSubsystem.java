@@ -36,22 +36,22 @@ public class ArmSubsystem extends SubsystemBase {
 		armRotateMotor = new SparkMaxController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID);
 	}
 
-    public CommandBase resetExtendEncoder() {
-		return this.runOnce(() -> armExtendMotor.resetEncoder());
-	}
+    // public CommandBase resetExtendEncoder() {
+	// 	return this.runOnce(() -> armExtendMotor.resetEncoder());
+	// }
 
-    public CommandBase resetRotateEncoder() {
-		return this.runOnce(() -> armRotateMotor.resetEncoder());
-	}
+    // public CommandBase resetRotateEncoder() {
+	// 	return this.runOnce(() -> armRotateMotor.resetEncoder());
+	// }
 
-    /**
-	 * Moves the Arm Rotate by a percent between -1 and 1 and stops it when finished.
-	 */
-	public CommandBase moveArm(int percent) {
-		System.out.println("Arm - moveElevator()");
+    // /**
+	//  * Moves the Arm Rotate by a percent between -1 and 1 and stops it when finished.
+	//  */
+	// public CommandBase moveArm(int percent) {
+	// 	System.out.println("Arm - moveElevator()");
 
-		return this.runEnd(() -> armRotateMotor.setPercent(percent), () -> armRotateMotor.setPercent(0));
-	}
+	// 	return this.runEnd(() -> armRotateMotor.setPercent(percent), () -> armRotateMotor.setPercent(0));
+	// }
 
     // public CommandBase raiseArm(int position) {
 	// 	System.out.println("Elevator - raiseElevator()");
