@@ -24,14 +24,15 @@ import frc.robot.Constants.Auton;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.HashMap;
 import java.util.List;
-
+import java.io.File;
+import java.nio.file.*;
 public final class Autos
 {
-
+  static Path aprilPath = (Path)Paths.get("/src", "main", "deploy", "2023-chargedup.json");
   /**
    * April Tag field layout.
    */
-  private static AprilTagFieldLayout aprilTagField = null;
+  private static AprilTagFieldLayout aprilTagField = new AprilTagFieldLayout(aprilPath.);
 
   private Autos()
   {
@@ -46,21 +47,22 @@ public final class Autos
 
   /**
    * Example static factory for an autonomous command.
+   * @param swerve Drivebase to use.
+   * @param path what path you want to use.
    */
-  public static CommandBase exampleAuto(SwerveSubsystem swerve)
+  public static CommandBase Autons(SwerveSubsystem swerve, String path)
   {
-    boolean               onTheFly = false; // Use the path defined in code or loaded from PathPlanner.
+    boolean               onTheFly = true; // Use the path defined in code or loaded from PathPlanner.
     PathPlannerTrajectory example;
     if (onTheFly)
     {
       // Simple path with holonomic rotation. Stationary start/end. Max velocity of 4 m/s and max accel of 3 m/s^2
       example = PathPlanner.generatePath(
-          new PathConstraints(4, 3),
-          new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
+          new PathConstraints(2, .5),
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(3, 5), Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(90)),
+          new PathPoint(new Translation2d(3, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(5, 5), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
+          new PathPoint(new Translation2d(5, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
           // position, heading(direction of travel), holonomic rotation
                                         );
     } else
