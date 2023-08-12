@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxRelativeEncoder;
 
 import frc.robot.Robot;
 import frc.robot.misc.PID;
@@ -28,12 +29,11 @@ public class SparkMaxController extends AbstractMotorController {
         super();
         sparkmax = new CANSparkMax(channelID, type);
         if (type == CANSparkMaxLowLevel.MotorType.kBrushed) {
-            encoder = sparkmax.getEncoder();
+            encoder = sparkmax.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 560);
         } else {
             encoder = sparkmax.getEncoder();
         }
         myPid = sparkmax.getPIDController();
-        System.out.println("------- myPid: " + myPid);
         //I dont know if talons do this or if we ever dont do this so here it is
         // if (myPid.setOutputRange(-1, 1) != REVLibError.kOk)
         //     if (!Robot.SECOND_TRY)

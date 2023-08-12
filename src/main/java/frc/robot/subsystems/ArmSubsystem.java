@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -34,7 +36,7 @@ public class ArmSubsystem extends SubsystemBase {
 	public void motorInit() {
 		System.out.println("Arm - motorInit()");
 
-		armMotorController = new SparkMaxController(Constants.MotorIDs.ARM_MOTOR_ID);
+		armMotorController = new SparkMaxController(Constants.MotorIDs.ARM_MOTOR_ID, MotorType.kBrushless);
 
         armMotorController.setBrake(true);
 	}
@@ -58,7 +60,6 @@ public class ArmSubsystem extends SubsystemBase {
 	public Command moveArm(int percent) {
 		
         // return this.runOnce(() -> armMotor.setPercent());
-        System.out.println("ArmSubsystem.java - moveArm");
 		return this.runEnd(() -> armMotorController.setPercent(percent), () -> armMotorController.setPercent(0));
 	}
 

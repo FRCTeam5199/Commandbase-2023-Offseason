@@ -9,14 +9,9 @@ import java.io.File;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
@@ -24,11 +19,9 @@ import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import java.io.File;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.CloseAction;
+import frc.robot.subsystems.piecemanipulation.WristSubsystem;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -48,12 +41,14 @@ public class RobotContainer
   
   final ArmSubsystem arm = new ArmSubsystem();
   
+  final WristSubsystem wrist = new WristSubsystem();
+  
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  final IntakeSubsystem intake = new IntakeSubsystem();
+//   final IntakeSubsystem intake = new IntakeSubsystem();
 
   XboxController driverXbox = new XboxController(0);
 
@@ -65,10 +60,13 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-    arm.init();
-    elevator.init();
-    claw.init();
+	claw.init();
 
+    elevator.init();
+    
+	arm.init();
+
+	wrist.init();
     // Configure the trigger bindings
     configureBindings();
 
@@ -116,7 +114,6 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    System.out.println("RobotContainer - configureBindings()");
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
 //     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
@@ -139,13 +136,11 @@ public class RobotContainer
 		commandXboxController.povUp().whileTrue(arm.moveArm(-1));
 		commandXboxController.povDown().whileTrue(arm.moveArm(1));
 	}
-
+    commandXboxController.b().whileTrue(wrist.moveWrist(50));
+    
+    commandXboxController.x().whileTrue(wrist.moveWrist(-50));
     // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
-
-  
   }
-
-  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
