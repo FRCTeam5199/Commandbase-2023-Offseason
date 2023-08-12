@@ -22,17 +22,32 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.Constants.Auton;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
-import java.io.File;
-import java.nio.file.*;
+import edu.wpi.first.wpilibj.Filesystem;
 public final class Autos
 {
-  static Path aprilPath = (Path)Paths.get("/src", "main", "deploy", "2023-chargedup.json");
+  static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(), "apriltags", "2023-chargedup.json");
   /**
    * April Tag field layout.
    */
-  private static AprilTagFieldLayout aprilTagField = new AprilTagFieldLayout(aprilPath.);
+  private static AprilTagFieldLayout aprilTagField;
+  static{
+    try{
+      aprilTagField = new AprilTagFieldLayout(aprilPath);
+    }catch(Exception e){
+      System.err.println("Input sucks L + Ratio");
+    }
+  }
+
+  public static void initApril() throws IOException{
+    aprilPath = (Path)Paths.get("apriltags", "2023-chargedup.json");
+
+  }
 
   private Autos()
   {
@@ -58,9 +73,9 @@ public final class Autos
     {
       // Simple path with holonomic rotation. Stationary start/end. Max velocity of 4 m/s and max accel of 3 m/s^2
       example = PathPlanner.generatePath(
-          new PathConstraints(2, .5),
+          new PathConstraints(2, 2),
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(3, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
+          new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 // position, heading(direction of travel), holonomic rotation
           new PathPoint(new Translation2d(5, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
           // position, heading(direction of travel), holonomic rotation

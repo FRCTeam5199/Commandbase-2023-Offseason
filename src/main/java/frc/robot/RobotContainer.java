@@ -96,7 +96,7 @@ public class RobotContainer
                                                                                  Constants.OperatorConstants.LEFT_Y_DEADBAND),
                                                     () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
                                                     Constants.OperatorConstants.LEFT_X_DEADBAND),
-                                                    () -> driverXbox.getRawAxis(4), () -> true, false, false);
+                                                    () -> driverXbox.getRawAxis(4), () -> true, true, false);
     TeleopDrive closedFieldRel = new TeleopDrive(
         drivebase,
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), Constants.OperatorConstants.LEFT_Y_DEADBAND),

@@ -90,7 +90,7 @@ public class Robot extends TimedRobot
   {
     if (disabledTimer.hasElapsed(Constants.Drivebase.WHEEL_LOCK_TIME))
     {
-      m_robotContainer.setMotorBrake(false);
+      m_robotContainer.setMotorBrake(true);
       disabledTimer.stop();
     }
   }
