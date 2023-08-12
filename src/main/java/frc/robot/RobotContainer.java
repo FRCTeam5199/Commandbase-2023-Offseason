@@ -64,6 +64,10 @@ public class RobotContainer
    */
   public RobotContainer()
   {
+    arm.init();
+    elevator.init();
+    claw.init();
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -111,37 +115,29 @@ public class RobotContainer
    */
   private void configureBindings()
   {
+    System.out.println("RobotContainer - configureBindings()");
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    
-//    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+//     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
+//     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+// //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
-    // left and rigth bumper
-    new JoystickButton(driverXbox, 6).onTrue(new InstantCommand(intake::runIntakes));
-    new JoystickButton(driverXbox, 4).onTrue(new InstantCommand(intake::deployPiston));
-    new JoystickButton(driverXbox, 5).onTrue(new InstantCommand(intake::retractPiston));
-    
+    commandXboxController.leftBumper().onTrue(arm.resetEncoder());
 
-    // rigth button next to xbox sign     true == cone / false == cube
-    
-    
-    commandXboxController.button(7).onTrue(intake.switchCubeCone());
-
-    commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
-    commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
-    
     commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
 
-    commandXboxController.a().onTrue(claw.openPiston());
-    commandXboxController.y().onTrue(claw.closePiston());
-    
-    commandXboxController.b().onTrue(elevator./*raise*/moveElevator(5));
-    
-    commandXboxController.x().onTrue(arm./*raise*/moveArm(5));
-    // commandXboxController.x().onTrue(elevator.lowerElevator(5));
+    commandXboxController.povRight().onTrue(claw.openPiston());
+    commandXboxController.povLeft().onTrue(claw.closePiston());
 
-    
+	if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
+		commandXboxController.y().whileTrue(elevator.moveElevator(1));
+		commandXboxController.a().whileTrue(elevator.moveElevator(-1));
+	}
+
+	if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
+		commandXboxController.povUp().whileTrue(arm.moveArm(-1));
+		commandXboxController.povDown().whileTrue(arm.moveArm(1));
+	}
 
     // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
@@ -159,9 +155,7 @@ public class RobotContainer
     return Autos.exampleAuto(drivebase);
   } 
 
-  public void setDriveMode()
-  {
-  }
+  public void setDriveMode() {}
 
   public void setMotorBrake(boolean brake)
   {

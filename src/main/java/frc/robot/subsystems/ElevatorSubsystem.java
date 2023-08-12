@@ -1,12 +1,14 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motorcontrol.SparkMaxController;
 
 public class ElevatorSubsystem extends SubsystemBase {
-	SparkMaxController elevatorMotor;
+	SparkMaxController elevatorMotorController;
+	PIDController elevatorPIDController;
 
 	public ElevatorSubsystem() {}
 
@@ -29,11 +31,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 	public void motorInit() {
 		System.out.println("Elevator - motorInit()");
 
-		elevatorMotor = new SparkMaxController(Constants.MotorIDs.ELEVATOR_MOTOR_ID);
+		elevatorMotorController = new SparkMaxController(Constants.MotorIDs.ELEVATOR_MOTOR_ID);
+		
+        elevatorMotorController.setBrake(true);
 	}
 
 	public CommandBase resetEncoder() {
-		return this.runOnce(() -> elevatorMotor.resetEncoder());
+		return this.runOnce(() -> elevatorMotorController.resetEncoder());
 	}
 
 	/**
@@ -42,7 +46,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	public CommandBase moveElevator(int percent) {
 		System.out.println("Elevator - moveElevator()");
 
-		return this.runEnd(() -> elevatorMotor.setPercent(percent), () -> elevatorMotor.setPercent(0));
+		return this.runEnd(() -> elevatorMotorController.setPercent(percent), () -> elevatorMotorController.setPercent(0));
 	}
 
 // 	public CommandBase raiseElevator(int position) {

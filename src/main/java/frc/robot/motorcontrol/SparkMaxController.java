@@ -33,12 +33,13 @@ public class SparkMaxController extends AbstractMotorController {
             encoder = sparkmax.getEncoder();
         }
         myPid = sparkmax.getPIDController();
+        System.out.println("------- myPid: " + myPid);
         //I dont know if talons do this or if we ever dont do this so here it is
-        if (myPid.setOutputRange(-1, 1) != REVLibError.kOk)
-            if (!Robot.SECOND_TRY)
-                throw new IllegalStateException("Spark motor controller with ID " + sparkmax.getDeviceId() + " could not set its output range");
-            else
-                failureFlag = true;
+        // if (myPid.setOutputRange(-1, 1) != REVLibError.kOk)
+        //     if (!Robot.SECOND_TRY)
+        //         throw new IllegalStateException("Spark motor controller with ID " + sparkmax.getDeviceId() + " could not set its output range");
+        //     else
+        //         failureFlag = true;
 
         sensorToRealDistanceFactor = 1D;
         sensorToRealTimeFactor = 1D;

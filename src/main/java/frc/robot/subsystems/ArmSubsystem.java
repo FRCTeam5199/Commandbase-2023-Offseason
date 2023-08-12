@@ -1,15 +1,16 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motorcontrol.SparkMaxController;
+import frc.robot.Constants.PieceManipulation;
 
 public class ArmSubsystem extends SubsystemBase {
-    SparkMaxController armExtendMotor;
-    SparkMaxController armRotateMotor;
+    SparkMaxController armMotorController;
+    PIDController armPIDController;
 
 	public ArmSubsystem() {}
 
@@ -17,6 +18,7 @@ public class ArmSubsystem extends SubsystemBase {
 		System.out.println("Arm - init()");
 
 		motorInit();
+        // PIDInit();
 	}
 
 	@Override
@@ -32,44 +34,38 @@ public class ArmSubsystem extends SubsystemBase {
 	public void motorInit() {
 		System.out.println("Arm - motorInit()");
 
-		armExtendMotor = new SparkMaxController(Constants.MotorIDs.ARM_EXTEND_MOTOR_ID, MotorType.kBrushed);
-		armRotateMotor = new SparkMaxController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID);
+		armMotorController = new SparkMaxController(Constants.MotorIDs.ARM_MOTOR_ID);
+
+        armMotorController.setBrake(true);
 	}
 
-    public CommandBase resetExtendEncoder() {
-		return this.runOnce(() -> armExtendMotor.resetEncoder());
+    // public void PIDInit() {
+    //     armPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+    // }
+    
+    // public void setArmSetpoint(int setpoint) {
+    //     armPIDController.setSetpoint(setpoint);
+    // }
+
+    public CommandBase resetEncoder() {
+		return this.runOnce(() -> armMotorController.resetEncoder());
 	}
 
-    public CommandBase resetRotateEncoder() {
-		return this.runOnce(() -> armRotateMotor.resetEncoder());
-	}
 
     /**
-	 * Moves the Arm Rotate by a percent between -1 and 1 and stops it when finished.
+	 * Moves the Arm by a percent between -1 and 1 and stops it when finished.
 	 */
-	public CommandBase moveArm(int percent) {
-		System.out.println("Arm - moveElevator()");
-
-		return this.runEnd(() -> armRotateMotor.setPercent(percent), () -> armRotateMotor.setPercent(0));
+	public Command moveArm(int percent) {
+		
+        // return this.runOnce(() -> armMotor.setPercent());
+        System.out.println("ArmSubsystem.java - moveArm");
+		return this.runEnd(() -> armMotorController.setPercent(percent), () -> armMotorController.setPercent(0));
 	}
 
-    // public CommandBase raiseArm(int position) {
-	// 	System.out.println("Elevator - raiseElevator()");
-	// 	return this.runOnce(() -> elevatorMotor.setPosition(position));
+    // public Command moveArmToSetpoint() {
+		
+    //     // return this.runOnce(() -> armMotor.setPercent());
+    //     System.out.println("ArmSubsystem.java - moveArm");
+	// 	return this.runEnd(() -> armMotorController.setPercent(), () -> armMotorController.setPercent(0));
 	// }
-
-	// public CommandBase lowerArm(int position) {
-	// 	System.out.println("Elevator - lowerElevator()");
-	// 	return this.runOnce(() -> elevatorMotor.setPosition(position));
-	// }
-
-    // public CommandBase extendArm(int position) {
-    // 	System.out.println("Elevator - raiseElevator()");
-    // 	return this.runOnce(() -> elevatorMotor.setPosition(position));
-    // }
-
-    // public CommandBase retractArm(int position) {
-    // 	System.out.println("Elevator - lowerElevator()");
-    // 	return this.runOnce(() -> elevatorMotor.setPosition(position));
-    // }
 }

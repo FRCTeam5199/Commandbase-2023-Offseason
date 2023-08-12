@@ -61,11 +61,10 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_ID = 40;
     
     // Arm
-    public static final int ARM_EXTEND_MOTOR_ID = 35;
-    public static final int ARM_ROTATE_MOTOR_ID = 43;
+    public static final int ARM_MOTOR_ID = 39;
 
     // Wrist
-    public static final int WRIST_MOTOR_ID = 36;
+    public static final int WRIST_MOTOR_ID = 34;
 
     //Top Intake 
     public static final int INTAKE_IN_ID = 12;
@@ -88,8 +87,8 @@ public final class Constants {
     public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
 
     // Claw
-    public static final int CLAW_IN_ID = 2;
-    public static final int CLAW_OUT_ID = 12;
+    public static final int CLAW_IN_ID = 10;
+    public static final int CLAW_OUT_ID = 9;
   }
 
       //////////////////////////
