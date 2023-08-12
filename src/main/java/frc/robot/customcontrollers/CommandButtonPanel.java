@@ -17,7 +17,7 @@ public class CommandButtonPanel {
     }
 
     public Trigger button(int port, int id) {
-        return (port == 1) ? buttonPanel1.button(id) : buttonPanel2.button(id);
+        return port == 2 ? buttonPanel1.button(id) : buttonPanel2.button(id);
     }
 
 }
