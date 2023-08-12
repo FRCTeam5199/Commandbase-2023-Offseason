@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,6 +22,7 @@ import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 /**
@@ -40,6 +42,8 @@ public class RobotContainer
   final ElevatorSubsystem elevator = new ElevatorSubsystem();
   
   final ArmSubsystem arm = new ArmSubsystem();
+  
+  final WristSubsystem wrist = new WristSubsystem();
   
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -91,6 +95,13 @@ public class RobotContainer
         () -> -driverXbox.getRawAxis(4), () -> true, false, true);
 
     drivebase.setDefaultCommand(simClosedFieldRel);
+    
+    
+    //CommandBase rotateWrist = ArmSubsystem.armRotateMotor.getRotations();
+    /*new RunCommand(() -> wrist.rotateWrist(
+      ArmSubsystem.armRotateMotor.getRotations(), 
+      WristSubsystem.wrist.getRotations()), 
+      wrist, arm);*/ // dosent work rn
   }
 
   /**

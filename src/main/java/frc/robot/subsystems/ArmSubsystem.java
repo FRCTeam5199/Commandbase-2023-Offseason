@@ -9,7 +9,7 @@ import frc.robot.motorcontrol.SparkMaxController;
 
 public class ArmSubsystem extends SubsystemBase {
     SparkMaxController armExtendMotor;
-    SparkMaxController armRotateMotor;
+    public static SparkMaxController armRotateMotor;
 
 	public ArmSubsystem() {}
 
