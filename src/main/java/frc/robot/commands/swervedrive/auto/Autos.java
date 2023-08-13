@@ -68,16 +68,16 @@ public final class Autos
   public static CommandBase Autons(SwerveSubsystem swerve, String path)
   {
     boolean               onTheFly = true; // Use the path defined in code or loaded from PathPlanner.
-    PathPlannerTrajectory example;
+    PathPlannerTrajectory paths;
     if (onTheFly)
     {
       // Simple path with holonomic rotation. Stationary start/end. Max velocity of 4 m/s and max accel of 3 m/s^2
-      example = PathPlanner.generatePath(
+      paths = PathPlanner.generatePath(
           new PathConstraints(2, 2),
 // position, heading(direction of travel), holonomic rotation
           new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(5, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
+          new PathPoint(new Translation2d(-5, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
           // position, heading(direction of travel), holonomic rotation
                                         );
     } else
@@ -112,7 +112,7 @@ public final class Autos
       return Commands.sequence(autoBuilder.fullAuto(example1));
     }
 //    swerve.postTrajectory(example);
-    return Commands.sequence(new FollowTrajectory(swerve, example, true));
+    return Commands.sequence(new FollowTrajectory(swerve, paths, true));
   }
 
   /**
