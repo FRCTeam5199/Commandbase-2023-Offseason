@@ -28,9 +28,12 @@ import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import frc.robot.misc.AprilTagManager;
 
 public class SwerveSubsystem extends SubsystemBase
 {
+
+  AprilTagManager tagManager;
 
   /**
    * Swerve drive object.
@@ -89,6 +92,7 @@ public class SwerveSubsystem extends SubsystemBase
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
   {
     swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
+    setFieldPosition();
   }
 
   @Override
@@ -280,7 +284,12 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp(), true, 4);
   }
 
+  public void setFieldPosition()
+  {
+    swerveDrive.addVisionMeasurement(tagManager.getEstimatedGlobalPose().getFirst(), tagManager.getEstimatedGlobalPose().getSecond(), true, 1);
+  }
 
+ 
 
 
 
