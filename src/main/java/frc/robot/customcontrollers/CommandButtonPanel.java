@@ -28,7 +28,7 @@ public class CommandButtonPanel {
     // References .button() Trigger of a port, accounting for if it already exists
     public Trigger button(int portID, int buttonID){
 
-        int portIDIndex = portIDs.indexOf(portID); // Should be >= 0 if a port with given portID already exists in ports
+        int portIDIndex = portIDs.indexOf(portID); // Should be >= 0 if a port with given portID already exists in ports<>
 
         if (portIDIndex >= 0) {
             return ports.get(portIDIndex).button(buttonID); // References existing port's .button() Trigger
