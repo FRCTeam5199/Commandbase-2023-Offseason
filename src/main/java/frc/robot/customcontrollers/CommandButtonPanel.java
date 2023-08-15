@@ -33,7 +33,7 @@ public class CommandButtonPanel {
             portIDs.add(portID); // If port doesn't exist yet, register new port in ports<>
             ports.add(new CommandGenericHID(portID));
 
-            return ports.get(-1).button(buttonID); // Reference the .button() Trigger of the latest item added at end of ports<> list
+            return ports.get(ports.size() - 1).button(buttonID); // Reference the .button() Trigger of the latest item added at end of ports<> list
         }
     }
 }
