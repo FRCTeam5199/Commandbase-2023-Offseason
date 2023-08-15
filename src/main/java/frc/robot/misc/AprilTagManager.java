@@ -23,9 +23,13 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj.Timer.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class AprilTagManager {
+public class AprilTagManager extends SubsystemBase{
     AprilTagDetector tagDetector;
     AprilTagDetection tagDetection;
 
@@ -37,7 +41,7 @@ public class AprilTagManager {
     PhotonCamera photonCamera1;
     PhotonCamera photonCamera2;
 
-    Pose2d lastPose = new Pose2d(new Translation2d(0,0),new Rotation2d(0));
+    public Pose2d lastPose = new Pose2d(new Translation2d(0,0),new Rotation2d(0));
 
     ArrayList<Pair<PhotonCamera, Transform3d>> camspos;
 
@@ -56,47 +60,47 @@ public class AprilTagManager {
     }
   }
 
+  
   public void init(){
 
     photonCamera1 = new PhotonCamera("Global_Shutter_Camera");
-    photonCamera2 = new PhotonCamera("HD_USB_CAMERA");
+    photonCamera1.setPipelineIndex(0);  
+
     camspos = new ArrayList<Pair<PhotonCamera, Transform3d>>();
     camspos.add(new Pair<>(photonCamera1, campos1));
-     camspos.add(new Pair<>(photonCamera2, camposBack));
 
     poseStrategy = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP;
-    poseEstimator = new PhotonPoseEstimator(tagLayout, poseStrategy, camspos.get(0).getFirst(), camspos.get(0).getSecond());
+    poseEstimator = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera1, campos1);
     poseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
 }
 
 
-    public void detectTag(){
-        Pose3d pos = tagLayout.getTags().get(1).pose;
+  public void detectTag(){
+      Pose3d pos = tagLayout.getTags().get(1).pose;
 
-    }
+  }
 
-    public Pair<Pose2d, Double> getEstimatedGlobalPose()
-    {
+  public Pair<Pose2d, Double> getEstimatedGlobalPose(){
       poseEstimator.setReferencePose(lastPose);
 
       double currentTime = Timer.getFPGATimestamp();
       Optional<EstimatedRobotPose> result = poseEstimator.update();
-
-      if (result.isEmpty()) {
-          return new Pair<Pose2d, Double>(new Pose2d(-2,-2,new Rotation2d(0)), 0.0);
-      } else {
           //return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
-
-          lastPose = result.get().estimatedPose.toPose2d();
-          return new Pair<Pose2d, Double>(lastPose, 0.0);
-      }
-
+          if(result.isEmpty()){
+            return new Pair<Pose2d, Double>(lastPose, 0.0);
+          }else{
+            lastPose = result.get().estimatedPose.toPose2d();
+            return new Pair<Pose2d, Double>(lastPose, 0.0);
+          }
     }
+    public void update(){
+      SmartDashboard.putNumber("Position X: ", getEstimatedGlobalPose().getFirst().getX());
+      SmartDashboard.putNumber("Postion Y: ", getEstimatedGlobalPose().getFirst().getY());
+    }
+  
+    public Command print(){
+      return this.run(() -> update());
 
-    public void updateGeneric()
-    {
-      UserInterface.smartDashboardPutNumber("Apriltag Estimate X Pose: ",getEstimatedGlobalPose().getFirst().getX());
-      UserInterface.smartDashboardPutNumber("Apriltag Estimate Y Pose: ",getEstimatedGlobalPose().getFirst().getY());
     }
 
 }
