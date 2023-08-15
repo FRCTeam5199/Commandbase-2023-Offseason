@@ -3,6 +3,7 @@ package frc.robot.customcontrollers;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // CommandButtonPanel takes in many CommandGenericHIDs (what we use for the Arduinos in the button panels),
@@ -14,11 +15,13 @@ public class CommandButtonPanel {
     List<Integer> portIDs;
 
     // Varargs constructor that initializes new ports and stores their port IDs
-    public CommandButtonPanel(List<Integer> IDs) { 
-        portIDs = IDs;
+    public CommandButtonPanel(int... IDs) { 
+        portIDs = new ArrayList<Integer>(IDs.length);
+        ports = new ArrayList<CommandGenericHID>(IDs.length);
 
         for (int portID : IDs) { 
             ports.add(new CommandGenericHID(portID)); // Make new port for each portID given
+            portIDs.add(portID);
         }
     }
 
