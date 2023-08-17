@@ -86,10 +86,10 @@ public final class Autos
       paths = PathPlanner.generatePath(
           new PathConstraints(4, 4),
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(-0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
+          new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(-6, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
+          new PathPoint(new Translation2d(6, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
           // position, heading(direction of travel), holonomic rotation
                                         );
         balance.execute();
