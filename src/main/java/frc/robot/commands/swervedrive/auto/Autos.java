@@ -12,6 +12,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.Constants.Auton;
+import frc.robot.misc.AprilTagManager;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 import java.io.IOException;
@@ -28,9 +30,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
+
+import org.opencv.core.Point;
+
+
 import edu.wpi.first.wpilibj.Filesystem;
 public final class Autos
 {
+
   static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(), "apriltags", "2023-chargedup.json");
   /**
    * April Tag field layout.
@@ -67,19 +74,25 @@ public final class Autos
    */
   public static CommandBase Autons(SwerveSubsystem swerve, String path)
   {
+    AprilTagManager tagManager = new AprilTagManager();
+    AutoBalanceCommand balance = new AutoBalanceCommand(swerve);
+
     boolean               onTheFly = true; // Use the path defined in code or loaded from PathPlanner.
     PathPlannerTrajectory paths;
+
     if (onTheFly)
     {
       // Simple path with holonomic rotation. Stationary start/end. Max velocity of 4 m/s and max accel of 3 m/s^2
       paths = PathPlanner.generatePath(
-          new PathConstraints(2, 2),
+          new PathConstraints(4, 4),
 // position, heading(direction of travel), holonomic rotation
           new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
+
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(-5, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
+          new PathPoint(new Translation2d(6, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
           // position, heading(direction of travel), holonomic rotation
                                         );
+        balance.execute();
     } else
     {
       List<PathPlannerTrajectory> example1 = PathPlanner.loadPathGroup("SamplePath", new PathConstraints(4, 3));

@@ -71,9 +71,9 @@ public class TeleopDrive extends CommandBase
   @Override
   public void execute()
   {
-    double xVelocity   = Math.pow(vX.getAsDouble(), 1);
-    double yVelocity   = Math.pow(vY.getAsDouble(), 1);
-    double angVelocity = Math.pow(omega.getAsDouble(), 3);
+    double xVelocity   = -Math.pow(vX.getAsDouble(), 1);
+    double yVelocity   = -Math.pow(vY.getAsDouble(), 1);
+    double angVelocity = Math.pow(omega.getAsDouble(), 1);
     SmartDashboard.putNumber("vX", xVelocity);
     SmartDashboard.putNumber("vY", yVelocity);
     SmartDashboard.putNumber("omega", angVelocity);

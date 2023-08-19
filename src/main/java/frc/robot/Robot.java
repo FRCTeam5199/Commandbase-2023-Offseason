@@ -58,9 +58,6 @@ public class Robot extends TimedRobot
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    tagManager = new AprilTagManager();
-
-    tagManager.init();
 
 
 

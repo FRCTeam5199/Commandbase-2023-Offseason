@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.swervedrive.auto.AutoBalanceCommand;
 import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
@@ -21,6 +22,8 @@ import frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.misc.AprilTagManager;
+import frc.robot.commands.swervedrive.auto.AutoBalanceCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -41,6 +44,10 @@ public class RobotContainer
   final ArmSubsystem arm = new ArmSubsystem();
   
   final WristSubsystem wrist = new WristSubsystem();
+
+  final AprilTagManager tagManager = new AprilTagManager();
+
+
   
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -59,15 +66,23 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-	claw.init();
+
+	  claw.init();
 
     elevator.init();
     
-	arm.init();
+	  arm.init();
 
-	wrist.init();
+	  wrist.init();
+
+    tagManager.init();
     // Configure the trigger bindings
     configureBindings();
+
+
+    tagManager.setDefaultCommand(tagManager.print());
+
+
 
     AbsoluteDrive closedAbsoluteDrive = new AbsoluteDrive(drivebase,
                                                           // Applies deadbands and inverts controls because joysticks
@@ -87,13 +102,13 @@ public class RobotContainer
                                                                              Constants.OperatorConstants.LEFT_Y_DEADBAND),
                                                                          () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
                                                                          Constants.OperatorConstants.LEFT_X_DEADBAND),
-                                                                         () -> driverXbox.getRawAxis(2), false);
+                                                                         () -> MathUtil.applyDeadband(driverXbox.getRawAxis(4), 0.5), false);
     TeleopDrive simClosedFieldRel = new TeleopDrive(drivebase,
                                                     () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
                                                                                  Constants.OperatorConstants.LEFT_Y_DEADBAND),
                                                     () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
                                                     Constants.OperatorConstants.LEFT_X_DEADBAND),
-                                                    () -> driverXbox.getRawAxis(4), () -> true, true, false);
+                                                    () -> MathUtil.applyDeadband(driverXbox.getRawAxis(4), .8), () -> true, true, false);
     TeleopDrive closedFieldRel = new TeleopDrive(
         drivebase,
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), Constants.OperatorConstants.LEFT_Y_DEADBAND),
@@ -158,7 +173,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return Autos.Autons(drivebase,"path");
+    return Autos.Autons(drivebase, null);
   } 
 
   public void setDriveMode() {}
