@@ -77,26 +77,26 @@ public class AprilTagManager {
 
     public Pair<Pose2d, Double> getEstimatedGlobalPose()
     {
-      poseEstimator.setReferencePose(lastPose);
+      // poseEstimator.setReferencePose(lastPose);
 
-      double currentTime = Timer.getFPGATimestamp();
-      Optional<EstimatedRobotPose> result = poseEstimator.update();
+      // double currentTime = Timer.getFPGATimestamp();
+      // Optional<EstimatedRobotPose> result = poseEstimator.update();
 
-      if (result.isEmpty()) {
-          return new Pair<Pose2d, Double>(new Pose2d(-2,-2,new Rotation2d(0)), 0.0);
-      } else {
-          //return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
+      // if (result.isEmpty()) {
+      //     return new Pair<Pose2d, Double>(new Pose2d(-2,-2,new Rotation2d(0)), 0.0);
+      // } else {
+      //     //return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
 
-          lastPose = result.get().estimatedPose.toPose2d();
-          return new Pair<Pose2d, Double>(lastPose, 0.0);
-      }
-
+      //     lastPose = result.get().estimatedPose.toPose2d();
+      //     return new Pair<Pose2d, Double>(lastPose, 0.0);
+      // }
+      return new Pair<Pose2d, Double>(new Pose2d(-2,-2,new Rotation2d(0)), 0.0);
     }
 
     public void updateGeneric()
     {
-      UserInterface.smartDashboardPutNumber("Apriltag Estimate X Pose: ",getEstimatedGlobalPose().getFirst().getX());
-      UserInterface.smartDashboardPutNumber("Apriltag Estimate Y Pose: ",getEstimatedGlobalPose().getFirst().getY());
+      // UserInterface.smartDashboardPutNumber("Apriltag Estimate X Pose: ",getEstimatedGlobalPose().getFirst().getX());
+      // UserInterface.smartDashboardPutNumber("Apriltag Estimate Y Pose: ",getEstimatedGlobalPose().getFirst().getY());
     }
 
 }

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.piecemanipulation;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -20,12 +20,13 @@ public class ArmSubsystem extends SubsystemBase {
 		System.out.println("Arm - init()");
 
 		motorInit();
-        // PIDInit();
+        PIDInit();
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		armMotorController.setPercent(armPIDController.calculate(armMotorController.getRotations()));
 	}
 
 	@Override
@@ -34,39 +35,27 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void motorInit() {
-		System.out.println("Arm - motorInit()");
-
 		armMotorController = new SparkMaxController(Constants.MotorIDs.ARM_MOTOR_ID, MotorType.kBrushless);
 
         armMotorController.setBrake(true);
 	}
 
-    // public void PIDInit() {
-    //     armPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
-    // }
-    
-    // public void setArmSetpoint(int setpoint) {
-    //     armPIDController.setSetpoint(setpoint);
-    // }
-
-    public CommandBase resetEncoder() {
+    public void PIDInit() {
+        armPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+    }
+	
+    public Command resetEncoder() {
 		return this.runOnce(() -> armMotorController.resetEncoder());
 	}
-
+	
+	public Command setArmSetpoint(int setpoint) {
+		return this.runOnce(() -> armPIDController.setSetpoint(setpoint));
+	}
 
     /**
 	 * Moves the Arm by a percent between -1 and 1 and stops it when finished.
 	 */
 	public Command moveArm(int percent) {
-		
-        // return this.runOnce(() -> armMotor.setPercent());
 		return this.runEnd(() -> armMotorController.setPercent(percent), () -> armMotorController.setPercent(0));
 	}
-
-    // public Command moveArmToSetpoint() {
-		
-    //     // return this.runOnce(() -> armMotor.setPercent());
-    //     System.out.println("ArmSubsystem.java - moveArm");
-	// 	return this.runEnd(() -> armMotorController.setPercent(), () -> armMotorController.setPercent(0));
-	// }
 }

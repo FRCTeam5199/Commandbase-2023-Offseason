@@ -16,10 +16,9 @@ import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClawSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.piecemanipulation.ArmSubsystem;
+import frc.robot.subsystems.piecemanipulation.ClawSubsystem;
+import frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
@@ -114,33 +113,42 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
 //     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
 //     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 // //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
     commandXboxController.leftBumper().onTrue(arm.resetEncoder());
-
     commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
+    commandXboxController.leftBumper().onTrue(wrist.resetEncoder());
 
     commandXboxController.povRight().onTrue(claw.openPiston());
     commandXboxController.povLeft().onTrue(claw.closePiston());
 
-	if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
-		commandXboxController.y().whileTrue(elevator.moveElevator(1));
-		commandXboxController.a().whileTrue(elevator.moveElevator(-1));
-	}
+    if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
+      commandXboxController.y().whileTrue(elevator.moveElevator(1));
+      commandXboxController.a().whileTrue(elevator.moveElevator(-1));
+    } else {
+      commandXboxController.y().whileTrue(elevator.setElevatorSetpoint(20));
+      commandXboxController.a().whileTrue(elevator.setElevatorSetpoint(0));
+    }
 
-	if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
-		commandXboxController.povUp().whileTrue(arm.moveArm(-1));
-		commandXboxController.povDown().whileTrue(arm.moveArm(1));
-	}
-    commandXboxController.b().whileTrue(wrist.moveWrist(50));
-    
-    commandXboxController.x().whileTrue(wrist.moveWrist(-50));
-    // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
+      commandXboxController.povUp().whileTrue(arm.moveArm(-1));
+      commandXboxController.povDown().whileTrue(arm.moveArm(1));
+    } else {
+      commandXboxController.povUp().whileTrue(arm.setArmSetpoint(20));
+      commandXboxController.povDown().whileTrue(arm.setArmSetpoint(0));
+    }
+
+    if (Constants.PieceManipulation.WRIST_MANUAL) {
+      commandXboxController.b().whileTrue(wrist.moveWrist(50));
+      commandXboxController.x().whileTrue(wrist.moveWrist(-50));
+    } else {
+      commandXboxController.b().whileTrue(wrist.setWristSetpoint(10));
+      commandXboxController.x().whileTrue(wrist.setWristSetpoint(0));
+    }
   }
+  // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

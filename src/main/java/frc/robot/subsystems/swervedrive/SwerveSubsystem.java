@@ -92,7 +92,7 @@ public class SwerveSubsystem extends SubsystemBase
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
   {
     swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
-    setFieldPosition();
+    // setFieldPosition();
   }
 
   @Override
@@ -286,7 +286,7 @@ public class SwerveSubsystem extends SubsystemBase
 
   public void setFieldPosition()
   {
-    swerveDrive.addVisionMeasurement(tagManager.getEstimatedGlobalPose().getFirst(), tagManager.getEstimatedGlobalPose().getSecond(), true, 1);
+    // swerveDrive.addVisionMeasurement(tagManager.getEstimatedGlobalPose().getFirst(), tagManager.getEstimatedGlobalPose().getSecond(), true, 1);
   }
 
  

@@ -1,14 +1,15 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.piecemanipulation;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClawSubsystem extends SubsystemBase {
   private DoubleSolenoid clawPiston;
-  // private Compressor compressor;
+  private Compressor compressor;
 
   /** Creates a new Claw. */
   public ClawSubsystem() {}
@@ -62,7 +63,7 @@ public class ClawSubsystem extends SubsystemBase {
   /**
    * Opens the Claw piston
    */
-  public CommandBase openPiston() {
+  public Command openPiston() {
     System.out.println("Claw - Opening Piston...");
     return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kForward));
   }
@@ -70,7 +71,7 @@ public class ClawSubsystem extends SubsystemBase {
   /**
    * Closes the Claw piston
    */
-  public CommandBase closePiston() {
+  public Command closePiston() {
     System.out.println("Claw - Closing Piston...");
     return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kReverse));
   }

@@ -1,9 +1,10 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.piecemanipulation;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.PieceManipulation;
 import frc.robot.motorcontrol.SparkMaxController;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -13,14 +14,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 	public ElevatorSubsystem() {}
 
 	public void init() {
-		System.out.println("Elevator - init()");
-
 		motorInit();
+		PIDInit();
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		elevatorMotorController.setPercent(elevatorPIDController.calculate(elevatorMotorController.getRotations()));
 	}
 
 	@Override
@@ -29,33 +30,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
 	public void motorInit() {
-		System.out.println("Elevator - motorInit()");
-
 		elevatorMotorController = new SparkMaxController(Constants.MotorIDs.ELEVATOR_MOTOR_ID);
-		
         elevatorMotorController.setBrake(true);
 	}
 
-	public CommandBase resetEncoder() {
+    public void PIDInit() {
+        elevatorPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+    }
+
+	public Command resetEncoder() {
 		return this.runOnce(() -> elevatorMotorController.resetEncoder());
+	}
+
+	public Command setElevatorSetpoint(int setpoint) {
+		return this.runOnce(() -> elevatorPIDController.setSetpoint(setpoint));
 	}
 
 	/**
 	 * Moves the Elevator by a percent between -1 and 1 and stops it when finished.
 	 */
-	public CommandBase moveElevator(int percent) {
-		System.out.println("Elevator - moveElevator()");
-
+	public Command moveElevator(int percent) {
 		return this.runEnd(() -> elevatorMotorController.setPercent(percent), () -> elevatorMotorController.setPercent(0));
 	}
-
-// 	public CommandBase raiseElevator(int position) {
-// 		System.out.println("Elevator - raiseElevator()");
-// 		return this.runOnce(() -> elevatorMotor.setPosition(position));
-// 	}
-
-// 	public CommandBase lowerElevator(int position) {
-// 		System.out.println("Elevator - lowerElevator()");
-// 		return this.runOnce(() -> elevatorMotor.setPosition(position));
-// 	}
 }

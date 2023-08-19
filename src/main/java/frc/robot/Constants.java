@@ -104,10 +104,11 @@ public final class Constants {
         // Elevator
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public static final Boolean ARM_ELEVATOR_MANUAL = false;
+
         public static final Boolean ENABLE_ELEVATOR = true;
         public static final String ELEVATOR_MOTOR_CANBUS = "rio";
-        public static final PID ELEVATORPID = new PID(.3, 0, 0, 0);
-        public static final Boolean ARM_ELEVATOR_MANUAL = true;
+        public static final PID ELEVATORPID = new PID(0.1, 0, 0);
 
         /////////////////////////////////////////////
         //  VV  Elevator Physical Properties  VV  //
@@ -122,7 +123,7 @@ public final class Constants {
 
         public final boolean ENABLE_ARM = true;
         public static final String ARM_MOTOR_CANBUS = "rio";
-        public static final PID ARM_PID = new PID(.5  , 0, 0, 0);
+        public static final PID ARM_PID = new PID(0.1, 0, 0);
 
         ////////////////////////////////////////
         //  VV  ARM Physical Properties  VV  //
@@ -142,9 +143,9 @@ public final class Constants {
         //  Wrist
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public String WRIST_MOTOR_CANBUS = "rio";
-        public boolean WRIST_MANUAL = true;
-        public static final PID WRIST_PID = new PID(.08, 0.0001, 0.045, 0);
+        public static String WRIST_MOTOR_CANBUS = "rio";
+        public static boolean WRIST_MANUAL = false;
+        public static final PID WRIST_PID = new PID(0.1, 0, 0);
 
     }
 }
