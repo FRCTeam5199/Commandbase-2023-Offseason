@@ -14,13 +14,19 @@ public class WristSubsystem extends SubsystemBase{
 
     public void init(){
         motorInit();
-        PIDInit();
+        if (!PieceManipulation.WRIST_MANUAL) {
+            PIDInit();
+        }
+
+        wristMotorController.resetEncoder();
     }
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		wristMotorController.setPercent(wristPIDController.calculate(wristMotorController.getRotations()));
+        if (!PieceManipulation.ENABLE_WRIST) {
+		    wristMotorController.setPercent(wristPIDController.calculate(wristMotorController.getRotations()));
+        }
 	}
 
 	@Override
@@ -49,7 +55,7 @@ public class WristSubsystem extends SubsystemBase{
         return this.runOnce(() -> wristPIDController.setSetpoint(setpoint));
     }
 
-    public Command move(int percent) {
+    public Command move(float percent) {
         return this.runEnd(() -> wristMotorController.setPercent(percent), () -> wristMotorController.setPercent(0));
     }
 }

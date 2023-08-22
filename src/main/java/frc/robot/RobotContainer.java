@@ -146,23 +146,31 @@ public class RobotContainer
       commandXboxController.x().whileTrue(elevator.move(1));
       commandXboxController.b().whileTrue(elevator.move(-1));
     }
+    // TEMPORARY ELSE STATEMENT REMOVE LATER
+    else {
+      commandXboxController.x().whileTrue(elevator.setSetpoint(5));
+      commandXboxController.b().whileTrue(elevator.setSetpoint(30));
+    }
 
     if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL && Constants.PieceManipulation.ENABLE_ARM) {
       commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
       commandXboxController.povDown().whileTrue(arm.moveRotate(1));
       
-      commandXboxController.povLeft().whileTrue(arm.moveExtend(-10));
-      commandXboxController.povRight().whileTrue(arm.moveExtend(10));
+      commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
+      commandXboxController.povRight().whileTrue(arm.moveExtend(20));
     }
     // TEMPORARY ELSE STATEMENT REMOVE LATER
     else {
-      commandXboxController.povLeft().whileTrue(arm.setExtendSetpoint(-10));
-      commandXboxController.povRight().whileTrue(arm.setExtendSetpoint(10));
+      commandXboxController.povUp().whileTrue(arm.setRotateSetpoint(-20));
+      commandXboxController.povDown().whileTrue(arm.setRotateSetpoint(30));
+
+      commandXboxController.povLeft().whileTrue(arm.setExtendSetpoint(0));
+      commandXboxController.povRight().whileTrue(arm.setExtendSetpoint(21));
     }
 
     if (Constants.PieceManipulation.WRIST_MANUAL && Constants.PieceManipulation.ENABLE_WRIST) {
-      commandXboxController.leftBumper().whileTrue(wrist.move(1));
-      commandXboxController.rightBumper().whileTrue(wrist.move(-1));
+      commandXboxController.leftBumper().whileTrue(wrist.move(0.5f));
+      commandXboxController.rightBumper().whileTrue(wrist.move(-0.5f));
     }
   }
   // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

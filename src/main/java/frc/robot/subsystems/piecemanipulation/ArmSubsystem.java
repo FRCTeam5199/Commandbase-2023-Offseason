@@ -18,11 +18,13 @@ public class ArmSubsystem extends SubsystemBase {
 	public ArmSubsystem() {}
 
 	public void init() {
-		System.out.println("Arm Init Exists!!");
 		motorInit();
 		if (!PieceManipulation.ARM_ELEVATOR_MANUAL) {
         	PIDInit();
 		}
+
+		armExtendMotorController.resetEncoder();
+		armRotateMotorController.resetEncoder();
 	}
 
 	@Override
@@ -30,8 +32,11 @@ public class ArmSubsystem extends SubsystemBase {
 		// This method will be called once per scheduler run
 		if (!PieceManipulation.ARM_ELEVATOR_MANUAL) {
 			armRotateMotorController.setPercent(armRotatePIDController.calculate(armRotateMotorController.getRotations()));
-			armExtendMotorController.setPercent(armExtendPIDController.calculate(armExtendMotorController.getRotations()));
+			armExtendMotorController.setPercent(-armExtendPIDController.calculate(armExtendMotorController.getRotations()));
 		}
+
+		System.out.println(armExtendMotorController.getRotations());
+		System.out.println(-armExtendPIDController.calculate(armExtendMotorController.getRotations()));
 	}
 
 	@Override
@@ -65,19 +70,19 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public Command setExtendSetpoint(int setpoint) {
-		return this.runOnce(() -> armRotatePIDController.setSetpoint(setpoint));
+		return this.runOnce(() -> armExtendPIDController.setSetpoint(setpoint));
 	}
     /**
 	 * Moves the Arm Rotate by a percent between -1 and 1 and stops it when finished.
 	 */
-	public Command moveRotate(int percent) {
+	public Command moveRotate(float percent) {
 		return this.runEnd(() -> armRotateMotorController.setPercent(percent), () -> armRotateMotorController.setPercent(0));
 	}
 
 	/**
 	 * Moves the Arm Extend by a percent between -1 and 1 and stops it when finished.
 	 */
-	public Command moveExtend(int percent) {
+	public Command moveExtend(float percent) {
 		return this.runEnd(() -> armExtendMotorController.setPercent(percent), () -> armExtendMotorController.setPercent(0));
 	}
 }
