@@ -35,7 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
     public void PIDInit() {
-        elevatorPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+        elevatorPIDController = new PIDController(PieceManipulation.ARM_ROTATE_PID.P, PieceManipulation.ARM_ROTATE_PID.I, PieceManipulation.ARM_ROTATE_PID.D);
     }
 
 	public Command resetEncoder() {

@@ -18,15 +18,20 @@ public class ArmSubsystem extends SubsystemBase {
 	public ArmSubsystem() {}
 
 	public void init() {
+		System.out.println("Arm Init Exists!!");
 		motorInit();
-        PIDInit();
+		if (!PieceManipulation.ARM_ELEVATOR_MANUAL) {
+        	PIDInit();
+		}
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		armRotateMotorController.setPercent(armRotatePIDController.calculate(armRotateMotorController.getRotations()));
-		armExtendMotorController.setPercent(armExtendPIDController.calculate(armExtendMotorController.getRotations()));
+		if (!PieceManipulation.ARM_ELEVATOR_MANUAL) {
+			armRotateMotorController.setPercent(armRotatePIDController.calculate(armRotateMotorController.getRotations()));
+			armExtendMotorController.setPercent(armExtendPIDController.calculate(armExtendMotorController.getRotations()));
+		}
 	}
 
 	@Override
@@ -36,14 +41,15 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public void motorInit() {
 		armRotateMotorController = new SparkMaxController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID, MotorType.kBrushless);
-		armExtendMotorController = new SparkMaxController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID, MotorType.kBrushed);
+		armExtendMotorController = new SparkMaxController(Constants.MotorIDs.ARM_EXTEND_MOTOR_ID, MotorType.kBrushed);
+
         armRotateMotorController.setBrake(true);
         armExtendMotorController.setBrake(true);
 	}
 
     public void PIDInit() {
-        armRotatePIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
-        armExtendPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+        armRotatePIDController = new PIDController(PieceManipulation.ARM_ROTATE_PID.P, PieceManipulation.ARM_ROTATE_PID.I, PieceManipulation.ARM_ROTATE_PID.D);
+        armExtendPIDController = new PIDController(PieceManipulation.ARM_EXTEND_PID.P, PieceManipulation.ARM_EXTEND_PID.I, PieceManipulation.ARM_EXTEND_PID.D);
     }
 	
     public Command resetRotateEncoder() {

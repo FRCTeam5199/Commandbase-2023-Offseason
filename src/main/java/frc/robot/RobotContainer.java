@@ -67,14 +67,13 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-
-	  claw.init();
-
+    claw.init();
+    
     elevator.init();
     
-	  arm.init();
-
-	  wrist.init();
+    arm.init();
+    
+    wrist.init();
 
     tagManager.init();
 
@@ -133,32 +132,37 @@ public class RobotContainer
 //     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 // //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
-    commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
-    commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
+    // commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
+    // commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
 
-    commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
+    // commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
     
-    commandXboxController.leftBumper().onTrue(wrist.resetEncoder());
+    // commandXboxController.leftBumper().onTrue(wrist.resetEncoder());
 
     commandXboxController.a().onTrue(claw.openPiston());
     commandXboxController.y().onTrue(claw.closePiston());
 
-    if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
+    if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL && Constants.PieceManipulation.ENABLE_ELEVATOR) {
       commandXboxController.x().whileTrue(elevator.move(1));
       commandXboxController.b().whileTrue(elevator.move(-1));
     }
 
-    if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
+    if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL && Constants.PieceManipulation.ENABLE_ARM) {
       commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
       commandXboxController.povDown().whileTrue(arm.moveRotate(1));
       
-      commandXboxController.povLeft().whileTrue(arm.moveExtend(-1));
-      commandXboxController.povRight().whileTrue(arm.moveExtend(1));
+      commandXboxController.povLeft().whileTrue(arm.moveExtend(-10));
+      commandXboxController.povRight().whileTrue(arm.moveExtend(10));
+    }
+    // TEMPORARY ELSE STATEMENT REMOVE LATER
+    else {
+      commandXboxController.povLeft().whileTrue(arm.setExtendSetpoint(-10));
+      commandXboxController.povRight().whileTrue(arm.setExtendSetpoint(10));
     }
 
-    if (Constants.PieceManipulation.WRIST_MANUAL) {
-      commandXboxController.leftBumper().whileTrue(wrist.move(50));
-      commandXboxController.rightBumper().whileTrue(wrist.move(-50));
+    if (Constants.PieceManipulation.WRIST_MANUAL && Constants.PieceManipulation.ENABLE_WRIST) {
+      commandXboxController.leftBumper().whileTrue(wrist.move(1));
+      commandXboxController.rightBumper().whileTrue(wrist.move(-1));
     }
   }
   // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

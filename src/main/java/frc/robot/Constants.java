@@ -58,9 +58,9 @@ public final class Constants {
         Declare all motor ID's here
         Try and keep it organized by subsystem please
     */
-    
+  
     // Elevator
-    public static final int ELEVATOR_MOTOR_ID = 41;
+    public static final int ELEVATOR_MOTOR_ID = 40;
     
     // Arm
     public static final int ARM_ROTATE_MOTOR_ID = 39;
@@ -107,9 +107,9 @@ public final class Constants {
         // Elevator
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static final Boolean ARM_ELEVATOR_MANUAL = false;
+        public static final Boolean ARM_ELEVATOR_MANUAL = true;
 
-        public static final Boolean ENABLE_ELEVATOR = true;
+        public static final Boolean ENABLE_ELEVATOR = false;
         public static final String ELEVATOR_MOTOR_CANBUS = "rio";
         public static final PID ELEVATORPID = new PID(0.1, 0, 0);
 
@@ -124,9 +124,10 @@ public final class Constants {
         // ARM
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public final boolean ENABLE_ARM = true;
+        public static final boolean ENABLE_ARM = true;
         public static final String ARM_MOTOR_CANBUS = "rio";
-        public static final PID ARM_PID = new PID(0.1, 0, 0);
+        public static final PID ARM_ROTATE_PID = new PID(0.1, 0, 0);
+        public static final PID ARM_EXTEND_PID = new PID(0.03, 0, 0);
 
         ////////////////////////////////////////
         //  VV  ARM Physical Properties  VV  //
@@ -138,7 +139,7 @@ public final class Constants {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // INTAKE
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public static final boolean ENABLE_INTAKE = true;
+        public static final boolean ENABLE_INTAKE = false;
         public static final String INTAKE_MOTOR_CANBUS = "rio";
         public static final boolean INTAKE_MANUAL = true;
         
@@ -146,9 +147,12 @@ public final class Constants {
         //  Wrist
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public static final boolean ENABLE_WRIST = false;
         public static String WRIST_MOTOR_CANBUS = "rio";
-        public static boolean WRIST_MANUAL = false;
+        public static boolean WRIST_MANUAL = true;
         public static final PID WRIST_PID = new PID(0.1, 0, 0);
 
+        // Claw
+        public static final boolean ENABLE_CLAW = false;
     }
 }
