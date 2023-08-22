@@ -213,6 +213,12 @@ public class TalonFXSwerve extends SwerveMotor
     configuration.slot0.integralZone = config.iz;
     configuration.slot0.closedLoopPeakOutput = config.output.max;
     configChanged = true;
+
+    configuration.slot1.kP = .1;
+    configuration.slot1.kI = 0.0;
+    configuration.slot1.kD = .1;
+    configuration.slot1.integralZone = 0;
+    configuration.slot1.closedLoopPeakOutput = config.output.max;
   }
 
   /**
