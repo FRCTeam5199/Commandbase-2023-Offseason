@@ -4,21 +4,20 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motorcontrol.SparkMaxController;
 import frc.robot.Constants.PieceManipulation;
 
 public class ArmSubsystem extends SubsystemBase {
-    SparkMaxController armMotorController;
-    PIDController armPIDController;
+    SparkMaxController armRotateMotorController;
+    SparkMaxController armExtendMotorController;
+    PIDController armRotatePIDController;
+    PIDController armExtendPIDController;
 
 	public ArmSubsystem() {}
 
 	public void init() {
-		System.out.println("Arm - init()");
-
 		motorInit();
         PIDInit();
 	}
@@ -26,7 +25,8 @@ public class ArmSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		armMotorController.setPercent(armPIDController.calculate(armMotorController.getRotations()));
+		armRotateMotorController.setPercent(armRotatePIDController.calculate(armRotateMotorController.getRotations()));
+		armExtendMotorController.setPercent(armExtendPIDController.calculate(armExtendMotorController.getRotations()));
 	}
 
 	@Override
@@ -35,27 +35,43 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void motorInit() {
-		armMotorController = new SparkMaxController(Constants.MotorIDs.ARM_MOTOR_ID, MotorType.kBrushless);
-
-        armMotorController.setBrake(true);
+		armRotateMotorController = new SparkMaxController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID, MotorType.kBrushless);
+		armExtendMotorController = new SparkMaxController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID, MotorType.kBrushed);
+        armRotateMotorController.setBrake(true);
+        armExtendMotorController.setBrake(true);
 	}
 
     public void PIDInit() {
-        armPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+        armRotatePIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+        armExtendPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
     }
 	
-    public Command resetEncoder() {
-		return this.runOnce(() -> armMotorController.resetEncoder());
-	}
-	
-	public Command setArmSetpoint(int setpoint) {
-		return this.runOnce(() -> armPIDController.setSetpoint(setpoint));
+    public Command resetRotateEncoder() {
+		return this.runOnce(() -> armRotateMotorController.resetEncoder());
 	}
 
+	public Command resetExtendEncoder() {
+		return this.runOnce(() -> armExtendMotorController.resetEncoder());
+	}
+	
+	public Command setRotateSetpoint(int setpoint) {
+		return this.runOnce(() -> armRotatePIDController.setSetpoint(setpoint));
+	}
+
+	public Command setExtendSetpoint(int setpoint) {
+		return this.runOnce(() -> armRotatePIDController.setSetpoint(setpoint));
+	}
     /**
-	 * Moves the Arm by a percent between -1 and 1 and stops it when finished.
+	 * Moves the Arm Rotate by a percent between -1 and 1 and stops it when finished.
 	 */
-	public Command moveArm(int percent) {
-		return this.runEnd(() -> armMotorController.setPercent(percent), () -> armMotorController.setPercent(0));
+	public Command moveRotate(int percent) {
+		return this.runEnd(() -> armRotateMotorController.setPercent(percent), () -> armRotateMotorController.setPercent(0));
+	}
+
+	/**
+	 * Moves the Arm Extend by a percent between -1 and 1 and stops it when finished.
+	 */
+	public Command moveExtend(int percent) {
+		return this.runEnd(() -> armExtendMotorController.setPercent(percent), () -> armExtendMotorController.setPercent(0));
 	}
 }

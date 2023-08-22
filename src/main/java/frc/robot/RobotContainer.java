@@ -12,18 +12,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.swervedrive.auto.AutoBalanceCommand;
 import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
 import frc.robot.commands.swervedrive.drivebase.TeleopDrive;
+import frc.robot.controllers.CommandButtonPanel;
+import frc.robot.misc.AprilTagManager;
 import frc.robot.subsystems.piecemanipulation.ArmSubsystem;
 import frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.misc.AprilTagManager;
-import frc.robot.commands.swervedrive.auto.AutoBalanceCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -35,15 +34,16 @@ public class RobotContainer
 
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve/falcon"));
+      "swerve/falcon"));
 
-  final ClawSubsystem claw = new ClawSubsystem();
+  public static final ArmSubsystem arm = new ArmSubsystem();
   
-  final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  public static final ElevatorSubsystem elevator = new ElevatorSubsystem();
   
-  final ArmSubsystem arm = new ArmSubsystem();
+  public static final WristSubsystem wrist = new WristSubsystem();
   
-  final WristSubsystem wrist = new WristSubsystem();
+  public static final ClawSubsystem claw = new ClawSubsystem();
+  
 
   final AprilTagManager tagManager = new AprilTagManager();
 
@@ -56,11 +56,12 @@ public class RobotContainer
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
 //   final IntakeSubsystem intake = new IntakeSubsystem();
 
+  public static final CommandButtonPanel commandButtonPanel = new CommandButtonPanel(Constants.BUTTON_PANEL1, Constants.BUTTON_PANEL2);
+
   XboxController driverXbox = new XboxController(0);
 
   CommandXboxController commandXboxController = new CommandXboxController(1);
   
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -76,39 +77,39 @@ public class RobotContainer
 	  wrist.init();
 
     tagManager.init();
+
     // Configure the trigger bindings
     configureBindings();
 
-
     tagManager.setDefaultCommand(tagManager.print());
 
-
-
     AbsoluteDrive closedAbsoluteDrive = new AbsoluteDrive(drivebase,
-                                                          // Applies deadbands and inverts controls because joysticks
-                                                          // are back-right positive while robot
-                                                          // controls are front-left positive
-                                                          () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                                        Constants.OperatorConstants.LEFT_Y_DEADBAND),
-                                                          () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                                                        Constants.OperatorConstants.LEFT_X_DEADBAND),
-                                                          () -> -driverXbox.getRightX(),
-                                                          () -> -driverXbox.getRightY(),
-                                                          false);
+        // Applies deadbands and inverts controls because joysticks
+        // are back-right positive while robot
+        // controls are front-left positive
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                      Constants.OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                      Constants.OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverXbox.getRightX(),
+        () -> -driverXbox.getRightY(),
+        false);
 
     AbsoluteFieldDrive closedFieldAbsoluteDrive = new AbsoluteFieldDrive(drivebase,
-                                                                         () ->
-                                                                             MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                             Constants.OperatorConstants.LEFT_Y_DEADBAND),
-                                                                         () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                                         Constants.OperatorConstants.LEFT_X_DEADBAND),
-                                                                         () -> MathUtil.applyDeadband(driverXbox.getRawAxis(4), 0.5), false);
+        () ->
+            MathUtil.applyDeadband(driverXbox.getLeftY(),
+            Constants.OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+        Constants.OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getRawAxis(4), 0.5), false);
+
     TeleopDrive simClosedFieldRel = new TeleopDrive(drivebase,
-                                                    () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                                 Constants.OperatorConstants.LEFT_Y_DEADBAND),
-                                                    () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                    Constants.OperatorConstants.LEFT_X_DEADBAND),
-                                                    () -> MathUtil.applyDeadband(driverXbox.getRawAxis(4), .8), () -> true, true, false);
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                      Constants.OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+        Constants.OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getRawAxis(4), .8), () -> true, true, false);
+
     TeleopDrive closedFieldRel = new TeleopDrive(
         drivebase,
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), Constants.OperatorConstants.LEFT_Y_DEADBAND),
@@ -132,35 +133,32 @@ public class RobotContainer
 //     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 // //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
 
-    commandXboxController.leftBumper().onTrue(arm.resetEncoder());
+    commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
+    commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
+
     commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
+    
     commandXboxController.leftBumper().onTrue(wrist.resetEncoder());
 
-    commandXboxController.povRight().onTrue(claw.openPiston());
-    commandXboxController.povLeft().onTrue(claw.closePiston());
+    commandXboxController.a().onTrue(claw.openPiston());
+    commandXboxController.y().onTrue(claw.closePiston());
 
     if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
-      commandXboxController.y().whileTrue(elevator.moveElevator(1));
-      commandXboxController.a().whileTrue(elevator.moveElevator(-1));
-    } else {
-      commandXboxController.y().whileTrue(elevator.setElevatorSetpoint(20));
-      commandXboxController.a().whileTrue(elevator.setElevatorSetpoint(0));
+      commandXboxController.x().whileTrue(elevator.move(1));
+      commandXboxController.b().whileTrue(elevator.move(-1));
     }
 
     if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL) {
-      commandXboxController.povUp().whileTrue(arm.moveArm(-1));
-      commandXboxController.povDown().whileTrue(arm.moveArm(1));
-    } else {
-      commandXboxController.povUp().whileTrue(arm.setArmSetpoint(20));
-      commandXboxController.povDown().whileTrue(arm.setArmSetpoint(0));
+      commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
+      commandXboxController.povDown().whileTrue(arm.moveRotate(1));
+      
+      commandXboxController.povLeft().whileTrue(arm.moveExtend(-1));
+      commandXboxController.povRight().whileTrue(arm.moveExtend(1));
     }
 
     if (Constants.PieceManipulation.WRIST_MANUAL) {
-      commandXboxController.b().whileTrue(wrist.moveWrist(50));
-      commandXboxController.x().whileTrue(wrist.moveWrist(-50));
-    } else {
-      commandXboxController.b().whileTrue(wrist.setWristSetpoint(10));
-      commandXboxController.x().whileTrue(wrist.setWristSetpoint(0));
+      commandXboxController.leftBumper().whileTrue(wrist.move(50));
+      commandXboxController.rightBumper().whileTrue(wrist.move(-50));
     }
   }
   // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

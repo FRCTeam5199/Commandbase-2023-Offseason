@@ -25,10 +25,7 @@ public final class Constants {
   public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME = 0.13; //s, 20ms + 110ms sprk max velocity lag
 
-
-
   public static final class Auton {
-
 
     public static final PIDFConfig xAutoPID = new PIDFConfig(0.7, 0, 0);
     public static final PIDFConfig yAutoPID = new PIDFConfig(0.7, 0, 0);
@@ -38,9 +35,6 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2.0;
 
     public static final boolean APRIL_TAG_ENABLED = true;
-
-
-
   }
 
   public static final class Drivebase {
@@ -66,14 +60,15 @@ public final class Constants {
     */
     
     // Elevator
-    public static final int ELEVATOR_MOTOR_ID = 40;
+    public static final int ELEVATOR_MOTOR_ID = 41;
     
     // Arm
-    public static final int ARM_MOTOR_ID = 39;
+    public static final int ARM_ROTATE_MOTOR_ID = 39;
+    public static final int ARM_EXTEND_MOTOR_ID = 43;
 
     // Wrist
-    public static final int WRIST_MOTOR_ID = 34;
-
+    public static final int WRIST_MOTOR_ID = 27;
+    
     //Top Intake 
     public static final int INTAKE_IN_ID = 12;
     public static final int INTAKE_OUT_ID = 2;
@@ -104,8 +99,8 @@ public final class Constants {
       //////////////////////////
         public static final int XBOX_CONTROLLER_USB_SLOT = 0,
         XBOX_CONTROLLER_USB_SLOT_2 = 1,
-        BUTTON_PANEL_USB_SLOT1 = 2,
-        BUTTON_PANEL_USB_SLOT2= 3;
+        BUTTON_PANEL1 = 2,
+        BUTTON_PANEL2= 3;
 
     public static class PieceManipulation {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

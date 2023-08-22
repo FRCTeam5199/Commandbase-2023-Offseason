@@ -42,14 +42,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 		return this.runOnce(() -> elevatorMotorController.resetEncoder());
 	}
 
-	public Command setElevatorSetpoint(int setpoint) {
+	public Command setSetpoint(int setpoint) {
 		return this.runOnce(() -> elevatorPIDController.setSetpoint(setpoint));
 	}
 
 	/**
 	 * Moves the Elevator by a percent between -1 and 1 and stops it when finished.
 	 */
-	public Command moveElevator(int percent) {
+	public Command move(int percent) {
 		return this.runEnd(() -> elevatorMotorController.setPercent(percent), () -> elevatorMotorController.setPercent(0));
 	}
 }

@@ -49,7 +49,7 @@ public class WristSubsystem extends SubsystemBase{
         return this.runOnce(() -> wristPIDController.setSetpoint(setpoint));
     }
 
-    public Command moveWrist(int percent) {
+    public Command move(int percent) {
         return this.runEnd(() -> wristMotorController.setPercent(percent), () -> wristMotorController.setPercent(0));
     }
 }
