@@ -35,8 +35,8 @@ public class ArmSubsystem extends SubsystemBase {
 			armExtendMotorController.setPercent(-armExtendPIDController.calculate(armExtendMotorController.getRotations()));
 		}
 
-		System.out.println(armExtendMotorController.getRotations());
-		System.out.println(-armExtendPIDController.calculate(armExtendMotorController.getRotations()));
+		// System.out.println(armExtendMotorController.getRotations());
+		// System.out.println(-armExtendPIDController.calculate(armExtendMotorController.getRotations()));
 	}
 
 	@Override

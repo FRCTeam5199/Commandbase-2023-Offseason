@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.File;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -21,9 +22,11 @@ import frc.robot.misc.AprilTagManager;
 import frc.robot.subsystems.piecemanipulation.ArmSubsystem;
 import frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
+import frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-
+import frc.robot.subsystems.CompressorSubsystem;
+import frc.robot.commands.CompressorCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -43,6 +46,10 @@ public class RobotContainer
   public static final WristSubsystem wrist = new WristSubsystem();
   
   public static final ClawSubsystem claw = new ClawSubsystem();
+
+  public static final IntakeSubsystem intake = new IntakeSubsystem();
+
+  public final CompressorSubsystem compressor = new CompressorSubsystem();
   
 
   final AprilTagManager tagManager = new AprilTagManager();
@@ -61,12 +68,15 @@ public class RobotContainer
   XboxController driverXbox = new XboxController(0);
 
   CommandXboxController commandXboxController = new CommandXboxController(1);
+
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer()
   {
+    compressor.init();
+
     claw.init();
     
     elevator.init();
@@ -74,6 +84,8 @@ public class RobotContainer
     arm.init();
     
     wrist.init();
+
+    intake.init();
 
     tagManager.init();
 
@@ -115,7 +127,11 @@ public class RobotContainer
         () -> MathUtil.applyDeadband(driverXbox.getLeftX(), Constants.OperatorConstants.LEFT_X_DEADBAND),
         () -> -driverXbox.getRawAxis(4), () -> true, false, true);
 
+    CompressorCommand compressorRun = new CompressorCommand(compressor);
+
     drivebase.setDefaultCommand(simClosedFieldRel);
+    compressor.setDefaultCommand(compressorRun);
+    
     
   }
 
@@ -139,16 +155,28 @@ public class RobotContainer
     
     // commandXboxController.leftBumper().onTrue(wrist.resetEncoder());
 
-    commandXboxController.a().onTrue(claw.openPiston());
-    commandXboxController.y().onTrue(claw.closePiston());
+    
+    // commandXboxController.y().onTrue(intake.deployPiston());
+    // commandXboxController.a().onTrue(intake.retractPiston());
 
+    // if (Constants.PieceManipulation.ENABLE_INTAKE && Constants.PieceManipulation.INTAKE_MANUAL) {
+
+
+    // }
+
+    commandButtonPanel.button(3, 10).onTrue(intake.deployPiston());
+    commandButtonPanel.button(3, 9).onTrue(intake.deployPiston());
+    if (Constants.PieceManipulation.ENABLE_CLAW) {
+      commandXboxController.a().onTrue(claw.openPiston());
+      commandXboxController.y().onTrue(claw.closePiston());
+    }
     if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL && Constants.PieceManipulation.ENABLE_ELEVATOR) {
-      commandXboxController.x().whileTrue(elevator.move(1));
+      // commandXboxController.x().whileTrue(elevator.move(1));
       commandXboxController.b().whileTrue(elevator.move(-1));
     }
     // TEMPORARY ELSE STATEMENT REMOVE LATER
     else {
-      commandXboxController.x().whileTrue(elevator.setSetpoint(5));
+      // commandXboxController.x().whileTrue(elevator.setSetpoint(5));
       commandXboxController.b().whileTrue(elevator.setSetpoint(30));
     }
 
@@ -171,6 +199,10 @@ public class RobotContainer
     if (Constants.PieceManipulation.WRIST_MANUAL && Constants.PieceManipulation.ENABLE_WRIST) {
       commandXboxController.leftBumper().whileTrue(wrist.move(0.5f));
       commandXboxController.rightBumper().whileTrue(wrist.move(-0.5f));
+    }
+    if (Constants.PieceManipulation.INTAKE_MANUAL && Constants.PieceManipulation.ENABLE_INTAKE) {
+      commandXboxController.x().onTrue(intake.spinBottomIntake());
+      commandXboxController.x().onFalse(intake.stopSpinBottomIntake());
     }
   }
   // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

@@ -72,14 +72,12 @@ public final class Constants {
     //Top Intake 
     public static final int INTAKE_IN_ID = 12;
     public static final int INTAKE_OUT_ID = 2;
-    
-    public static final int TopIntakeLeft_ID = 44;
-    public static final int TopIntakeRigth_ID = 27;
 
     //Bottom Intake
     public static final int BottomIntakeMotor_ID = 54;
-    public static final int SPIKE_IN_ID = 3;
-    public static final int SPIKE_OUT_ID = 13;
+
+    public static final int SPIKE_IN_ID = 8;
+    public static final int SPIKE_OUT_ID = 11;
   }
 
   public static class Pneumatics {
@@ -90,8 +88,8 @@ public final class Constants {
     public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
 
     // Claw
-    public static final int CLAW_IN_ID = 10;
-    public static final int CLAW_OUT_ID = 9;
+    public static final int CLAW_IN_ID = 9;
+    public static final int CLAW_OUT_ID = 10;
   }
 
       //////////////////////////
@@ -139,7 +137,7 @@ public final class Constants {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // INTAKE
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public static final boolean ENABLE_INTAKE = false;
+        public static final boolean ENABLE_INTAKE = true;
         public static final String INTAKE_MOTOR_CANBUS = "rio";
         public static final boolean INTAKE_MANUAL = true;
         
@@ -153,6 +151,6 @@ public final class Constants {
         public static final PID WRIST_PID = new PID(0.1, 0, 0);
 
         // Claw
-        public static final boolean ENABLE_CLAW = false;
+        public static final boolean ENABLE_CLAW = true;
     }
 }

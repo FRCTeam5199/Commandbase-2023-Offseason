@@ -5,7 +5,6 @@
 package frc.robot.subsystems.piecemanipulation;
 
 import java.util.function.BooleanSupplier;
-
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motorcontrol.SparkMaxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -35,16 +35,10 @@ public class IntakeSubsystem extends SubsystemBase {
       // This method will be called once per scheduler run
     }
     public void init() {
-      bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
+      bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PCM_ID,Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
       bottomIntake = new SparkMaxController(Constants.MotorIDs.BottomIntakeMotor_ID, MotorType.kBrushed);
       bottomIntake.setBrake(true);
 
-      topLeftIntake = new SparkMaxController(Constants.MotorIDs.TopIntakeLeft_ID);
-      topRightIntake = new SparkMaxController(Constants.MotorIDs.TopIntakeRigth_ID);
-      topLeftIntake.setBrake(true);
-      topRightIntake.setBrake(true);
-      topLeftIntake.setCurrentLimit(20);
-      topLeftIntake.setCurrentLimit(20);
 
     }
 
@@ -72,41 +66,28 @@ public class IntakeSubsystem extends SubsystemBase {
     ///////////
     
     public CommandBase deployPiston() {
-      if (getConeMode() == false) {
-      deployedIntakeSwitch(true);
+      // return this.run(()-> System.out.println("DEPLOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"));
       return this.runOnce(() -> bottomPiston.set(Value.kForward));
-      }
-      return null;
+      
     }
 
     public CommandBase retractPiston() {
-      deployedIntakeSwitch(false);
+      // return this.run(()-> System.out.println("RETRACTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"));
       return this.runOnce(() -> bottomPiston.set(Value.kReverse));
     }
 
     ////////////
 
-    public void spinBottomIntake() {
-      bottomIntake.setPercent(-.6);
+    public Command spinBottomIntake() {
+      return this.runOnce(() -> bottomIntake.setPercent(-.6));
     }
 
-    public void TopIntake() {
-      topLeftIntake.setPercent(12);
-      topRightIntake.setPercent(-12);
+    public Command stopSpinBottomIntake() {
+      return this.runOnce(() -> bottomIntake.setPercent(0));
     }
+
     public void spinBothIntakes(){
       spinBottomIntake();
-      TopIntake();
-    }
-
-    public CommandBase runIntakes() {
-      if (getConeMode()) {
-        return this.run(()->TopIntake());
-      }
-      else if (!getConeMode() && getDeployedBottomIntake()) {
-        return this.run(() -> spinBothIntakes());
-      }
-      return null;
     }
 
     
