@@ -47,7 +47,6 @@ public final class Constants {
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
-    public static final boolean APRIL_TAGS = true;
 }
 
 
@@ -115,7 +114,7 @@ public final class Constants {
 
         public static final Boolean ARM_ELEVATOR_MANUAL = false;
 
-        public static final Boolean ENABLE_ELEVATOR = false;
+        public static final Boolean ENABLE_ELEVATOR = true;
         public static final String ELEVATOR_MOTOR_CANBUS = "rio";
         public static final PID ELEVATORPID = new PID(0.1, 0, 0);
 
@@ -130,7 +129,7 @@ public final class Constants {
         // ARM
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public final boolean ENABLE_ARM = false;
+        public final boolean ENABLE_ARM = true;
         public static final String ARM_MOTOR_CANBUS = "rio";
         public static final PID ARM_PID = new PID(0.1, 0, 0);
 
@@ -144,7 +143,7 @@ public final class Constants {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // INTAKE
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public static final boolean ENABLE_INTAKE = false;
+        public static final boolean ENABLE_INTAKE = true;
         public static final String INTAKE_MOTOR_CANBUS = "rio";
         public static final boolean INTAKE_MANUAL = true;
         
@@ -154,7 +153,7 @@ public final class Constants {
 
         public static String WRIST_MOTOR_CANBUS = "rio";
         public static boolean WRIST_MANUAL = false;
-        public static final PID WRIST_PID = new PID(0.0, 0, 0);
+        public static final PID WRIST_PID = new PID(0.1, 0, 0);
 
     }
 }

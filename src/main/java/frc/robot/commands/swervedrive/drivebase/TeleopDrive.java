@@ -13,6 +13,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
+import swervelib.SwerveDrive;
 
 /**
  * An example command that uses an example subsystem.
@@ -21,6 +22,7 @@ public class TeleopDrive extends CommandBase
 {
 
   private final SwerveSubsystem  swerve;
+  
   private final DoubleSupplier   vX;
   private final DoubleSupplier   vY;
   private final DoubleSupplier   omega;
@@ -67,6 +69,8 @@ public class TeleopDrive extends CommandBase
     }
   }
 
+  
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
@@ -98,6 +102,8 @@ public class TeleopDrive extends CommandBase
                    angVelocity * controller.config.maxAngularVelocity,
                    driveMode.getAsBoolean(), isOpenLoop);
     }
+
+
   }
 
   // Called once the command ends or is interrupted.

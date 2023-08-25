@@ -102,7 +102,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *                      to disable closed-loop.
    */
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop, true);
+    swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
   }
 
   @Override
@@ -263,10 +263,6 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void lock() {
     swerveDrive.lockPose();
-  }
-
-  public void lockdrive(){
-    swerveDrive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   /**

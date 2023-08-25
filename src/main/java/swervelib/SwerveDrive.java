@@ -121,6 +121,7 @@ public class SwerveDrive
   public SwerveDrive(
       SwerveDriveConfiguration config, SwerveControllerConfiguration controllerConfig)
   {
+    
     tagManager.init();
     swerveDriveConfiguration = config;
     swerveController = new SwerveController(controllerConfig);
@@ -701,6 +702,7 @@ public class SwerveDrive
   public void updateOdometry()
   {
     if(tagManager.detect()){
+      System.out.println("detection");
       swerveDrivePoseEstimator.update(tagManager.getEstimatedGlobalPose().getFirst().getRotation(), getPitch(), getRoll(), getModulePositions());
     }else {
       // Update odometry

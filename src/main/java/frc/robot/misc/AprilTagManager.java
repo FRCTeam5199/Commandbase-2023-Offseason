@@ -82,12 +82,13 @@ public class AprilTagManager extends SubsystemBase {
   public boolean detect() {
     Optional<EstimatedRobotPose> result = poseEstimator.update();
 
-    if (result.isEmpty()) {
-      return false;
-    } else {
+    if(result.isEmpty()){
       return true;
+    }else{
+      return false;
     }
   }
+
 
   public Pair<Pose2d, Double> getEstimatedGlobalPose() {
     poseEstimator.setReferencePose(lastPose);
