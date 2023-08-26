@@ -26,6 +26,7 @@ import frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
+import frc.robot.Constants.Drivebase;
 import frc.robot.commands.CompressorCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -155,29 +156,27 @@ public class RobotContainer
     
     // commandXboxController.leftBumper().onTrue(wrist.resetEncoder());
 
-    
-    // commandXboxController.y().onTrue(intake.deployPiston());
-    // commandXboxController.a().onTrue(intake.retractPiston());
 
-    // if (Constants.PieceManipulation.ENABLE_INTAKE && Constants.PieceManipulation.INTAKE_MANUAL) {
+    if (Constants.PieceManipulation.ENABLE_INTAKE && Constants.PieceManipulation.INTAKE_MANUAL) {
+      commandXboxController.y().onTrue(intake.deployPiston());
+      commandXboxController.a().onTrue(intake.retractPiston());
 
-
-    // }
+    }
 
     commandButtonPanel.button(3, 10).onTrue(intake.deployPiston());
     commandButtonPanel.button(3, 9).onTrue(intake.deployPiston());
     if (Constants.PieceManipulation.ENABLE_CLAW) {
-      commandXboxController.a().onTrue(claw.openPiston());
-      commandXboxController.y().onTrue(claw.closePiston());
+      // commandXboxController.a().onTrue(claw.openPiston());
+      // commandXboxController.y().onTrue(claw.closePiston());
     }
     if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL && Constants.PieceManipulation.ENABLE_ELEVATOR) {
       // commandXboxController.x().whileTrue(elevator.move(1));
-      commandXboxController.b().whileTrue(elevator.move(-1));
+      // commandXboxController.b().whileTrue(elevator.move(-1));
     }
     // TEMPORARY ELSE STATEMENT REMOVE LATER
     else {
       // commandXboxController.x().whileTrue(elevator.setSetpoint(5));
-      commandXboxController.b().whileTrue(elevator.setSetpoint(30));
+      // commandXboxController.b().whileTrue(elevator.setSetpoint(30));
     }
 
     if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL && Constants.PieceManipulation.ENABLE_ARM) {
@@ -201,8 +200,19 @@ public class RobotContainer
       commandXboxController.rightBumper().whileTrue(wrist.move(-0.5f));
     }
     if (Constants.PieceManipulation.INTAKE_MANUAL && Constants.PieceManipulation.ENABLE_INTAKE) {
-      commandXboxController.x().onTrue(intake.spinBottomIntake());
-      commandXboxController.x().onFalse(intake.stopSpinBottomIntake());
+
+      // commandXboxController.x().onTrue(intake.spinBottomWithLimit(false));
+      // commandXboxController.x().onFalse(intake.spinBottomWithLimit(true));
+      if(Constants.RobotNum == 5199) {
+        commandXboxController.x().onTrue(intake.spinBottomWithLimit(false));
+        commandXboxController.x().onFalse(intake.spinBottomWithLimit(true));
+        commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
+        commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
+      }
+      else {
+        // commandXboxController.x().onTrue(intake.spinBottomIntake());
+      // commandXboxController.x().onFalse(intake.stopSpinBottomIntake());
+      }
     }
   }
   // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));

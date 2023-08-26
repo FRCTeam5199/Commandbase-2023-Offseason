@@ -36,10 +36,19 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     public void init() {
       bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PCM_ID,Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
-      bottomIntake = new SparkMaxController(Constants.MotorIDs.BottomIntakeMotor_ID, MotorType.kBrushed);
+      bottomIntakeMotorInit();
       bottomIntake.setBrake(true);
 
 
+    }
+
+    public void bottomIntakeMotorInit() {
+      if (Constants.RobotNum == 5199) {
+        bottomIntake = new SparkMaxController(Constants.MotorIDs.BottomIntakeMotor_ID, MotorType.kBrushed);
+      }
+      // if (Constants.RobotNum == 9199) {
+      //   bottomIntake = new Victor
+      // }
     }
 
     ////////////
@@ -63,6 +72,22 @@ public class IntakeSubsystem extends SubsystemBase {
       return deployedBottomIntake;
     }
 
+    
+    public void runBottomIntake(boolean currentLimit) {
+      if (currentLimit == false) {   
+        if (bottomIntake.getCurrent() <= 0.70){
+          bottomIntake.setPercent(-1);
+        }
+        else {
+          currentLimit = true;         
+      }
+    }
+      else {
+        bottomIntake.setPercent(0);
+        System.out.println("CURRENT LIMIT REACHEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+      }
+    }
+
     ///////////
     
     public CommandBase deployPiston() {
@@ -78,16 +103,31 @@ public class IntakeSubsystem extends SubsystemBase {
 
     ////////////
 
-    public Command spinBottomIntake() {
-      return this.runOnce(() -> bottomIntake.setPercent(-.6));
+    public void spinBottomIntake(boolean stop) {
+      if(stop) {
+        bottomIntake.setPercent(0);
+      }
+      else{
+        bottomIntake.setPercent(3);
+      }
+    } 
+
+    /**
+     * The command that runs the bottom intake with stop when the cube is inside the intake
+     * @param currentLimit If true stops the intake, if false runs the intake and continuosly checks for current, 
+     * if current exceeds a limit currentLimit becomes true and stops the intake
+     */
+    public Command spinBottomWithLimit(boolean currentLimit) {
+      return this.runOnce(() -> runBottomIntake(currentLimit));
     }
 
-    public Command stopSpinBottomIntake() {
-      return this.runOnce(() -> bottomIntake.setPercent(0));
-    }
-
-    public void spinBothIntakes(){
-      spinBottomIntake();
+    /**
+     * The command spin the intake to spit out cubes
+     * @param stop if stop is true it stops intake, if false the intake is free to spin
+     * 
+     */
+    public Command spinOutakeOnBottom(boolean stop) {
+      return runOnce(()-> spinBottomIntake(stop));
     }
 
     
