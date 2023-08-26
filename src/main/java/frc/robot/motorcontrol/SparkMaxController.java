@@ -80,6 +80,9 @@ public class SparkMaxController extends AbstractMotorController {
     public double getVoltage() {
         return sparkmax.getBusVoltage();
     }
+    public double getCurrent() {
+        return sparkmax.getOutputCurrent();
+    }
 
     @Override
     public void setVelocity(double velocity) {

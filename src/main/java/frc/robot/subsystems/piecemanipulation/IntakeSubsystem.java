@@ -5,7 +5,6 @@
 package frc.robot.subsystems.piecemanipulation;
 
 import java.util.function.BooleanSupplier;
-
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motorcontrol.SparkMaxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -35,17 +35,20 @@ public class IntakeSubsystem extends SubsystemBase {
       // This method will be called once per scheduler run
     }
     public void init() {
-      bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
-      bottomIntake = new SparkMaxController(Constants.MotorIDs.BottomIntakeMotor_ID, MotorType.kBrushed);
+      bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PCM_ID,Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
+      bottomIntakeMotorInit();
       bottomIntake.setBrake(true);
 
-      topLeftIntake = new SparkMaxController(Constants.MotorIDs.TopIntakeLeft_ID);
-      topRightIntake = new SparkMaxController(Constants.MotorIDs.TopIntakeRigth_ID);
-      topLeftIntake.setBrake(true);
-      topRightIntake.setBrake(true);
-      topLeftIntake.setCurrentLimit(20);
-      topLeftIntake.setCurrentLimit(20);
 
+    }
+
+    public void bottomIntakeMotorInit() {
+      if (Constants.RobotNum == 5199) {
+        bottomIntake = new SparkMaxController(Constants.MotorIDs.BottomIntakeMotor_ID, MotorType.kBrushed);
+      }
+      // if (Constants.RobotNum == 9199) {
+      //   bottomIntake = new Victor
+      // }
     }
 
     ////////////
@@ -69,44 +72,62 @@ public class IntakeSubsystem extends SubsystemBase {
       return deployedBottomIntake;
     }
 
+    
+    public void runBottomIntake(boolean currentLimit) {
+      if (currentLimit == false) {   
+        if (bottomIntake.getCurrent() <= 0.70){
+          bottomIntake.setPercent(-1);
+        }
+        else {
+          currentLimit = true;         
+      }
+    }
+      else {
+        bottomIntake.setPercent(0);
+        System.out.println("CURRENT LIMIT REACHEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+      }
+    }
+
     ///////////
     
     public CommandBase deployPiston() {
-      if (getConeMode() == false) {
-      deployedIntakeSwitch(true);
+      // return this.run(()-> System.out.println("DEPLOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"));
       return this.runOnce(() -> bottomPiston.set(Value.kForward));
-      }
-      return null;
+      
     }
 
     public CommandBase retractPiston() {
-      deployedIntakeSwitch(false);
+      // return this.run(()-> System.out.println("RETRACTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"));
       return this.runOnce(() -> bottomPiston.set(Value.kReverse));
     }
 
     ////////////
 
-    public void spinBottomIntake() {
-      bottomIntake.setPercent(-.6);
+    public void spinBottomIntake(boolean stop) {
+      if(stop) {
+        bottomIntake.setPercent(0);
+      }
+      else{
+        bottomIntake.setPercent(3);
+      }
+    } 
+
+    /**
+     * The command that runs the bottom intake with stop when the cube is inside the intake
+     * @param currentLimit If true stops the intake, if false runs the intake and continuosly checks for current, 
+     * if current exceeds a limit currentLimit becomes true and stops the intake
+     */
+    public Command spinBottomWithLimit(boolean currentLimit) {
+      return this.runOnce(() -> runBottomIntake(currentLimit));
     }
 
-    public void TopIntake() {
-      topLeftIntake.setPercent(12);
-      topRightIntake.setPercent(-12);
-    }
-    public void spinBothIntakes(){
-      spinBottomIntake();
-      TopIntake();
-    }
-
-    public CommandBase runIntakes() {
-      if (getConeMode()) {
-        return this.run(()->TopIntake());
-      }
-      else if (!getConeMode() && getDeployedBottomIntake()) {
-        return this.run(() -> spinBothIntakes());
-      }
-      return null;
+    /**
+     * The command spin the intake to spit out cubes
+     * @param stop if stop is true it stops intake, if false the intake is free to spin
+     * 
+     */
+    public Command spinOutakeOnBottom(boolean stop) {
+      return runOnce(()-> spinBottomIntake(stop));
     }
 
     
