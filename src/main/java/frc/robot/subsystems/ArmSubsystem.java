@@ -5,11 +5,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.motorcontrol.SparkMaxController;
+import frc.robot.AbstractMotorInterfaces.SparkMotorController;
 
 public class ArmSubsystem extends SubsystemBase {
-    SparkMaxController armExtendMotor;
-    public static SparkMaxController armRotateMotor;
+    SparkMotorController armExtendMotor;
+    public static SparkMotorController armRotateMotor;
 
 	public ArmSubsystem() {}
 
@@ -32,8 +32,8 @@ public class ArmSubsystem extends SubsystemBase {
 	public void motorInit() {
 		System.out.println("Arm - motorInit()");
 
-		armExtendMotor = new SparkMaxController(Constants.MotorIDs.ARM_EXTEND_MOTOR_ID, MotorType.kBrushed);
-		armRotateMotor = new SparkMaxController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID);
+		armExtendMotor = new SparkMotorController(Constants.MotorIDs.ARM_EXTEND_MOTOR_ID, MotorType.kBrushed);
+		armRotateMotor = new SparkMotorController(Constants.MotorIDs.ARM_ROTATE_MOTOR_ID);
 	}
 
     public CommandBase resetExtendEncoder() {
@@ -50,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
 	public CommandBase moveArm(int percent) {
 		System.out.println("Arm - moveElevator()");
 
-		return this.runEnd(() -> armRotateMotor.setPercent(percent), () -> armRotateMotor.setPercent(0));
+		return this.runEnd(() -> armRotateMotor.moveAtPercent(percent), () -> armRotateMotor.moveAtPercent(0));
 	}
 
     // public CommandBase raiseArm(int position) {

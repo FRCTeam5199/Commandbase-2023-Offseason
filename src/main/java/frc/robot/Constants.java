@@ -93,6 +93,11 @@ public final class Constants {
         XBOX_CONTROLLER_USB_SLOT_2 = 1,
         BUTTON_PANEL_USB_SLOT1 = 2,
         BUTTON_PANEL_USB_SLOT2= 3;
+        public static final int OVERHEAT_THRESHOLD = 80;
+        public static final boolean ENABLE_OVERHEAT_DETECTION = false;
+        public static final boolean ENABLE_CAMERA = false;
+        public static final String DRIVE_MOTOR_CANBUS = null;
+        public static final double CTRE_SENSOR_UNITS_PER_ROTATION = 2048;
 
     public static class PieceManipulation {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
