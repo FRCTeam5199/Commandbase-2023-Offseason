@@ -9,9 +9,11 @@ import java.io.File;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.compositeManager.CompositeManagerCommandComposition;
 import frc.robot.commands.swervedrive.auto.Autos;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteFieldDrive;
@@ -47,7 +49,7 @@ public class RobotContainer
 
   final AprilTagManager tagManager = new AprilTagManager();
 
-
+  // final SendableChooser<Command> sendableChooser = new SendableChooser<>();
   
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -76,6 +78,8 @@ public class RobotContainer
     wrist.init();
 
     tagManager.init();
+    
+    /*private*/ final Command compositeManagerCommandComposition = new CompositeManagerCommandComposition(arm, elevator);
 
     // Configure the trigger bindings
     configureBindings();
