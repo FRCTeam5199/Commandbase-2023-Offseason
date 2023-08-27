@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -27,6 +28,10 @@ import frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.misc.AprilTagManager;
+import frc.robot.commands.swervedrive.auto.AutoBalanceCommand;
+import swervelib.math.SwervePoseEstimator2;
+import swervelib.motors.TalonFXSwerve;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.Constants.Drivebase;
 import frc.robot.commands.CompressorCommand;
@@ -71,6 +76,8 @@ public class RobotContainer
   XboxController driverXbox = new XboxController(0);
 
   CommandXboxController commandXboxController = new CommandXboxController(1);
+  
+  public boolean headingCorrection;
 
   
   /**
@@ -79,6 +86,9 @@ public class RobotContainer
   public RobotContainer()
   {
     compressor.init();
+
+
+	  claw.init();
 
     claw.init();
     
@@ -135,6 +145,8 @@ public class RobotContainer
     CompressorCommand compressorRun = new CompressorCommand(compressor);
 
     drivebase.setDefaultCommand(simClosedFieldRel);
+
+ 
     compressor.setDefaultCommand(compressorRun);
     
     
@@ -152,6 +164,12 @@ public class RobotContainer
 //     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
 //     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 // //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    headingCorrection = false;
+
+    if(driverXbox.getAButtonPressed()){
+      drivebase.zeroMotors();
+    }
+
 
     // commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
     // commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
@@ -229,6 +247,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
+
+
     return Autos.Autons(drivebase, null);
   } 
 

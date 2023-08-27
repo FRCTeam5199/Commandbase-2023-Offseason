@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import frc.robot.Constants;
 import swervelib.imu.SwerveIMU;
 import swervelib.math.SwerveKinematics2;
 import swervelib.math.SwerveMath;
@@ -35,6 +37,7 @@ import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.simulation.SwerveIMUSimulation;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import frc.robot.misc.AprilTagManager;
 
 /**
  * Swerve Drive class representing and controlling the swerve drive.
@@ -102,6 +105,8 @@ public class SwerveDrive
    */
   private       double                   lastHeadingRadians           = 0;
 
+  public AprilTagManager tagManager = new AprilTagManager();
+
   /**
    * Creates a new swerve drivebase subsystem. Robot is controlled via the {@link SwerveDrive#drive} method, or via the
    * {@link SwerveDrive#setRawModuleStates} method. The {@link SwerveDrive#drive} method incorporates kinematics-- it
@@ -116,6 +121,8 @@ public class SwerveDrive
   public SwerveDrive(
       SwerveDriveConfiguration config, SwerveControllerConfiguration controllerConfig)
   {
+    
+    tagManager.init();
     swerveDriveConfiguration = config;
     swerveController = new SwerveController(controllerConfig);
     // Create Kinematics from swerve module locations.
@@ -247,13 +254,15 @@ public class SwerveDrive
     // Originally made by Team 1466 Webb Robotics.
     if (headingCorrection)
     {
-      if (Math.abs(rotation) < 0.01)
-      {
-        velocity.omegaRadiansPerSecond =
-            swerveController.headingCalculate(lastHeadingRadians, getYaw().getRadians());
-      } else
+      System.out.println(rotation);
+      if (Math.abs(rotation) < 0.03)
       {
         lastHeadingRadians = getYaw().getRadians();
+
+      } else
+      {
+        velocity.omegaRadiansPerSecond =
+                swerveController.headingCalculate(lastHeadingRadians, getYaw().getRadians());
       }
     }
 
@@ -439,6 +448,12 @@ public class SwerveDrive
       states[module.moduleNumber] = module.getState();
     }
     return states;
+  }
+
+  public void getSpeeds(){
+    for(int i = 0; i <= 4; i++){
+      swerveModules[i].getSpeed();
+    }
   }
 
   /**
@@ -692,15 +707,23 @@ public class SwerveDrive
    */
   public void updateOdometry()
   {
-    // Update odometry
-    swerveDrivePoseEstimator.update(getYaw(), getPitch(), getRoll(), getModulePositions());
-
+    if(tagManager.detect()){
+      System.out.println("detection");
+      swerveDrivePoseEstimator.update(tagManager.getEstimatedGlobalPose().getFirst().getRotation(), getPitch(), getRoll(), getModulePositions());
+    }else {
+      // Update odometry
+      swerveDrivePoseEstimator.update(getYaw(), getPitch(), getRoll(), getModulePositions());
+    }
     // Update angle accumulator if the robot is simulated
-    if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal())
-    {
-      Pose2d[] modulePoses = getSwerveModulePoses(swerveDrivePoseEstimator.getEstimatedPosition());
+    if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal()) {
+      if (tagManager.detect()) {
+        Pose2d[] modulePoses = getSwerveModulePoses(tagManager.getEstimatedGlobalPose().getFirst());
+      } else{
+        Pose2d[] modulePoses = getSwerveModulePoses(swerveDrivePoseEstimator.getEstimatedPosition());
+      }
       if (SwerveDriveTelemetry.isSimulation)
       {
+        Pose2d[] modulePoses = getSwerveModulePoses(swerveDrivePoseEstimator.getEstimatedPosition());
         simIMU.updateOdometry(
             kinematics,
             getStates(),
@@ -717,6 +740,9 @@ public class SwerveDrive
 
     if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.LOW.ordinal())
     {
+      if(tagManager.detect()){
+        field.setRobotPose(tagManager.getEstimatedGlobalPose().getFirst());
+      }
       field.setRobotPose(swerveDrivePoseEstimator.getEstimatedPosition());
     }
 

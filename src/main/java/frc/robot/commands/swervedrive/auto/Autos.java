@@ -56,6 +56,8 @@ public final class Autos
 
   }
 
+  
+
   private Autos()
   {
     throw new UnsupportedOperationException("This is a utility class!");
@@ -79,6 +81,9 @@ public final class Autos
 
     boolean               onTheFly = true; // Use the path defined in code or loaded from PathPlanner.
     PathPlannerTrajectory paths;
+
+    Pose2d initialPose;
+
 
     if (onTheFly)
     {

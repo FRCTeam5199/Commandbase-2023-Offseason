@@ -71,6 +71,7 @@ public class AprilTagManager extends SubsystemBase {
     poseStrategy = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP;
     poseEstimator = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera1, campos1);
     poseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+
   }
 
   public void detectTag() {
@@ -78,9 +79,21 @@ public class AprilTagManager extends SubsystemBase {
 
   }
 
+  public boolean detect() {
+    Optional<EstimatedRobotPose> result = poseEstimator.update();
+
+    if(result.isEmpty()){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+
   public Pair<Pose2d, Double> getEstimatedGlobalPose() {
     poseEstimator.setReferencePose(lastPose);
 
+    
     double currentTime = Timer.getFPGATimestamp();
     Optional<EstimatedRobotPose> result = poseEstimator.update();
     // return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(),

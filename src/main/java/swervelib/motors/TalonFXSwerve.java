@@ -1,5 +1,6 @@
 package swervelib.motors;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -236,6 +237,10 @@ public class TalonFXSwerve extends SwerveMotor
   public void setMotorBrake(boolean isBrakeMode)
   {
     motor.setNeutralMode(isBrakeMode ? NeutralMode.Brake : NeutralMode.Coast);
+  }
+
+  public void motorZero(){
+    motor.set(ControlMode.Position, 0);
   }
 
   /**

@@ -68,7 +68,6 @@ public final class Constants {
 
     // Wrist
     public static final int WRIST_MOTOR_ID = 27;
-    
     //Top Intake 
     public static final int INTAKE_IN_ID = 12;
     public static final int INTAKE_OUT_ID = 2;
