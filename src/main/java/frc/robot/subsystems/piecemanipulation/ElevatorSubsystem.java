@@ -15,7 +15,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 	public void init() {
 		motorInit();
-		PIDInit();
+        if (!PieceManipulation.ARM_ELEVATOR_MANUAL) {
+			PIDInit();
+		}
+
+		elevatorMotorController.resetEncoder();
 	}
 
 	@Override
@@ -35,21 +39,23 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
     public void PIDInit() {
-        elevatorPIDController = new PIDController(PieceManipulation.ARM_PID.P, PieceManipulation.ARM_PID.I, PieceManipulation.ARM_PID.D);
+        if (!PieceManipulation.ENABLE_ELEVATOR) {
+        	elevatorPIDController = new PIDController(PieceManipulation.ARM_ROTATE_PID.P, PieceManipulation.ARM_ROTATE_PID.I, PieceManipulation.ARM_ROTATE_PID.D);
+		}
     }
 
 	public Command resetEncoder() {
 		return this.runOnce(() -> elevatorMotorController.resetEncoder());
 	}
 
-	public Command setElevatorSetpoint(int setpoint) {
+	public Command setSetpoint(int setpoint) {
 		return this.runOnce(() -> elevatorPIDController.setSetpoint(setpoint));
 	}
 
 	/**
 	 * Moves the Elevator by a percent between -1 and 1 and stops it when finished.
 	 */
-	public Command moveElevator(int percent) {
+	public Command move(float percent) {
 		return this.runEnd(() -> elevatorMotorController.setPercent(percent), () -> elevatorMotorController.setPercent(0));
 	}
 }

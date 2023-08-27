@@ -11,31 +11,7 @@ public class ClawSubsystem extends SubsystemBase {
   private DoubleSolenoid clawPiston;
   private Compressor compressor;
 
-  /** Creates a new Claw. */
   public ClawSubsystem() {}
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  // public CommandBase exampleMethodCommand() {
-  //   // Inline construction of command goes here.
-  //   // Subsystem::RunOnce implicitly requires `this` subsystem.
-  //   return runOnce(
-  //       () -> {
-  //         /* one-time action goes here */
-  //       });
-  // }
-
-  // /**
-  //  * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-  //  *
-  //  * @return value of some boolean subsystem state, such as a digital sensor.
-  //  */
-  // public boolean exampleCondition() {
-  //   // Query some boolean state, such as a digital sensor.
-  //   return false;
-  // }
 
   public void init() {
     System.out.println("Claw - init()");
@@ -57,7 +33,7 @@ public class ClawSubsystem extends SubsystemBase {
     // compressor = new Compressor(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE);
     // compressor.enableDigital();
 
-    clawPiston = new DoubleSolenoid(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.Pneumatics.CLAW_IN_ID, Constants.Pneumatics.CLAW_OUT_ID);
+    clawPiston = new DoubleSolenoid(Constants.Pneumatics.PCM_ID,Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.Pneumatics.CLAW_IN_ID, Constants.Pneumatics.CLAW_OUT_ID);
   }
 
   /**

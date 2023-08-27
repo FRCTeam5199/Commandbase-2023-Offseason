@@ -25,7 +25,7 @@ import swervelib.parser.SwerveParser;
 public class Robot extends TimedRobot
 {
 
-  private static Robot   instance;
+  private static Robot instance;
   public static final boolean SECOND_TRY = false;
 
   private Command m_autonomousCommand;

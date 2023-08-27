@@ -20,15 +20,12 @@ import swervelib.parser.PIDFConfig;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
+  public static final int RobotNum = 5199;
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME = 0.13; //s, 20ms + 110ms sprk max velocity lag
 
-
-
   public static final class Auton {
-
 
     public static final PIDFConfig xAutoPID = new PIDFConfig(0.7, 0, 0);
     public static final PIDFConfig yAutoPID = new PIDFConfig(0.7, 0, 0);
@@ -38,9 +35,6 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2.0;
 
     public static final boolean APRIL_TAG_ENABLED = true;
-
-
-
   }
 
   public static final class Drivebase {
@@ -64,28 +58,25 @@ public final class Constants {
         Declare all motor ID's here
         Try and keep it organized by subsystem please
     */
-    
+  
     // Elevator
     public static final int ELEVATOR_MOTOR_ID = 40;
     
     // Arm
-    public static final int ARM_MOTOR_ID = 39;
+    public static final int ARM_ROTATE_MOTOR_ID = 39;
+    public static final int ARM_EXTEND_MOTOR_ID = 43;
 
     // Wrist
-    public static final int WRIST_MOTOR_ID = 43;
-    ;
-
+    public static final int WRIST_MOTOR_ID = 27;
     //Top Intake 
     public static final int INTAKE_IN_ID = 12;
     public static final int INTAKE_OUT_ID = 2;
-    
-    public static final int TopIntakeLeft_ID = 44;
-    public static final int TopIntakeRigth_ID = 27;
 
     //Bottom Intake
     public static final int BottomIntakeMotor_ID = 54;
-    public static final int SPIKE_IN_ID = 3;
-    public static final int SPIKE_OUT_ID = 13;
+
+    public static final int SPIKE_IN_ID = 8;
+    public static final int SPIKE_OUT_ID = 11;
   }
 
   public static class Pneumatics {
@@ -96,8 +87,8 @@ public final class Constants {
     public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
 
     // Claw
-    public static final int CLAW_IN_ID = 10;
-    public static final int CLAW_OUT_ID = 9;
+    public static final int CLAW_IN_ID = 9;
+    public static final int CLAW_OUT_ID = 10;
   }
 
       //////////////////////////
@@ -105,17 +96,18 @@ public final class Constants {
       //////////////////////////
         public static final int XBOX_CONTROLLER_USB_SLOT = 0,
         XBOX_CONTROLLER_USB_SLOT_2 = 1,
-        BUTTON_PANEL_USB_SLOT1 = 2,
-        BUTTON_PANEL_USB_SLOT2= 3;
+        BUTTON_PANEL1 = 2,
+        BUTTON_PANEL2= 3;
 
     public static class PieceManipulation {
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Elevator
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static final Boolean ARM_ELEVATOR_MANUAL = false;
 
-        public static final Boolean ENABLE_ELEVATOR = true;
+        public static final Boolean ENABLE_ELEVATOR = false;
         public static final String ELEVATOR_MOTOR_CANBUS = "rio";
         public static final PID ELEVATORPID = new PID(0.1, 0, 0);
 
@@ -130,9 +122,10 @@ public final class Constants {
         // ARM
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public final boolean ENABLE_ARM = true;
+        public static final boolean ENABLE_ARM = true;
         public static final String ARM_MOTOR_CANBUS = "rio";
-        public static final PID ARM_PID = new PID(0.1, 0, 0);
+        public static final PID ARM_ROTATE_PID = new PID(0.01, 0, 0);
+        public static final PID ARM_EXTEND_PID = new PID(0.03, 0.001, 0);
 
         ////////////////////////////////////////
         //  VV  ARM Physical Properties  VV  //
@@ -152,9 +145,12 @@ public final class Constants {
         //  Wrist
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public static final boolean ENABLE_WRIST = true;
         public static String WRIST_MOTOR_CANBUS = "rio";
-        public static boolean WRIST_MANUAL = false;
+        public static boolean WRIST_MANUAL = true;
         public static final PID WRIST_PID = new PID(0.1, 0, 0);
 
+        // Claw
+        public static final boolean ENABLE_CLAW = true;
     }
 }
