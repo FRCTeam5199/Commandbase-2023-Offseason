@@ -9,6 +9,7 @@ import java.io.File;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,6 +25,8 @@ import frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.misc.AprilTagManager;
 import frc.robot.commands.swervedrive.auto.AutoBalanceCommand;
+import swervelib.math.SwervePoseEstimator2;
+import swervelib.motors.TalonFXSwerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -60,12 +63,14 @@ public class RobotContainer
 
   CommandXboxController commandXboxController = new CommandXboxController(1);
   
+  public boolean headingCorrection;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer()
   {
+
 
 	  claw.init();
 
@@ -116,6 +121,7 @@ public class RobotContainer
         () -> -driverXbox.getRawAxis(4), () -> true, false, true);
 
     drivebase.setDefaultCommand(simClosedFieldRel);
+  
     
   }
 
@@ -131,6 +137,12 @@ public class RobotContainer
 //     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
 //     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 // //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    headingCorrection = false;
+
+    if(driverXbox.getAButtonPressed()){
+      drivebase.zeroMotors();
+    }
+
 
     commandXboxController.leftBumper().onTrue(arm.resetEncoder());
     commandXboxController.leftBumper().onTrue(elevator.resetEncoder());
@@ -173,6 +185,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
+
+
     return Autos.Autons(drivebase, null);
   } 
 

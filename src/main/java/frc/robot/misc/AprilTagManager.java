@@ -83,9 +83,9 @@ public class AprilTagManager extends SubsystemBase {
     Optional<EstimatedRobotPose> result = poseEstimator.update();
 
     if(result.isEmpty()){
-      return true;
-    }else{
       return false;
+    }else{
+      return true;
     }
   }
 
@@ -93,6 +93,7 @@ public class AprilTagManager extends SubsystemBase {
   public Pair<Pose2d, Double> getEstimatedGlobalPose() {
     poseEstimator.setReferencePose(lastPose);
 
+    
     double currentTime = Timer.getFPGATimestamp();
     Optional<EstimatedRobotPose> result = poseEstimator.update();
     // return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(),

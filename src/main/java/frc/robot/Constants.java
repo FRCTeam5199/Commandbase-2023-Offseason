@@ -72,7 +72,8 @@ public final class Constants {
     public static final int ARM_MOTOR_ID = 39;
 
     // Wrist
-    public static final int WRIST_MOTOR_ID = 27;
+    public static final int WRIST_MOTOR_ID = 43;
+    ;
 
     //Top Intake 
     public static final int INTAKE_IN_ID = 12;

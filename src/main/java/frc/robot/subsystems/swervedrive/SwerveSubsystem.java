@@ -32,6 +32,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import frc.robot.misc.AprilTagManager;
 import frc.robot.Constants;
 import frc.robot.Constants.Auton;
+import swervelib.motors.TalonFXSwerve;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -102,7 +103,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *                      to disable closed-loop.
    */
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
+    swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop, true);
   }
 
   @Override
@@ -172,6 +173,8 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.zeroGyro();
   }
 
+
+
   /**
    * Sets the drive motors to brake/coast mode.
    *
@@ -220,6 +223,9 @@ public class SwerveSubsystem extends SubsystemBase {
     xInput = -Math.pow(xInput, 3);
     yInput = -Math.pow(yInput, 3);
     return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, angle.getRadians(), getHeading().getRadians());
+  }
+
+  public void zeroMotors(){
   }
 
   /**
@@ -274,6 +280,9 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrive.getPitch();
   }
 
+  public void printSpeed(){
+    swerveDrive.getSpeeds();
+  }
   /**
    * Add a fake vision reading for testing purposes.
    */
@@ -334,4 +343,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     return autoBuilder.fullAuto(pathGroup);
   }
+
+  
 }

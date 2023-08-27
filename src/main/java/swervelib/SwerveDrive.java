@@ -450,6 +450,12 @@ public class SwerveDrive
     return states;
   }
 
+  public void getSpeeds(){
+    for(int i = 0; i <= 4; i++){
+      swerveModules[i].getSpeed();
+    }
+  }
+
   /**
    * Gets the current module positions (azimuth and wheel position (meters)). Inverts the distance from each module if
    * {@link #invertOdometry} is true.

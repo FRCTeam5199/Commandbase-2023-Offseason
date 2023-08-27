@@ -243,6 +243,8 @@ public class SwerveModule
     return new SwerveModuleState2(velocity, azimuth, omega);
   }
 
+  
+
   /**
    * Get the position of the swerve module.
    *
@@ -333,6 +335,10 @@ public class SwerveModule
   public SwerveMotor getDriveMotor()
   {
     return driveMotor;
+  }
+
+  public void getSpeed(){
+    SmartDashboard.putNumber("Speed" + configuration.name, driveMotor.getVelocity());
   }
 
   /**
