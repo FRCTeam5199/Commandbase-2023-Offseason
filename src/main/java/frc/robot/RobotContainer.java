@@ -90,13 +90,11 @@ public class RobotContainer
 
 	  claw.init();
 
-    claw.init();
     
     elevator.init();
     
     arm.init();
     
-    wrist.init();
 
     intake.init();
 

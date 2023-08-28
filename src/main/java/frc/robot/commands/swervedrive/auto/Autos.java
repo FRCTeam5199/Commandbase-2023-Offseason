@@ -79,7 +79,7 @@ public final class Autos
     AprilTagManager tagManager = new AprilTagManager();
     AutoBalanceCommand balance = new AutoBalanceCommand(swerve);
 
-    boolean               onTheFly = true; // Use the path defined in code or loaded from PathPlanner.
+    boolean               onTheFly = false; // Use the path defined in code or loaded from PathPlanner.
     PathPlannerTrajectory paths;
 
     Pose2d initialPose;
@@ -94,14 +94,18 @@ public final class Autos
           new PathPoint(new Translation2d(0, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
 
 // position, heading(direction of travel), holonomic rotation
-          new PathPoint(new Translation2d(6, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
+          new PathPoint(new Translation2d(6, 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)),
           // position, heading(direction of travel), holonomic rotation
+          new PathPoint(new Translation2d(6,0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180)),
+
+
+
+          new PathPoint(new Translation2d(0,0), Rotation2d.fromDegrees(180), Rotation2d.fromDegrees(180))
                                         );
         balance.execute();
     } else
     {
-      List<PathPlannerTrajectory> example1 = PathPlanner.loadPathGroup("SamplePath", new PathConstraints(4, 3));
-      List<PathPlannerTrajectory> example2 = PathPlanner.loadPathGroup("path1", new PathConstraints(4, 3));
+      List<PathPlannerTrajectory> example1 = PathPlanner.loadPathGroup("New Path", new PathConstraints(4, 3));
 
       // This is just an example event map. It would be better to have a constant, global event map
       // in your code that will be used by all path following commands.
@@ -130,7 +134,7 @@ public final class Autos
       return Commands.sequence(autoBuilder.fullAuto(example1));
     }
 //    swerve.postTrajectory(example);
-    return Commands.sequence(new FollowTrajectory(swerve, paths, true));
+    return Commands.sequence(new FollowTrajectory(swerve, paths, false));
   }
 
   /**

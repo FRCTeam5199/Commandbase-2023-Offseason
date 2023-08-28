@@ -3,7 +3,7 @@
     {
       "anchorPoint": {
         "x": 6,
-        "y": 7
+        "y": 0
       },
       "prevControl": null,
       "nextControl": {
@@ -24,8 +24,8 @@
     },
     {
       "anchorPoint": {
-        "x": 3.0,
-        "y": 5.0
+        "x": 6.0,
+        "y": 0.0
       },
       "prevControl": {
         "x": 3.0,

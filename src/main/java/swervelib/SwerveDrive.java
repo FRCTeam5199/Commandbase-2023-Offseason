@@ -254,7 +254,6 @@ public class SwerveDrive
     // Originally made by Team 1466 Webb Robotics.
     if (headingCorrection)
     {
-      System.out.println(rotation);
       if (Math.abs(rotation) < 0.03)
       {
         lastHeadingRadians = getYaw().getRadians();
