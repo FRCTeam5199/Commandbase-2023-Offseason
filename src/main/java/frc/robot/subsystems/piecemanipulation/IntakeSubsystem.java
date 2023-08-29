@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.motorcontrol.SparkMaxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -26,6 +27,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Boolean coneMode;
     public Boolean deployedBottomIntake;
+    public Boolean stopBottomIntake;
+
+    public Timer bottomIntakeTimer;
 
     public IntakeSubsystem() {}
 
@@ -35,12 +39,20 @@ public class IntakeSubsystem extends SubsystemBase {
       // This method will be called once per scheduler run
     }
     public void init() {
+      bottomIntakeTimer = new Timer();
+      stopBottomIntake = false;
       bottomPiston = new DoubleSolenoid(Constants.Pneumatics.PCM_ID,Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.MotorIDs.SPIKE_OUT_ID, Constants.MotorIDs.SPIKE_IN_ID);
       bottomIntakeMotorInit();
       bottomIntake.setBrake(true);
+      bottomIntake.setCurrentLimit(10);
 
 
     }
+
+    // public boolean getBottomIntakeStop() {
+    //   return stopBottomIntake;
+
+    // }
 
     public void bottomIntakeMotorInit() {
       if (Constants.RobotNum == 5199) {
@@ -53,39 +65,48 @@ public class IntakeSubsystem extends SubsystemBase {
 
     ////////////
 
-    public boolean deployedIntakeSwitch(boolean out) {
-      return deployedBottomIntake = out;
-    }
+    // public boolean deployedIntakeSwitch(boolean out) {
+    //   return deployedBottomIntake = out;
+    // }
 
-    public boolean coneCubeMode() {
-      return !coneMode;
-    }
+    // public boolean coneCubeMode() {
+    //   return !coneMode;
+    // }
    
-    public CommandBase switchCubeCone() {
-      return this.run(()-> coneCubeMode());
-    }
+    // public CommandBase switchCubeCone() {
+    //   return this.run(()-> coneCubeMode());
+    // }
 
-    public boolean getConeMode() {
-      return coneMode;
-    }
+    // public boolean getConeMode() {
+    //   return coneMode;
+    // }
+      public Command changeIntakeStop() {
+          return runOnce(()-> stopBottomIntake = false);
+        }
+      
+
     public boolean getDeployedBottomIntake() {
       return deployedBottomIntake;
     }
 
     
-    public void runBottomIntake(boolean currentLimit) {
-      if (currentLimit == false) {   
-        if (bottomIntake.getCurrent() <= 0.70){
+    public void runBottomIntake() {
+      bottomIntakeTimer.start();
+      if(stopBottomIntake == false){
+        if(bottomIntake.getCurrent() < 16.5) {
           bottomIntake.setPercent(-1);
+          // System.out.println("-----------------------------------------------------------------------------------------");
+          }
+      else{
+        // bottomIntake.setPercent(0);
+        if  (bottomIntakeTimer.get() > 2) {
+        bottomPiston.set(Value.kReverse);
         }
-        else {
-          currentLimit = true;         
+        bottomIntakeTimer.reset();
+        // System.out.println("stopppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp");
+        stopBottomIntake = true;
       }
     }
-      else {
-        bottomIntake.setPercent(0);
-        System.out.println("CURRENT LIMIT REACHEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-      }
     }
 
     ///////////
@@ -103,22 +124,18 @@ public class IntakeSubsystem extends SubsystemBase {
 
     ////////////
 
-    public void spinBottomIntake(boolean stop) {
+    public void spinBottomOutake(boolean stop) {
       if(stop) {
         bottomIntake.setPercent(0);
       }
       else{
-        bottomIntake.setPercent(3);
+        bottomIntake.setPercent(10);
       }
     } 
 
-    /**
-     * The command that runs the bottom intake with stop when the cube is inside the intake
-     * @param currentLimit If true stops the intake, if false runs the intake and continuosly checks for current, 
-     * if current exceeds a limit currentLimit becomes true and stops the intake
-     */
-    public Command spinBottomWithLimit(boolean currentLimit) {
-      return this.runOnce(() -> runBottomIntake(currentLimit));
+
+    public Command spinBottomWithLimit() {
+      return this.run(() -> runBottomIntake());
     }
 
     /**
@@ -127,8 +144,16 @@ public class IntakeSubsystem extends SubsystemBase {
      * 
      */
     public Command spinOutakeOnBottom(boolean stop) {
-      return runOnce(()-> spinBottomIntake(stop));
+      return runOnce(()-> spinBottomOutake(stop));
     }
 
-    
+    public Command victorRunBottomIntake() {
+      return runOnce(()-> bottomIntake.setPercent(-1));
+    }
+
+    public Command StopBottomIntake() {
+      bottomIntakeTimer.reset();
+      return runOnce(()-> bottomIntake.setPercent(0));
+    }
+
 }

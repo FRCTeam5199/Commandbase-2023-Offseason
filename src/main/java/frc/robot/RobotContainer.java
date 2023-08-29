@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.File;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -69,14 +70,13 @@ public class RobotContainer
 
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-//   final IntakeSubsystem intake = new IntakeSubsystem();
 
   public static final CommandButtonPanel commandButtonPanel = new CommandButtonPanel(Constants.BUTTON_PANEL1, Constants.BUTTON_PANEL2);
 
-  XboxController driverXbox = new XboxController(0);
+  CommandXboxController driverXbox = new CommandXboxController(0);
 
   CommandXboxController commandXboxController = new CommandXboxController(1);
-  
+
   public boolean headingCorrection;
 
   
@@ -87,23 +87,23 @@ public class RobotContainer
   {
     compressor.init();
 
-
-	  claw.init();
-
+    claw.init();
     
     elevator.init();
     
     arm.init();
     
+    wrist.init();
 
     intake.init();
 
     tagManager.init();
-    
+
     /*private*/ final Command compositeManagerCommandComposition = new CompositeManagerCommandComposition(arm, elevator);
 
     // Configure the trigger bindings
     configureBindings();
+
 
     tagManager.setDefaultCommand(tagManager.print());
 
@@ -143,8 +143,6 @@ public class RobotContainer
     CompressorCommand compressorRun = new CompressorCommand(compressor);
 
     drivebase.setDefaultCommand(simClosedFieldRel);
-
- 
     compressor.setDefaultCommand(compressorRun);
     
     
@@ -164,10 +162,7 @@ public class RobotContainer
 // //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
     headingCorrection = false;
 
-    if(driverXbox.getAButtonPressed()){
-      drivebase.zeroMotors();
-    }
-
+  
 
     // commandXboxController.leftBumper().onTrue(arm.resetRotateEncoder());
     // commandXboxController.leftBumper().onTrue(arm.resetExtendEncoder());
@@ -176,18 +171,19 @@ public class RobotContainer
     
     // commandXboxController.leftBumper().onTrue(wrist.resetEncoder());
 
+    // driverXbox.rightBumper().onFalse(wrist.setPub());
 
     if (Constants.PieceManipulation.ENABLE_INTAKE && Constants.PieceManipulation.INTAKE_MANUAL) {
-      commandXboxController.y().onTrue(intake.deployPiston());
-      commandXboxController.a().onTrue(intake.retractPiston());
+      driverXbox.y().onTrue(intake.deployPiston());
+      driverXbox.a().onTrue(intake.retractPiston());
 
     }
 
     commandButtonPanel.button(3, 10).onTrue(intake.deployPiston());
     commandButtonPanel.button(3, 9).onTrue(intake.deployPiston());
     if (Constants.PieceManipulation.ENABLE_CLAW) {
-      // commandXboxController.a().onTrue(claw.openPiston());
-      // commandXboxController.y().onTrue(claw.closePiston());
+      commandXboxController.a().onTrue(claw.openPiston());
+      commandXboxController.y().onTrue(claw.closePiston());
     }
     if (Constants.PieceManipulation.ARM_ELEVATOR_MANUAL && Constants.PieceManipulation.ENABLE_ELEVATOR) {
       // commandXboxController.x().whileTrue(elevator.move(1));
@@ -216,23 +212,30 @@ public class RobotContainer
     }
 
     if (Constants.PieceManipulation.WRIST_MANUAL && Constants.PieceManipulation.ENABLE_WRIST) {
-      commandXboxController.leftBumper().whileTrue(wrist.move(0.5f));
-      commandXboxController.rightBumper().whileTrue(wrist.move(-0.5f));
+      // commandXboxController.leftBumper().whileTrue(wrist.move(0.5f));
+      // commandXboxController.rightBumper().whileTrue(wrist.move(-0.5f));
+      commandXboxController.leftBumper().whileTrue(wrist.move(5));
+      commandXboxController.rightBumper().whileTrue(wrist.move(-5));
     }
     if (Constants.PieceManipulation.INTAKE_MANUAL && Constants.PieceManipulation.ENABLE_INTAKE) {
 
       // commandXboxController.x().onTrue(intake.spinBottomWithLimit(false));
       // commandXboxController.x().onFalse(intake.spinBottomWithLimit(true));
-      if(Constants.RobotNum == 5199) {
-        commandXboxController.x().onTrue(intake.spinBottomWithLimit(false));
-        commandXboxController.x().onFalse(intake.spinBottomWithLimit(true));
+      // if(Constants.RobotNum == 5199) {
+
+        commandXboxController.x().onTrue(intake.spinBottomWithLimit());
+        commandXboxController.x().onFalse(intake.StopBottomIntake());
+        commandXboxController.x().onFalse(intake.changeIntakeStop());
+
         commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
         commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
-      }
-      else {
-        // commandXboxController.x().onTrue(intake.spinBottomIntake());
-      // commandXboxController.x().onFalse(intake.stopSpinBottomIntake());
-      }
+      // }
+      // else {
+      //   commandXboxController.x().onTrue(intake.victorRunBottomIntake());
+      //   commandXboxController.x().onFalse(intake.StopBottomIntake());
+      //   commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
+      //   commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
+      // }
     }
   }
   // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
@@ -245,8 +248,6 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-
-
     return Autos.Autons(drivebase, null);
   } 
 

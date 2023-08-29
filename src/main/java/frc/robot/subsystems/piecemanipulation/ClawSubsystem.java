@@ -30,8 +30,6 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void pneumaticsInit() {
     System.out.println("Claw - pneumaticsInit()");
-    // compressor = new Compressor(Constants.Pneumatics.PNEUMATICS_MODULE_TYPE);
-    // compressor.enableDigital();
 
     clawPiston = new DoubleSolenoid(Constants.Pneumatics.PCM_ID,Constants.Pneumatics.PNEUMATICS_MODULE_TYPE, Constants.Pneumatics.CLAW_IN_ID, Constants.Pneumatics.CLAW_OUT_ID);
   }
