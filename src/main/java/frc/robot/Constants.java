@@ -99,6 +99,7 @@ public final class Constants {
         XBOX_CONTROLLER_USB_SLOT_2 = 1,
         BUTTON_PANEL_USB_SLOT1 = 2,
         BUTTON_PANEL_USB_SLOT2= 3;
+        public static final String XBOX_CONTROLLER_DEADZONE = null;
 
     public static class PieceManipulation {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
