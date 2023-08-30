@@ -1,4 +1,4 @@
-package com.team6560.frc2023.utility;
+package com.frc.robot.utility;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;

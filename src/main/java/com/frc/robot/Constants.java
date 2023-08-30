@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package com.team6560.frc2023;
+package com.frc.robot;
 
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
@@ -86,7 +86,11 @@ public final class Constants {
       new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
       // Back right
       new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
-
+  public static final int OVERHEAT_THRESHOLD = 80;
+  public static final boolean ENABLE_OVERHEAT_DETECTION = false;
+  public static final boolean ENABLE_CAMERA = false;
+  public static final String DRIVE_MOTOR_CANBUS = null;
+  public static final double CTRE_SENSOR_UNITS_PER_ROTATION = 2048;
 
 
 

@@ -1,6 +1,6 @@
-package com.team6560.frc2023.commands;
+package com.frc.robot.commands;
 
-import com.team6560.frc2023.subsystems.Drivetrain;
+import com.frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;

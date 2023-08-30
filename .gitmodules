@@ -1,0 +1,3 @@
+[submodule "src/main/java/com/frc/robot/AbstractMotorInterfaces"]
+	path = src/main/java/com/frc/robot/AbstractMotorInterfaces
+	url = https://github.com/FRCTeam5199/FRC-AbstractMotorInterfaces.git

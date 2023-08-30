@@ -2,9 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package com.team6560.frc2023;
+package com.frc.robot;
 
-import com.team6560.frc2023.utility.AlwaysRunInstantCommand;
+import com.frc.robot.utility.AlwaysRunInstantCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,10 +18,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static final boolean SECOND_TRY = false;
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
 
+  
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.

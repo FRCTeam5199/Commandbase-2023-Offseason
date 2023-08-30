@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package com.team6560.frc2023;
+package com.frc.robot;
 
 // import java.io.File;
 
-import com.team6560.frc2023.commands.DriveCommand;
-import com.team6560.frc2023.controls.ManualControls;
-import com.team6560.frc2023.subsystems.Drivetrain;
+import com.frc.robot.commands.DriveCommand;
+import com.frc.robot.controls.ManualControls;
+import com.frc.robot.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
