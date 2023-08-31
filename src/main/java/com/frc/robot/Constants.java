@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
  */
 public final class Constants {
 
-  
+  public static final int robotNum = 5199;
 
   public static final int GYRO_ID = 22;
 
@@ -106,6 +106,11 @@ public final class Constants {
   public static final PID ARM_EXTEND_PID = new PID(0.03, 0.001, 0);
   public static final boolean WRIST_MANUAL = true;
   public static final boolean ENABLE_WRIST = true;
+  public static final boolean ENABLE_INTAKE = true;
+  public static final boolean INTAKE_MANUAL = true;
+  public static final boolean ENABLE_ARM = true;
+  public static final boolean ENABLE_CLAW = true;
+
   public static final int WRIST_MOTOR_ID = 27;
   public static final PID WRIST_PID = new PID(0.1, 0, 0);
   public static final int CLAW_IN_ID = 9;
@@ -166,5 +171,7 @@ public final class Constants {
     public static final double TOP_CONE_MARKER_TO_EDGE_Z_METERS = 0.98425;
     public static final double TOP_CONE_MARKER_TO_FLOOR_DISTANCE_METERS = 1.0795;
   }
+
+  
 
 }

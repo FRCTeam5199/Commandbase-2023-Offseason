@@ -91,22 +91,25 @@ public class IntakeSubsystem extends SubsystemBase {
 
     
     public void runBottomIntake() {
-      bottomIntakeTimer.start();
-      if(stopBottomIntake == false){
+      while(stopBottomIntake == false){
+        bottomIntakeTimer.start();
         if(bottomIntake.getCurrent() < 16.5) {
           bottomIntake.moveAtPercent(-1);
           // System.out.println("-----------------------------------------------------------------------------------------");
+            }
+        else{
+          bottomIntakeTimer.restart();
+          if (bottomIntakeTimer.get() > 1.5) {
+            bottomPiston.set(Value.kReverse);
+            stopper();
           }
-      else{
-        // bottomIntake.setPercent(0);
-        if  (bottomIntakeTimer.get() > 2) {
-        bottomPiston.set(Value.kReverse);
-        }
-        bottomIntakeTimer.reset();
-        // System.out.println("stopppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp");
-        stopBottomIntake = true;
       }
     }
+    }
+    public void stopper() {
+      bottomIntake.moveAtPercent(0);
+      bottomIntakeTimer.reset();
+      stopBottomIntake = true;
     }
 
     ///////////
@@ -135,7 +138,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public Command spinBottomWithLimit() {
-      return this.run(() -> runBottomIntake());
+      bottomPiston.set(Value.kForward);
+      return this.runEnd(() -> runBottomIntake(), ()-> stopBottomIntake = false);
     }
 
     /**
