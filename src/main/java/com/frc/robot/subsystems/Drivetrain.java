@@ -17,18 +17,24 @@ import com.swervedrivespecialties.swervelib.MotorType;
 // UTIL:
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
 import static com.frc.robot.Constants.*;
 
 import java.util.function.Supplier;
 
+import com.frc.robot.Constants;
 import com.frc.robot.utility.NetworkTable.NtValueDisplay;
 
 // SWERVE:
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
@@ -54,6 +60,9 @@ public class Drivetrain extends SubsystemBase {
         private final SwerveModule m_backLeftModule;
         private final SwerveModule m_backRightModule;
 
+        private Pose2d lastPose = new Pose2d();
+
+
         /**
          * The default states for each module, corresponding to an X shape.
          */
@@ -69,6 +78,9 @@ public class Drivetrain extends SubsystemBase {
 
         // ODOMETRY
         private final SwerveDriveOdometry odometry;
+
+        SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(m_kinematics,
+                                getRawGyroRotation(), getModulePositions(), new Pose2d(), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(.115, .115, .115), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(1.6, 1.6, 1.6));
 
         // CONTROL
         private boolean autoLock = true;
@@ -217,6 +229,14 @@ public class Drivetrain extends SubsystemBase {
                 return odometry.getPoseMeters();
         }
 
+        public Rotation2d getPitch(){
+                return Rotation2d.fromDegrees(pigeon.getPitch());
+        }
+
+        public Rotation2d getRoll(){
+                return Rotation2d.fromDegrees(pigeon.getRoll());
+        }
+
         // This method is used to reset the position of the robot's pose estimator.
         public void resetOdometry(Pose2d pose) {
                 odometry.resetPosition(getRawGyroRotation(), getModulePositions(), pose);
@@ -227,4 +247,42 @@ public class Drivetrain extends SubsystemBase {
         public void zeroGyroscope() {
                 resetOdometry(new Pose2d(getPose().getTranslation(), new Rotation2d(0.0)));
         }
+
+        public Rotation2d getGyroscopeRotation() {
+                // if (m_navx.isMagnetometerCalibrated()) {
+                // // We will only get valid fused headings if the magnetometer is calibrated
+                // return Rotation2d.fromDegrees(m_navx.getFusedHeading());
+                // }
+                // We will only get valid fused headings if the magnetometer is calibrated
+                // We have to invert the angle of the NavX so that rotating the robot
+                // counter-clockwise makes the angle increase.
+
+                // if pose estimator is null, default to the raw gyro rotation
+                if (poseEstimator == null) {
+                        if (lastPose == null) {
+                                return new Rotation2d();
+                        }
+                        return lastPose.getRotation();
+                }
+
+                return poseEstimator.getEstimatedPosition().getRotation();
+                // return getRawGyroRotation();
+        }
+
+        public void autoSetChassisState(SwerveModuleState[] states) {
+                setChassisState(states);
+                // ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(states);
+                // setChassisState(m_kinematics.toSwerveModuleStates(new
+                // ChassisSpeeds(speeds.vxMetersPerSecond,
+                // speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond)));
+        }
+        public SwerveModuleState[] getStates() {
+                return new SwerveModuleState[] { m_frontLeftModule.getState(), m_frontRightModule.getState(),
+                                m_backLeftModule.getState(), m_backRightModule.getState() };
+        }
+
+        public ChassisSpeeds getChassisSpeeds() {
+                return Constants.m_kinematics.toChassisSpeeds(getStates());
+        }
+
 }

@@ -4,6 +4,8 @@
 
 package com.frc.robot;
 
+import com.frc.robot.commands.Auton;
+
 // import java.io.File;
 
 import com.frc.robot.commands.DriveCommand;
@@ -42,7 +44,7 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                return null;
+                return Auton.getCharge();
         }
 
 }
