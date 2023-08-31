@@ -72,7 +72,7 @@ public class Auton {
    *                   ubsystem.
    */
   public Auton(Drivetrain drivetrain) {
-    this.drivetrain = drivetrain;
+    Auton.drivetrain = drivetrain;
 
 
     eventMap = new HashMap<>();
