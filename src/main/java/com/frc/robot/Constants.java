@@ -5,6 +5,7 @@
 package com.frc.robot;
 
 
+import com.frc.robot.utility.PID;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -50,22 +52,22 @@ public final class Constants {
   public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
   public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2;
   public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 11;
-  public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(202.1731568);
+  public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(299.5);
 
   public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 3;
   public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 4;
   public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 12;
-  public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(26.202392578125);
+  public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(303);
 
   public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
   public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8;
   public static final int BACK_LEFT_MODULE_STEER_ENCODER = 14;
-  public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(349.859619140625);
+  public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(274);
 
   public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 5;
   public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 6;
   public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 13;
-  public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(67.9586792);
+  public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(158);
 
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
       SdsModuleConfigurations.MK4I_L2.getDriveReduction() *
@@ -92,6 +94,31 @@ public final class Constants {
   public static final String DRIVE_MOTOR_CANBUS = null;
   public static final double CTRE_SENSOR_UNITS_PER_ROTATION = 2048;
 
+  //subsystems (yall can clean up later im just adding them here)
+  public static final boolean ARM_ELEVATOR_MANUAL = false;
+  public static final boolean ENABLE_ELEVATOR = true;
+  public static final int ELEVATOR_MOTOR_ID = 40;
+  public static final PID ARM_ROTATE_PID = new PID(0.01, 0, 0);
+  public static final int ARM_EXTEND_MOTOR_ID = 43;
+  public static final int ARM_ROTATE_MOTOR_ID = 39;
+  public static final PID ARM_EXTEND_PID = new PID(0.03, 0.001, 0);
+  public static final boolean WRIST_MANUAL = true;
+  public static final boolean ENABLE_WRIST = true;
+  public static final int WRIST_MOTOR_ID = 27;
+  public static final PID WRIST_PID = new PID(0.1, 0, 0);
+  public static final int CLAW_IN_ID = 9;
+  public static final int CLAW_OUT_ID = 10;
+
+
+  // Compressor
+  public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
+  // Pneumatics Control Module
+  public static final int PCM_ID = 50;
+
+  public static final int SPIKE_OUT_ID = 11;
+  public static final int SPIKE_IN_ID = 8;
+  public static final int RobotNum = 5199;
+  public static final int BottomIntakeMotor_ID = 54;
 
 
   public static final class ControllerIds {
