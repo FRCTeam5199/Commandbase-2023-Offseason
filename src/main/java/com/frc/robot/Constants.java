@@ -95,38 +95,46 @@ public final class Constants {
   public static final boolean ENABLE_CAMERA = false;
   public static final String DRIVE_MOTOR_CANBUS = null;
   public static final double CTRE_SENSOR_UNITS_PER_ROTATION = 2048;
+  
+  public static final int RobotNum = 5199;
 
-  //subsystems (yall can clean up later im just adding them here)
-  public static final boolean ARM_ELEVATOR_MANUAL = false;
-  public static final boolean ENABLE_ELEVATOR = true;
-  public static final int ELEVATOR_MOTOR_ID = 40;
-  public static final PID ARM_ROTATE_PID = new PID(0.01, 0, 0);
-  public static final int ARM_EXTEND_MOTOR_ID = 43;
-  public static final int ARM_ROTATE_MOTOR_ID = 39;
-  public static final PID ARM_EXTEND_PID = new PID(0.03, 0.001, 0);
-  public static final boolean WRIST_MANUAL = true;
-  public static final boolean ENABLE_WRIST = true;
-  public static final boolean ENABLE_INTAKE = true;
-  public static final boolean INTAKE_MANUAL = true;
-  public static final boolean ENABLE_ARM = true;
-  public static final boolean ENABLE_CLAW = true;
-
-  public static final int WRIST_MOTOR_ID = 27;
-  public static final PID WRIST_PID = new PID(0.1, 0, 0);
-  public static final int CLAW_IN_ID = 9;
-  public static final int CLAW_OUT_ID = 10;
-
-
-  // Compressor
-  public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
   // Pneumatics Control Module
   public static final int PCM_ID = 50;
 
+  // Compressor
+  public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
+
+  // Subsystems
+  public static final boolean ARM_ELEVATOR_MANUAL = false;
+
+  // Elevator
+  public static final boolean ENABLE_ELEVATOR = true;
+  public static final int ELEVATOR_MOTOR_ID = 40;
+  
+  // Arm
+  public static final boolean ENABLE_ARM = true;
+  public static final int ARM_EXTEND_MOTOR_ID = 43;
+  public static final int ARM_ROTATE_MOTOR_ID = 39;
+  public static final PID ARM_ROTATE_PID = new PID(0.01, 0, 0);
+  public static final PID ARM_EXTEND_PID = new PID(0.03, 0.001, 0);
+
+  // Wrist
+  public static final boolean ENABLE_WRIST = true;
+  public static final boolean WRIST_MANUAL = true;
+  public static final int WRIST_MOTOR_ID = 27;
+  public static final PID WRIST_PID = new PID(0.1, 0, 0);
+
+  // Intake
+  public static final boolean ENABLE_INTAKE = true;
+  public static final boolean INTAKE_MANUAL = true;
   public static final int SPIKE_OUT_ID = 11;
   public static final int SPIKE_IN_ID = 8;
-  public static final int RobotNum = 5199;
   public static final int BottomIntakeMotor_ID = 54;
 
+  // Claw
+  public static final boolean ENABLE_CLAW = true;
+  public static final int CLAW_IN_ID = 9;
+  public static final int CLAW_OUT_ID = 10;
 
   public static final class ControllerIds {
     public static final int FIRST_DRIVER_CONTROLLER = 0;

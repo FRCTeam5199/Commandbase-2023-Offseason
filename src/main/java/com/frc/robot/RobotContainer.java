@@ -83,28 +83,27 @@ public class RobotContainer {
         }
 
         public void configureBindings() {
-          
-      
           if (Constants.ENABLE_CLAW) {
             commandXboxController.a().onTrue(claw.openPiston());
             commandXboxController.y().onTrue(claw.closePiston());
           }
-          if (Constants.ARM_ELEVATOR_MANUAL && Constants.ENABLE_ELEVATOR) {
-            // commandXboxController.x().whileTrue(elevator.move(1));
-            // commandXboxController.b().whileTrue(elevator.move(-1));
+
+          if (Constants.ENABLE_ELEVATOR && Constants.ARM_ELEVATOR_MANUAL ) {
+            commandXboxController.x().whileTrue(elevator.move(1));
+            commandXboxController.b().whileTrue(elevator.move(-1));
           }
           // TEMPORARY ELSE STATEMENT REMOVE LATER
           else {
-            // commandXboxController.x().whileTrue(elevator.setSetpoint(5));
-            // commandXboxController.b().whileTrue(elevator.setSetpoint(30));
+            commandXboxController.x().whileTrue(elevator.setSetpoint(5));
+            commandXboxController.b().whileTrue(elevator.setSetpoint(30));
           }
       
-          if (Constants.ARM_ELEVATOR_MANUAL && Constants.ENABLE_ARM) {
-            // commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
-            // commandXboxController.povDown().whileTrue(arm.moveRotate(1));
+          if (Constants.ENABLE_ARM && Constants.ARM_ELEVATOR_MANUAL) {
+            commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
+            commandXboxController.povDown().whileTrue(arm.moveRotate(1));
             
-            // commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
-            // commandXboxController.povRight().whileTrue(arm.moveExtend(20));
+            commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
+            commandXboxController.povRight().whileTrue(arm.moveExtend(20));
           }
           // TEMPORARY ELSE STATEMENT REMOVE LATER
           else {
