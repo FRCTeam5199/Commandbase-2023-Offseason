@@ -44,7 +44,10 @@ public class RobotContainer {
         public static final IntakeSubsystem intake = new IntakeSubsystem();
         
         public final CompressorSubsystem compressor = new CompressorSubsystem();
-        
+
+        public final Auton auton;
+
+
         // final AprilTagManager tagManager = new AprilTagManager();
 
         /**
@@ -55,6 +58,9 @@ public class RobotContainer {
           drivetrain = new Drivetrain();
           driveCommand = new DriveCommand(drivetrain, manualControls);
           drivetrain.setDefaultCommand(driveCommand);
+
+          auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
+
 
           compressor.init();
 
@@ -138,7 +144,7 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                return Auton.getCharge();
+                return auton.TaxiandLevel();
         }
 
 }
