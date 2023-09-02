@@ -28,24 +28,45 @@ public class IntakeSubsystem extends SubsystemBase {
     public Boolean coneMode;
     public Boolean deployedBottomIntake;
     public Boolean stopBottomIntake;
+    public Boolean spinWithCube;
+    public Boolean OnceTimer;
+    public Boolean biggerIfTimer;
 
     public Timer bottomIntakeTimer;
+    public Timer spinBottomToKeep;
+    public Timer checkTheTimer;
+  
 
     public IntakeSubsystem() {}
 
     @Override
     public void periodic() {
-      
+      if (stopBottomIntake == false) {
+        runBottomIntake();
+      }
+      runTheKeeper();
       // This method will be called once per scheduler run
     }
     public void init() {
       bottomIntakeTimer = new Timer();
-      stopBottomIntake = false;
+      spinBottomToKeep = new Timer();
+      checkTheTimer = new Timer();
+      spinBottomToKeep.start();
+      bottomIntakeTimer.start();
+      checkTheTimer.start();
+
+      stopBottomIntake = true;
+      OnceTimer = false;
+      spinWithCube = false;
+      biggerIfTimer = true;
+
+
       bottomPiston = new DoubleSolenoid(Constants.PCM_ID,Constants.PNEUMATICS_MODULE_TYPE, Constants.SPIKE_OUT_ID, Constants.SPIKE_IN_ID);
       bottomIntakeMotorInit();
       bottomIntake.setBrake(true);
       bottomIntake.setCurrentLimit(10);
-
+      
+      
 
     }
 
@@ -64,55 +85,59 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     ////////////
-
-    // public boolean deployedIntakeSwitch(boolean out) {
-    //   return deployedBottomIntake = out;
-    // }
-
-    // public boolean coneCubeMode() {
-    //   return !coneMode;
-    // }
-   
-    // public CommandBase switchCubeCone() {
-    //   return this.run(()-> coneCubeMode());
-    // }
-
-    // public boolean getConeMode() {
-    //   return coneMode;
-    // }
-      public Command changeIntakeStop() {
-          return runOnce(()-> stopBottomIntake = false);
-        }
-      
-
-    public boolean getDeployedBottomIntake() {
-      return deployedBottomIntake;
+    public void TimerReset() {
+      if (OnceTimer) {
+        bottomIntakeTimer.restart();
+        OnceTimer = false;
+        checkTheTimer.restart();
+            }
     }
-
     
     public void runBottomIntake() {
-      while(stopBottomIntake == false){
-        bottomIntakeTimer.start();
-        if(bottomIntake.getCurrent() < 16.5) {
+        if(bottomIntake.getCurrent() < 13.5) {
           bottomIntake.moveAtPercent(-1);
-          // System.out.println("-----------------------------------------------------------------------------------------");
+          if  (biggerIfTimer) {
+            OnceTimer = true;
+            biggerIfTimer = false;
+          }
+          if (checkTheTimer.get() > .60 && checkTheTimer.get() <0.80){
+              biggerIfTimer = true;
+          }
             }
         else{
-          bottomIntakeTimer.restart();
-          if (bottomIntakeTimer.get() > 1.5) {
-            bottomPiston.set(Value.kReverse);
+          TimerReset(); 
             stopper();
-          }
       }
     }
-    }
+    
     public void stopper() {
+      if (bottomIntakeTimer.get() > 0.5) {
+      bottomPiston.set(Value.kReverse);
       bottomIntake.moveAtPercent(0);
       bottomIntakeTimer.reset();
+      spinWithCube = true;
+      biggerIfTimer = true;
       stopBottomIntake = true;
+      
+      }
+    }
+
+    public void runTheKeeper() {
+      if(spinWithCube) {
+        spinToKeepIn();
+      }
     }
 
     ///////////
+    public void spinToKeepIn() {
+        if (spinBottomToKeep.get() > 2){
+          bottomIntake.moveAtPercent(-1);
+          if(bottomIntake.getCurrent() < 14.5) {
+            bottomIntake.moveAtPercent(0);
+            spinBottomToKeep.restart();
+          }
+        }
+      }
     
     public CommandBase deployPiston() {
       // return this.run(()-> System.out.println("DEPLOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"));
@@ -128,6 +153,7 @@ public class IntakeSubsystem extends SubsystemBase {
     ////////////
 
     public void spinBottomOutake(boolean stop) {
+      spinWithCube = false;
       if(stop) {
         bottomIntake.moveAtPercent(0);
       }
@@ -137,9 +163,13 @@ public class IntakeSubsystem extends SubsystemBase {
     } 
 
 
-    public Command spinBottomWithLimit() {
+    public void runTheIntakeWithLimit(){
       bottomPiston.set(Value.kForward);
-      return this.runEnd(() -> runBottomIntake(), ()-> stopBottomIntake = false);
+      stopBottomIntake = false;
+    }
+
+    public Command spinBottomWithLimit() {
+      return this.runOnce(() -> runTheIntakeWithLimit());
     }
 
     /**
@@ -151,13 +181,5 @@ public class IntakeSubsystem extends SubsystemBase {
       return runOnce(()-> spinBottomOutake(stop));
     }
 
-    public Command victorRunBottomIntake() {
-      return runOnce(()-> bottomIntake.moveAtPercent(-1));
-    }
-
-    public Command StopBottomIntake() {
-      bottomIntakeTimer.reset();
-      return runOnce(()-> bottomIntake.moveAtPercent(0));
-    }
 
 }
