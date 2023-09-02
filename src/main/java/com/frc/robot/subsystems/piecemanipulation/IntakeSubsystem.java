@@ -31,6 +31,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Boolean spinWithCube;
     public Boolean OnceTimer;
     public Boolean biggerIfTimer;
+    public Boolean keeperSpin;
 
     public Timer bottomIntakeTimer;
     public Timer spinBottomToKeep;
@@ -58,8 +59,9 @@ public class IntakeSubsystem extends SubsystemBase {
       stopBottomIntake = true;
       OnceTimer = false;
       spinWithCube = false;
+      keeperSpin = true;
       biggerIfTimer = true;
-
+      
 
       bottomPiston = new DoubleSolenoid(Constants.PCM_ID,Constants.PNEUMATICS_MODULE_TYPE, Constants.SPIKE_OUT_ID, Constants.SPIKE_IN_ID);
       bottomIntakeMotorInit();
@@ -85,7 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     ////////////
-    public void TimerReset() {
+    public void TimerResetrun() {
       if (OnceTimer) {
         bottomIntakeTimer.restart();
         OnceTimer = false;
@@ -105,20 +107,19 @@ public class IntakeSubsystem extends SubsystemBase {
           }
             }
         else{
-          TimerReset(); 
+          TimerResetrun(); 
             stopper();
       }
     }
     
     public void stopper() {
-      if (bottomIntakeTimer.get() > 0.5) {
-      bottomPiston.set(Value.kReverse);
-      bottomIntake.moveAtPercent(0);
-      bottomIntakeTimer.reset();
-      spinWithCube = true;
-      biggerIfTimer = true;
-      stopBottomIntake = true;
-      
+      if (bottomIntakeTimer.get() > 0.5 && bottomIntake.getCurrent() > 13.5) {
+        bottomPiston.set(Value.kReverse);
+        bottomIntake.moveAtPercent(0);
+        bottomIntakeTimer.reset();
+        spinWithCube = true;
+        biggerIfTimer = true;
+        stopBottomIntake = true;
       }
     }
 
@@ -128,13 +129,25 @@ public class IntakeSubsystem extends SubsystemBase {
       }
     }
 
+    public void TimerResetKeeper(boolean change) {
+      if (change == false){
+        spinBottomToKeep.restart();
+        keeperSpin = false;
+      }
+      else {
+        keeperSpin = true;
+      }
+    }
     ///////////
     public void spinToKeepIn() {
+        if(keeperSpin){
+        TimerResetKeeper(false);
+        }
         if (spinBottomToKeep.get() > 2){
           bottomIntake.moveAtPercent(-1);
-          if(bottomIntake.getCurrent() < 14.5) {
+          if(bottomIntake.getCurrent() > 14.5) {
             bottomIntake.moveAtPercent(0);
-            spinBottomToKeep.restart();
+            TimerResetKeeper(true);
           }
         }
       }
