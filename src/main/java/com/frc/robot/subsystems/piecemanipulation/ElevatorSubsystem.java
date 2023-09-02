@@ -24,7 +24,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		// elevatorMotorController.moveAtPercent(elevatorPIDController.calculate(elevatorMotorController.getRotations()));
+        if (!Constants.ARM_ELEVATOR_MANUAL) {
+			elevatorMotorController.moveAtPercent(elevatorPIDController.calculate(elevatorMotorController.getRotations()));
+		}
 	}
 
 	@Override
@@ -38,9 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
     public void PIDInit() {
-        if (!Constants.ENABLE_ELEVATOR) {
-        	elevatorPIDController = new PIDController(Constants.ARM_ROTATE_PID.P, Constants.ARM_ROTATE_PID.I, Constants.ARM_ROTATE_PID.D);
-		}
+		elevatorPIDController = new PIDController(Constants.ARM_ROTATE_PID.P, Constants.ARM_ROTATE_PID.I, Constants.ARM_ROTATE_PID.D);
     }
 
 	public Command resetEncoder() {

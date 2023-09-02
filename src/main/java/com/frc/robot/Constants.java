@@ -120,7 +120,7 @@ public final class Constants {
 
   // Wrist
   public static final boolean ENABLE_WRIST = true;
-  public static final boolean WRIST_MANUAL = true;
+  public static final boolean WRIST_MANUAL = false;
   public static final int WRIST_MOTOR_ID = 27;
   public static final PID WRIST_PID = new PID(0.1, 0, 0);
 

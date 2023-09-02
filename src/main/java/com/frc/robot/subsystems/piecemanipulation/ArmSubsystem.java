@@ -30,8 +30,8 @@ public class ArmSubsystem extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 		if (!Constants.ARM_ELEVATOR_MANUAL) {
-			// rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
-			// extendMotorController.moveAtPercent(-extendPIDController.calculate(extendMotorController.getRotations()));
+			rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
+			extendMotorController.moveAtPercent(-extendPIDController.calculate(extendMotorController.getRotations()));
 		}
 
 		// System.out.println(armExtendMotorController.getRotations());

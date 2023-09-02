@@ -25,7 +25,7 @@ public class WristSubsystem extends SubsystemBase{
 	public void periodic() {
 		// This method will be called once per scheduler run
         if (!Constants.ENABLE_WRIST) {
-		    // wristMotorController.moveAtPercent(wristPIDController.calculate(wristMotorController.getRotations()));
+		    wristMotorController.moveAtPercent(wristPIDController.calculate(wristMotorController.getRotations()));
         }
 	}
 
@@ -51,7 +51,7 @@ public class WristSubsystem extends SubsystemBase{
 		return this.runOnce(() -> wristMotorController.resetEncoder());
 	}
 
-    public Command setWristSetpoint(int setpoint) {
+    public Command setSetpoint(int setpoint) {
         return this.runOnce(() -> wristPIDController.setSetpoint(setpoint));
     }
 

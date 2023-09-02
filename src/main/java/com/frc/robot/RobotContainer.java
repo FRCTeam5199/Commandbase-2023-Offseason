@@ -29,15 +29,15 @@ public class RobotContainer {
         // The robot's subsystems and commands are defined here...
         final Drivetrain drivetrain;
         private final DriveCommand driveCommand;
-        private final ManualControls manualControls = new ManualControls(new XboxController(0), new XboxController(1));
+        private final ManualControls manualControls = new ManualControls(new XboxController(0));
 
-        CommandXboxController commandXboxController = new CommandXboxController(2);
+        CommandXboxController commandXboxController = new CommandXboxController(1);
         // not public or private so Robot.java has access to it.
-        public final static ArmSubsystem arm = new ArmSubsystem();;
+        public final static ArmSubsystem arm = new ArmSubsystem();
         
         public static ElevatorSubsystem elevator = new ElevatorSubsystem();
         
-        public static WristSubsystem wrist = new WristSubsystem();;
+        public static WristSubsystem wrist = new WristSubsystem();
         
         public static final ClawSubsystem claw = new ClawSubsystem();
         
@@ -46,7 +46,6 @@ public class RobotContainer {
         public final CompressorSubsystem compressor = new CompressorSubsystem();
         
         // final AprilTagManager tagManager = new AprilTagManager();
-
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -85,22 +84,22 @@ public class RobotContainer {
             commandXboxController.y().onTrue(claw.closePiston());
           }
 
-          if (Constants.ENABLE_ELEVATOR && Constants.ARM_ELEVATOR_MANUAL ) {
-            // commandXboxController.x().whileTrue(elevator.move(1));
-            // commandXboxController.b().whileTrue(elevator.move(-1));
+          if (Constants.ENABLE_ELEVATOR && Constants.ARM_ELEVATOR_MANUAL) {
+            commandXboxController.x().whileTrue(elevator.move(1));
+            commandXboxController.b().whileTrue(elevator.move(-1));
           }
           // TEMPORARY ELSE STATEMENT REMOVE LATER
           else {
-            // commandXboxController.x().whileTrue(elevator.setSetpoint(5));
-            // commandXboxController.b().whileTrue(elevator.setSetpoint(30));
+            commandXboxController.x().whileTrue(elevator.setSetpoint(5));
+            commandXboxController.b().whileTrue(elevator.setSetpoint(30));
           }
       
           if (Constants.ENABLE_ARM && Constants.ARM_ELEVATOR_MANUAL) {
-            // commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
-            // commandXboxController.povDown().whileTrue(arm.moveRotate(1));
+            commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
+            commandXboxController.povDown().whileTrue(arm.moveRotate(1));
             
-            // commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
-            // commandXboxController.povRight().whileTrue(arm.moveExtend(20));
+            commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
+            commandXboxController.povRight().whileTrue(arm.moveExtend(20));
           }
           // TEMPORARY ELSE STATEMENT REMOVE LATER
           else {
@@ -112,13 +111,17 @@ public class RobotContainer {
           }
       
           if (Constants.WRIST_MANUAL && Constants.ENABLE_WRIST) {
-            // commandXboxController.leftBumper().whileTrue(wrist.move(0.5f));
-            // commandXboxController.rightBumper().whileTrue(wrist.move(-0.5f));
             commandXboxController.leftBumper().whileTrue(wrist.move(5));
             commandXboxController.rightBumper().whileTrue(wrist.move(-5));
           }
+          // TEMPORARY ELSE STATEMENT REMOVE LATER
+          else {
+            commandXboxController.leftBumper().whileTrue(wrist.setSetpoint(0));
+            commandXboxController.rightBumper().whileTrue(wrist.setSetpoint(5));
+          }
+
           if (Constants.INTAKE_MANUAL && Constants.ENABLE_INTAKE) {
-              commandXboxController.x().toggleOnTrue(intake.spinBottomWithLimit());
+              // commandXboxController.x().toggleOnTrue(intake.spinBottomWithLimit());
               // commandXboxController.x().onTrue(intake.deployPiston());
               // commandXboxController.b().onTrue(intake.retractPiston());
 
