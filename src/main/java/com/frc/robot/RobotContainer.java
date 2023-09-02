@@ -27,7 +27,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
         // The robot's subsystems and commands are defined here...
-
+        final Drivetrain drivetrain;
+        private final DriveCommand driveCommand;
+        private final ManualControls manualControls = new ManualControls(new XboxController(0));
+        
+        CommandXboxController commandXboxController = new CommandXboxController(1);
         // not public or private so Robot.java has access to it.
         public final static ArmSubsystem arm = new ArmSubsystem();;
         
@@ -43,11 +47,6 @@ public class RobotContainer {
         
         // final AprilTagManager tagManager = new AprilTagManager();
 
-        final Drivetrain drivetrain;
-        private final DriveCommand driveCommand;
-        private final ManualControls manualControls = new ManualControls(new XboxController(0));
-        
-        CommandXboxController commandXboxController = new CommandXboxController(1);
 
 
 

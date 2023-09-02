@@ -79,8 +79,6 @@ public class Drivetrain extends SubsystemBase {
         // ODOMETRY
         private final SwerveDriveOdometry odometry;
 
-        SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(m_kinematics,
-                                getRawGyroRotation(), getModulePositions(), new Pose2d(), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(.115, .115, .115), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(1.6, 1.6, 1.6));
 
         // CONTROL
         private boolean autoLock = true;
@@ -128,7 +126,6 @@ public class Drivetrain extends SubsystemBase {
 
                 odometry = new SwerveDriveOdometry(m_kinematics, getRawGyroRotation(), getModulePositions());
                 resetOdometry(new Pose2d());
-
                 
                 NtValueDisplay.ntDispTab("Drivetrain")
                 .add("Front Left", ()->getModulePositions()[0].angle.getDegrees())
@@ -249,6 +246,9 @@ public class Drivetrain extends SubsystemBase {
         }
 
         public Rotation2d getGyroscopeRotation() {
+                SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(m_kinematics,
+                getRawGyroRotation(), getModulePositions(), new Pose2d(), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(.115, .115, .115), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(1.6, 1.6, 1.6));
+
                 // if (m_navx.isMagnetometerCalibrated()) {
                 // // We will only get valid fused headings if the magnetometer is calibrated
                 // return Rotation2d.fromDegrees(m_navx.getFusedHeading());

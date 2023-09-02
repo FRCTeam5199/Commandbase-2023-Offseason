@@ -24,7 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		elevatorMotorController.moveAtPercent(elevatorPIDController.calculate(elevatorMotorController.getRotations()));
+		// elevatorMotorController.moveAtPercent(elevatorPIDController.calculate(elevatorMotorController.getRotations()));
 	}
 
 	@Override
