@@ -3,7 +3,6 @@ package com.frc.robot.commands;
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 import java.util.List;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +16,14 @@ import com.pathplanner.lib.PathPlannerTrajectory.StopEvent.ExecutionBehavior;
 import com.pathplanner.lib.PathPlannerTrajectory.StopEvent.WaitBehavior;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.frc.robot.Constants;
 import com.frc.robot.subsystems.Drivetrain;
+import com.frc.robot.subsystems.piecemanipulation.ClawSubsystem;
+import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
+import com.frc.robot.subsystems.piecemanipulation.ArmSubsystem;
+import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
+import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
+import com.frc.robot.Constants;
+import com.frc.robot.subsystems.CompressorSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -52,13 +57,19 @@ public class Auton {
    * 
    * An instance of SwerveAutoBuilder used to generate path following commands.
    */
-  private static SwerveAutoBuilder autoBuilder;
+  private SwerveAutoBuilder autoBuilder;
 
   /**
    * 
    * An instance of Drivetrain that represents the drive subsystem.
    */
-  private static Drivetrain drivetrain;
+  private Drivetrain drivetrain;
+
+  private ArmSubsystem arm;
+  private IntakeSubsystem intake;
+  private ElevatorSubsystem elevator;
+  private ClawSubsystem claw;
+  private WristSubsystem wrist;
 
 
   private SwerveAutoBuilder teleopAutoBuilder;
@@ -70,10 +81,15 @@ public class Auton {
    * 
    * @param drivetrain An instance of Drivetrain that represents the drive
    *                   ubsystem.
+ * @return 
    */
-  public Auton(Drivetrain drivetrain) {
-    Auton.drivetrain = drivetrain;
-
+  public Auton(Drivetrain drivetrain, ArmSubsystem arm, IntakeSubsystem intake, ElevatorSubsystem elevator, ClawSubsystem claw, WristSubsystem wrist) {
+    this.drivetrain = drivetrain;
+    this.arm = arm;
+    this.intake = intake;
+    this.elevator = elevator;
+    this.claw = claw;
+    this.wrist = wrist;
 
     eventMap = new HashMap<>();
     eventMap.put("printCommand", new PrintCommand("test Print command"));
@@ -116,33 +132,35 @@ public class Auton {
     return autoBuilder.fullAuto(pathGroup);
   }
 
-  
+  public Command TaxiandLevel(){
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(2, 1));
 
+    return new SequentialCommandGroup(intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
+  }
+
+
+
+  
 
   public Command getTaxiCharge(){
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TaxiCharge", new PathConstraints(2, 1));
 
     return new SequentialCommandGroup(
       autoBuilder.fullAuto(pathGroup.get(0)),
-      new ChargingStation(drivetrain)
+      new ChargingStationAuto(drivetrain)
     );
   }
 
-  public Command getTaxi(){
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi", new PathConstraints(2, 1));
 
-    return autoBuilder.fullAuto(pathGroup.get(0));
-  }
 
-  public static Command getCharge(){
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(1, 1));
+  public Command getCharge(){
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Charge", new PathConstraints(1, 1));
 
     return new SequentialCommandGroup(
       autoBuilder.fullAuto(pathGroup.get(0)),
-      new ChargingStation(drivetrain)
+      new ChargingStationAuto(drivetrain)
     );
   }
-
 
 
 

@@ -5,7 +5,7 @@ package com.frc.robot.commands;
     import edu.wpi.first.wpilibj.DriverStation;
     import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ChargingStation extends CommandBase {
+public class ChargingStationAuto extends CommandBase {
 
   private final Drivetrain drivetrain;
   private double pitchOffsetDegrees;
@@ -15,7 +15,7 @@ public class ChargingStation extends CommandBase {
   private boolean rolledOver = true;
 
   /** Creates a new ChargingStationAuto. */
-  public ChargingStation(Drivetrain drivetrain, double pitchOffsetDegrees, double rollOffsetDegrees) {
+  public ChargingStationAuto(Drivetrain drivetrain, double pitchOffsetDegrees, double rollOffsetDegrees) {
 
     addRequirements(drivetrain);
     this.drivetrain = drivetrain;
@@ -24,7 +24,7 @@ public class ChargingStation extends CommandBase {
     this.rollOffsetDegrees = rollOffsetDegrees;
   }
 
-  public ChargingStation(Drivetrain drivetrain) {
+  public ChargingStationAuto(Drivetrain drivetrain) {
     this(drivetrain, drivetrain.getPitch().getDegrees(), drivetrain.getRoll().getDegrees());
   }
 
