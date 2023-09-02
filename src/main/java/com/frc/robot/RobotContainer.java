@@ -5,6 +5,7 @@
 package com.frc.robot;
 
 import com.frc.robot.commands.Auton;
+import com.frc.robot.commands.CompositeCommand;
 import com.frc.robot.commands.CompressorCommand;
 
 // import java.io.File;
@@ -20,8 +21,6 @@ import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -45,17 +44,20 @@ public class RobotContainer {
         
         public final CompressorSubsystem compressor = new CompressorSubsystem();
         
+        private final CompositeCommand compositeCommand;
         // final AprilTagManager tagManager = new AprilTagManager();
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
-      
           drivetrain = new Drivetrain();
           driveCommand = new DriveCommand(drivetrain, manualControls);
           drivetrain.setDefaultCommand(driveCommand);
 
+          compositeCommand = new CompositeCommand(elevator, arm);
+          
+          
           compressor.init();
 
           claw.init();
@@ -84,15 +86,16 @@ public class RobotContainer {
             commandXboxController.y().onTrue(claw.closePiston());
           }
 
-          if (Constants.ENABLE_ELEVATOR && Constants.ARM_ELEVATOR_MANUAL) {
-            commandXboxController.x().whileTrue(elevator.move(1));
-            commandXboxController.b().whileTrue(elevator.move(-1));
-          }
-          // TEMPORARY ELSE STATEMENT REMOVE LATER
-          else {
-            commandXboxController.x().whileTrue(elevator.setSetpoint(5));
-            commandXboxController.b().whileTrue(elevator.setSetpoint(30));
-          }
+          // if (Constants.ENABLE_ELEVATOR && Constants.ARM_ELEVATOR_MANUAL) {
+          //   commandXboxController.x().whileTrue(elevator.move(1));
+          //   commandXboxController.b().whileTrue(elevator.move(-1));
+          // }
+          // // TEMPORARY ELSE STATEMENT REMOVE LATER
+          // else {
+          //   commandXboxController.x().whileTrue(elevator.setSetpoint(5));
+          //   commandXboxController.b().whileTrue(elevator.setSetpoint(30));
+          // }
+          commandXboxController.b().onTrue(compositeCommand);
       
           if (Constants.ENABLE_ARM && Constants.ARM_ELEVATOR_MANUAL) {
             commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
@@ -125,8 +128,8 @@ public class RobotContainer {
               // commandXboxController.x().onTrue(intake.deployPiston());
               // commandXboxController.b().onTrue(intake.retractPiston());
 
-              commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
-              commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
+              // commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
+              // commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
           
           }
         }
