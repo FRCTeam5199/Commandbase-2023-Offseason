@@ -34,7 +34,7 @@ public class ChargingStationAuto extends CommandBase {
 
   @Override
   public void execute() {
-    double speedMultiplier = 1;
+    double speedMultiplier = 2;
 
     boolean roll = Math.hypot(drivetrain.getPitch().getDegrees() - pitchOffsetDegrees, drivetrain.getRoll().getDegrees() - rollOffsetDegrees) > 1.5;
 

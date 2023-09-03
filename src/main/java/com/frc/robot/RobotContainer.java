@@ -60,7 +60,6 @@ public class RobotContainer {
 
     compositeCommand = new CompositeCommand(elevator, arm);
 
-    auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
 
     compressor.init();
 
@@ -73,6 +72,10 @@ public class RobotContainer {
     wrist.init();
 
     intake.init();
+
+    auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
+
+
 
     // tagManager.init();
 

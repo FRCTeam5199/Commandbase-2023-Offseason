@@ -76,8 +76,8 @@ public class DriveCommand extends CommandBase {
 
         drivetrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        controls.driveX(),
-                        controls.driveY(),
+                        -controls.driveX(),
+                        -controls.driveY(),
                         controls.driveRotationX(),
                         drivetrain.getGyroscopeRotationNoApriltags())); // perhaps use getRawGyroRotation() instead?
     }
