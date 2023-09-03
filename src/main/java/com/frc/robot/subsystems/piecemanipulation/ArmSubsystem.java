@@ -85,4 +85,28 @@ public class ArmSubsystem extends SubsystemBase {
 	public Command moveExtend(float percent) {
 		return this.runEnd(() -> extendMotorController.moveAtPercent(percent), () -> extendMotorController.moveAtPercent(0));
 	}
+
+	public void rotateFront() {
+		rotatePIDController.setSetpoint(0);
+	}
+
+	public void rotateBack() {
+		rotatePIDController.setSetpoint(30);
+	}
+
+	public void extend() {
+		extendPIDController.setSetpoint(21);
+	}
+
+	public void retract() {
+		extendPIDController.setSetpoint(5);
+	}
+
+	public boolean isRetracted() {
+		return extendMotorController.getRotations() < 6;
+	}
+
+    public boolean isFront() {
+		return rotateMotorController.getRotations() < 20;
+	}
 }

@@ -4,6 +4,8 @@
 
 package com.frc.robot;
 
+import java.util.Map;
+
 import com.frc.robot.commands.Auton;
 import com.frc.robot.commands.CompositeCommand;
 import com.frc.robot.commands.CompressorCommand;
@@ -22,6 +24,13 @@ import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -48,6 +57,11 @@ public class RobotContainer {
 
   public final Auton auton;
 
+  private enum ArmPositionStateSelector {
+      ARMFRONT,
+      ARMBACK
+    }
+
   // final AprilTagManager tagManager = new AprilTagManager();
 
   /**
@@ -59,7 +73,6 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(driveCommand);
 
     compositeCommand = new CompositeCommand(elevator, arm);
-
 
     compressor.init();
 
@@ -75,8 +88,6 @@ public class RobotContainer {
 
     auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
 
-
-
     // tagManager.init();
 
     configureBindings();
@@ -86,6 +97,44 @@ public class RobotContainer {
     compressor.setDefaultCommand(compressorRun);
 
   }
+
+  // Determine which command to run based on robot state
+  private ArmPositionStateSelector select() {
+    if (arm.isFront()) {
+      return ArmPositionStateSelector.ARMFRONT;
+    } else {
+      return ArmPositionStateSelector.ARMBACK;
+    }
+
+  }
+
+  // Move the arm to the front of the robot if it is in the back
+  private final Command m_MoveArmFrontCommand =
+  new SelectCommand (
+      // Maps selector values to commands
+      Map.ofEntries(
+          Map.entry(ArmPositionStateSelector.ARMFRONT, new WaitCommand(0)),
+          Map.entry(ArmPositionStateSelector.ARMBACK, new SequentialCommandGroup(
+            new InstantCommand(()->arm.retract()),
+            new InstantCommand(()->elevator.low()),
+            new WaitUntilCommand(()->arm.isRetracted()),
+            new InstantCommand(()->arm.rotateBack())
+          ))),
+      this::select);
+
+  // Move the arm to the back of the robot if it is in the front
+  private final Command m_MoveArmBackCommand =
+  new SelectCommand (
+      // Maps selector values to commands
+      Map.ofEntries(
+          Map.entry(ArmPositionStateSelector.ARMFRONT, new SequentialCommandGroup(
+            new InstantCommand(()->arm.retract()),
+            new InstantCommand(()->elevator.low()),
+            new WaitUntilCommand(()->arm.isRetracted()),
+            new InstantCommand(()->arm.rotateFront())
+          )),
+          Map.entry(ArmPositionStateSelector.ARMBACK, new WaitCommand(0))),
+      this::select);
 
   public void configureBindings() {
     if (Constants.ENABLE_CLAW) {
@@ -104,6 +153,50 @@ public class RobotContainer {
     // }
     commandXboxController.b().onTrue(compositeCommand);
 
+    // Stable
+    ParallelCommandGroup stableCommandGroup = new ParallelCommandGroup();
+    stableCommandGroup.addCommands(
+      m_MoveArmFrontCommand,
+      new InstantCommand(()->elevator.low()),
+      new InstantCommand(()->arm.retract())
+    );
+
+    // Human player
+    ParallelCommandGroup humanPlayerCommandGroup = new ParallelCommandGroup();
+    humanPlayerCommandGroup.addCommands(
+      m_MoveArmFrontCommand,
+      new InstantCommand(()->elevator.top()),
+      new InstantCommand(()->arm.extend())
+    );
+
+    // High goal
+    ParallelCommandGroup highGoalCommandGroup = new ParallelCommandGroup();
+    highGoalCommandGroup.addCommands(
+      m_MoveArmBackCommand,
+      new InstantCommand(()->elevator.top()),
+      new InstantCommand(()->arm.extend())
+    );
+
+    // Medium goal
+    ParallelCommandGroup mediumGoalCommandGroup = new ParallelCommandGroup();
+    highGoalCommandGroup.addCommands(
+      m_MoveArmBackCommand,
+      new InstantCommand(()->elevator.middle()),
+      new InstantCommand(()->arm.extend())
+    );
+
+    // Low goal
+    ParallelCommandGroup lowGoalCommandGroup = new ParallelCommandGroup();
+    highGoalCommandGroup.addCommands(
+      m_MoveArmBackCommand,
+      new InstantCommand(()->elevator.low()),
+      new InstantCommand(()->arm.extend())
+    );
+
+    commandXboxController.b().onTrue(humanPlayerCommandGroup);
+
+          // new InstantCommand(()->arm.rotateForward()),
+      // new InstantCommand(()->arm.extend())
     if (Constants.ENABLE_ARM && Constants.ARM_ELEVATOR_MANUAL) {
       commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
       commandXboxController.povDown().whileTrue(arm.moveRotate(1));

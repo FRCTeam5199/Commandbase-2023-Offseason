@@ -51,6 +51,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 		return this.runOnce(() -> elevatorPIDController.setSetpoint(setpoint));
 	}
 
+	public void low() {
+		elevatorPIDController.setSetpoint(0);
+	}
+
+	public void middle() {
+		elevatorPIDController.setSetpoint(5);
+	}
+
+	public void top() {
+		elevatorPIDController.setSetpoint(30);
+	}
+
 	/**
 	 * Moves the Elevator by a percent between -1 and 1 and stops it when finished.
 	 */
