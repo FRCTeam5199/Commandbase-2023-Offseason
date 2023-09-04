@@ -104,7 +104,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void rotateMedium() {
-		rotatePIDController.setSetpoint(-90);
+		rotatePIDController.setSetpoint(-87);
 	}
 
 	public void rotateLow() {
@@ -112,11 +112,15 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void extendMedium() {
-		extendPIDController.setSetpoint(15);
+		extendPIDController.setSetpoint(4.5);
+	}
+
+	public void extendHumanplayer() {
+		extendPIDController.setSetpoint(10);
 	}
 
 	public void extend() {
-		extendPIDController.setSetpoint(21);
+		extendPIDController.setSetpoint(22.5);
 	}
 
 	public void retract() {

@@ -56,11 +56,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
 	public void middle() {
-		elevatorPIDController.setSetpoint(5);
+		elevatorPIDController.setSetpoint(1);
 	}
 
 	public void top() {
-		elevatorPIDController.setSetpoint(30);
+		elevatorPIDController.setSetpoint(36);
 	}
 
 	/**

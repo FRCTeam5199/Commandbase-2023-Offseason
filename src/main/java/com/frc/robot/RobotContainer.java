@@ -133,10 +133,10 @@ public class RobotContainer {
       this::select);
 
   public void configureBindings() {
-    // if (Constants.ENABLE_CLAW) {
-    //   commandXboxController.a().onTrue(claw.openPiston());
-    //   commandXboxController.y().onTrue(claw.closePiston());
-    // }
+    if (Constants.ENABLE_CLAW) {
+      commandXboxController.a().onTrue(claw.openPiston());
+      commandXboxController.y().onTrue(claw.closePiston());
+    }
 
     // if (Constants.ENABLE_ELEVATOR && Constants.ARM_ELEVATOR_MANUAL) {
     // commandXboxController.x().whileTrue(elevator.move(1));
@@ -181,7 +181,7 @@ public class RobotContainer {
         //   this::select)),
         new InstantCommand(() -> elevator.top()),
         new InstantCommand(() -> arm.rotateHumanplayer()),
-        new InstantCommand(() -> arm.extend()));
+        new InstantCommand(() -> arm.extendHumanplayer()));
 
     // High goal
     ParallelCommandGroup highGoalCommandGroup = new ParallelCommandGroup();
@@ -234,10 +234,10 @@ public class RobotContainer {
         new InstantCommand(() -> arm.rotateLow()),
         new InstantCommand(() -> arm.retract()));
 
-    commandXboxController.y().onTrue(humanPlayerCommandGroup);
-    commandXboxController.a().onTrue(stableCommandGroup);
-    commandXboxController.b().onTrue(highGoalCommandGroup);
-    commandXboxController.x().onTrue(mediumGoalCommandGroup);
+    commandXboxController.povUp().onTrue(humanPlayerCommandGroup);
+    commandXboxController.povDown().onTrue(stableCommandGroup);
+    commandXboxController.povLeft().onTrue(highGoalCommandGroup);
+    commandXboxController.povRight().onTrue(mediumGoalCommandGroup);
     commandXboxController.leftBumper().onTrue(lowGoalCommandGroup);
 
     // commandXboxController.b().onTrue(humanPlayerCommandGroup);
@@ -253,11 +253,11 @@ public class RobotContainer {
     // }
     // TEMPORARY ELSE STATEMENT REMOVE LATER
     // else {
-      commandXboxController.povUp().whileTrue(arm.setRotateSetpoint(-20));
-      commandXboxController.povDown().whileTrue(arm.setRotateSetpoint(30));
+      // commandXboxController.povUp().whileTrue(arm.setRotateSetpoint(-20));
+      // commandXboxController.povDown().whileTrue(arm.setRotateSetpoint(30));
 
-      commandXboxController.povLeft().onTrue(new InstantCommand(() -> arm.retract()));
-      commandXboxController.povRight().onTrue(new InstantCommand(() -> arm.extend()));/*new InstantCommand(() -> arm.setExtendSetpoint(20/*21*/ //)));
+      // commandXboxController.povLeft().onTrue(new InstantCommand(() -> arm.retract()));
+      // commandXboxController.povRight().onTrue(new InstantCommand(() -> arm.extend()));/*new InstantCommand(() -> arm.setExtendSetpoint(20/*21*/ //)));
     // }
 
     if (Constants.WRIST_MANUAL && Constants.ENABLE_WRIST) {
