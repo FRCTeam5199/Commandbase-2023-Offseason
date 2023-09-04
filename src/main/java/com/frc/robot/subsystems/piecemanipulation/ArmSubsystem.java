@@ -18,25 +18,26 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public void init() {
 		motorInit();
-		if (!Constants.ARM_ELEVATOR_MANUAL) {
+		// if (!Constants.ARM_ELEVATOR_MANUAL) {
         	PIDInit();
-		}
+		// }
 
 		extendMotorController.resetEncoder();
 		rotateMotorController.resetEncoder();
 	}
 
-
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		if (!Constants.ARM_ELEVATOR_MANUAL) {
+		// if (!Constants.ARM_ELEVATOR_MANUAL) {
 			rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
-			extendMotorController.moveAtPercent(-extendPIDController.calculate(extendMotorController.getRotations()));
-		}
-
-		// System.out.println(armExtendMotorController.getRotations());
-		// System.out.println(-armExtendPIDController.calculate(armExtendMotorController.getRotations()));
+			extendMotorController.moveAtPercent(extendPIDController.calculate(extendMotorController.getRotations()));
+		// }
+			System.out.println(isFront());
+		// System.out.println("Rotations: " + rotateMotorController.getRotations());
+		// System.out.println("Rotations: " + extendMotorController.getRotations());
+		// System.out.println("PID: " + extendPIDController.calculate(extendMotorController.getRotations()));
+		// System.out.println("Setpoint: " + extendPIDController.getSetpoint());
 	}
 
 	@Override
@@ -94,6 +95,26 @@ public class ArmSubsystem extends SubsystemBase {
 		rotatePIDController.setSetpoint(30);
 	}
 
+	public void rotateHumanplayer() {
+		rotatePIDController.setSetpoint(35);
+	}
+
+	public void rotateHigh() {
+		rotatePIDController.setSetpoint(-105);
+	}
+
+	public void rotateMedium() {
+		rotatePIDController.setSetpoint(-90);
+	}
+
+	public void rotateLow() {
+		rotatePIDController.setSetpoint(-120);
+	}
+
+	public void extendMedium() {
+		extendPIDController.setSetpoint(15);
+	}
+
 	public void extend() {
 		extendPIDController.setSetpoint(21);
 	}
@@ -107,6 +128,6 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
     public boolean isFront() {
-		return rotateMotorController.getRotations() < 20;
+		return rotateMotorController.getRotations() > -5;
 	}
 }
