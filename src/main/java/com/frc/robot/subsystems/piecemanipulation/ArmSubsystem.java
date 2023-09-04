@@ -120,7 +120,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void extend() {
-		extendPIDController.setSetpoint(22.5);
+		extendPIDController.setSetpoint(23);
 	}
 
 	public void retract() {

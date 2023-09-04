@@ -179,7 +179,7 @@ public class RobotContainer {
         //           new WaitUntilCommand(() -> arm.isRetracted()),
         //           new InstantCommand(() -> arm.rotateBack())))),
         //   this::select)),
-        new InstantCommand(() -> elevator.top()),
+        new InstantCommand(() -> elevator.humanplayer()),
         new InstantCommand(() -> arm.rotateHumanplayer()),
         new InstantCommand(() -> arm.extendHumanplayer()));
 
@@ -196,7 +196,7 @@ public class RobotContainer {
         //           new InstantCommand(() -> arm.rotateFront()))),
         //       Map.entry(ArmPositionStateSelector.ARMBACK, new WaitCommand(0))),
         //   this::select)),
-        new InstantCommand(() -> elevator.top()),
+        new InstantCommand(() -> elevator.high()),
         new InstantCommand(() -> arm.rotateHigh()),
         new InstantCommand(() -> arm.extend()));
 
@@ -213,7 +213,7 @@ public class RobotContainer {
         //           new InstantCommand(() -> arm.rotateFront()))),
         //       Map.entry(ArmPositionStateSelector.ARMBACK, new WaitCommand(0))),
         //   this::select)),
-        new InstantCommand(() -> elevator.middle()),
+        new InstantCommand(() -> elevator.medium()),
         new InstantCommand(() -> arm.rotateMedium()),
         new InstantCommand(() -> arm.extendMedium()));
 

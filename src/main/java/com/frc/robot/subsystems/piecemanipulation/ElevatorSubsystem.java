@@ -51,15 +51,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 		return this.runOnce(() -> elevatorPIDController.setSetpoint(setpoint));
 	}
 
+	public void humanplayer() {
+		elevatorPIDController.setSetpoint(34);
+	}
+
 	public void low() {
 		elevatorPIDController.setSetpoint(0);
 	}
 
-	public void middle() {
+	public void medium() {
 		elevatorPIDController.setSetpoint(1);
 	}
 
-	public void top() {
+	public void high() {
 		elevatorPIDController.setSetpoint(36);
 	}
 
