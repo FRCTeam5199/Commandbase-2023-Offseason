@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
+import javax.swing.text.StyledEditorKit;
+
 public class IntakeSubsystem extends SubsystemBase {
     /** Creates a new BottomIntakeSubsystem. */
     public SparkMotorController bottomIntake;
@@ -155,8 +157,17 @@ public class IntakeSubsystem extends SubsystemBase {
     public CommandBase deployPiston() {
       // return this.run(()-> System.out.println("DEPLOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"));
       return this.runOnce(() -> bottomPiston.set(Value.kForward));
-      
     }
+
+    public BooleanSupplier deployPistonFinished(){
+        if(deployPiston().isFinished()){
+            return ()-> true;
+        }else{
+            return ()-> false;
+        }
+    }
+
+
 
     public CommandBase retractPiston() {
       // return this.run(()-> System.out.println("RETRACTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"));
@@ -193,6 +204,32 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command spinOutakeOnBottom(boolean stop) {
       return runOnce(()-> spinBottomOutake(stop));
     }
+
+    public Command stopSpin(){
+        return runOnce(()-> bottomIntake.moveAtPercent(0));
+    }
+
+    public Command intake(){
+        return runOnce(()-> bottomIntake.moveAtPercent(-1));
+    }
+    public boolean intakeFinished(){
+        return intake().isFinished();
+    }
+
+    public Command outtake(){
+        return runOnce(()-> bottomIntake.moveAtPercent(1));
+    }
+
+    public BooleanSupplier stopIntake(){
+        if(bottomIntake.getCurrent() > 13.5){
+            return ()-> false;
+        }else {
+            return ()-> true;
+        }
+
+    }
+
+
 
 
 }

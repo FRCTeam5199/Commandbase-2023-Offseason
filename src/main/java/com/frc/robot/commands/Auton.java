@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.List;
 
+import com.frc.robot.misc.Time;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -29,6 +30,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -58,6 +60,8 @@ public class Auton {
    * An instance of SwerveAutoBuilder used to generate path following commands.
    */
   private SwerveAutoBuilder autoBuilder;
+
+  private Time timer = new Time();
 
   /**
    * 
@@ -133,11 +137,17 @@ public class Auton {
   }
 
   public Command TaxiandLevel(){
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(2, 1));
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(1.25, .9));
 
-    return new SequentialCommandGroup(intake.deployPiston(), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
+    return new SequentialCommandGroup(intake.deployPiston().withTimeout(1), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
   }
 
+  public Command TaxiCubeLevel(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge", new PathConstraints(1.25, 1));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.25, .9));
+
+    return new SequentialCommandGroup(intake.deployPiston().until(intake.deployPistonFinished()), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)), intake.deployPiston(), intake.intake().until(intake.stopIntake()), intake.stopSpin(), intake.retractPiston(),  autoBuilder.fullAuto(pathGroup2.get(0)), new ChargingStationAuto(drivetrain), intake.outtake());
+  }
 
 
   
