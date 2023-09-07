@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import javax.swing.text.StyledEditorKit;
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 public class IntakeSubsystem extends SubsystemBase {
     /** Creates a new BottomIntakeSubsystem. */
@@ -34,10 +35,12 @@ public class IntakeSubsystem extends SubsystemBase {
     public Boolean OnceTimer;
     public Boolean biggerIfTimer;
     public Boolean keeperSpin;
+    public Boolean stopIntake;
 
     public Timer bottomIntakeTimer;
     public Timer spinBottomToKeep;
     public Timer checkTheTimer;
+    public Timer intakeTimer;
   
 
     public IntakeSubsystem() {}
@@ -63,6 +66,7 @@ public class IntakeSubsystem extends SubsystemBase {
       spinWithCube = false;
       keeperSpin = true;
       biggerIfTimer = true;
+      double intakeTimer;
       
 
       bottomPiston = new DoubleSolenoid(Constants.PCM_ID,Constants.PNEUMATICS_MODULE_TYPE, Constants.SPIKE_OUT_ID, Constants.SPIKE_IN_ID);
@@ -219,11 +223,38 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public BooleanSupplier stopIntake(){
         if(bottomIntake.getCurrent() > 13.5){
-            return ()-> false;
-        }else {
             return ()-> true;
+        }else {
+            intake();
+            return ()-> false;
         }
 
+    }
+
+    public boolean checkCurrent(){
+      if(bottomIntake.getCurrent() > 13.5){
+        return stopIntake = true;
+      }else{
+        return stopIntake = false;
+      }
+    }
+
+    public Runnable currentCheck(){
+      return ()-> checkCurrent();
+    }
+
+    public Command dropAndStop(){
+      currentCheck();
+      intakeTimer.start();
+      while(!stopIntake){
+        if(intakeTimer.get() > 3){
+          break;
+          
+        }else{
+          return intake();
+        }
+      }
+      return stopSpin().andThen(retractPiston());
     }
 
 

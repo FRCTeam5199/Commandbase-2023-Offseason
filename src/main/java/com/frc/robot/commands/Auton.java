@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /**
  * 
@@ -146,7 +147,7 @@ public class Auton {
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge", new PathConstraints(1.25, 1));
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.25, .9));
 
-    return new SequentialCommandGroup(intake.deployPiston(), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)), intake.deployPiston(), intake.intake(), intake.retractPiston(),  autoBuilder.fullAuto(pathGroup2.get(0)), new ChargingStationAuto(drivetrain), intake.outtake());
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(1), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)), intake.deployPiston(), intake.dropAndStop(), intake.retractPiston(),  autoBuilder.fullAuto(pathGroup2.get(0)), new ChargingStationAuto(drivetrain), intake.outtake());
   }
 
 
