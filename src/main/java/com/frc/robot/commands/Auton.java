@@ -146,7 +146,7 @@ public class Auton {
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge", new PathConstraints(1.25, 1));
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.25, .9));
 
-    return new SequentialCommandGroup(intake.deployPiston().until(intake.deployPistonFinished()), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)), intake.deployPiston(), intake.intake().until(intake.stopIntake()), intake.stopSpin(), intake.retractPiston(),  autoBuilder.fullAuto(pathGroup2.get(0)), new ChargingStationAuto(drivetrain), intake.outtake());
+    return new SequentialCommandGroup(intake.deployPiston(), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)), intake.deployPiston(), intake.intake(), intake.retractPiston(),  autoBuilder.fullAuto(pathGroup2.get(0)), new ChargingStationAuto(drivetrain), intake.outtake());
   }
 
 

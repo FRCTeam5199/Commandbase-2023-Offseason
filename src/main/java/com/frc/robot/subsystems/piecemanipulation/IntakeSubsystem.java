@@ -156,22 +156,19 @@ public class IntakeSubsystem extends SubsystemBase {
     
     public CommandBase deployPiston() {
       // return this.run(()-> System.out.println("DEPLOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"));
-      return this.runOnce(() -> bottomPiston.set(Value.kForward));
+      return this.run(() -> bottomPiston.set(Value.kForward));
     }
 
-    public BooleanSupplier deployPistonFinished(){
-        if(deployPiston().isFinished()){
-            return ()-> true;
-        }else{
-            return ()-> false;
-        }
-    }
 
 
 
     public CommandBase retractPiston() {
       // return this.run(()-> System.out.println("RETRACTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"));
-      return this.runOnce(() -> bottomPiston.set(Value.kReverse));
+        int i = 0;
+        while(i < 10000){
+            i++;
+        }
+      return this.runOnce(() -> bottomPiston.set(Value.kReverse)).andThen(retractPiston());
     }
 
     ////////////
@@ -217,7 +214,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command outtake(){
-        return runOnce(()-> bottomIntake.moveAtPercent(1));
+        return run(()-> bottomIntake.moveAtPercent(1));
     }
 
     public BooleanSupplier stopIntake(){
