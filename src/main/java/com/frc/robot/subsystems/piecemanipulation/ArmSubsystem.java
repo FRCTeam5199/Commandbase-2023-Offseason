@@ -33,7 +33,6 @@ public class ArmSubsystem extends SubsystemBase {
 			rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
 			extendMotorController.moveAtPercent(extendPIDController.calculate(extendMotorController.getRotations()));
 		// }
-			System.out.println(isFront());
 		// System.out.println("Rotations: " + rotateMotorController.getRotations());
 		// System.out.println("Rotations: " + extendMotorController.getRotations());
 		// System.out.println("PID: " + extendPIDController.calculate(extendMotorController.getRotations()));
