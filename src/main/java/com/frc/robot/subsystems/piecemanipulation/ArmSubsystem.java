@@ -30,8 +30,12 @@ public class ArmSubsystem extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 		// if (!Constants.ARM_ELEVATOR_MANUAL) {
-			rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
+		rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
+		if (extendMotorController.getRotations() < 1000) {
 			extendMotorController.moveAtPercent(extendPIDController.calculate(extendMotorController.getRotations()));
+		} else {
+			extendMotorController.moveAtPercent(5);
+		}
 		// }
 		// System.out.println("Rotations: " + rotateMotorController.getRotations());
 		// System.out.println("Rotations: " + extendMotorController.getRotations());
@@ -103,7 +107,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void rotateMedium() {
-		rotatePIDController.setSetpoint(-87);
+		rotatePIDController.setSetpoint(-89);
 	}
 
 	public void rotateLow() {
@@ -111,11 +115,11 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void extendMedium() {
-		extendPIDController.setSetpoint(4.5);
+		extendPIDController.setSetpoint(2.5);
 	}
 
 	public void extendHumanplayer() {
-		extendPIDController.setSetpoint(10);
+		extendPIDController.setSetpoint(7);
 	}
 
 	public void extend() {
