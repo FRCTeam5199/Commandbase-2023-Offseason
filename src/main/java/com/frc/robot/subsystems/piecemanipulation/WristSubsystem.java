@@ -58,4 +58,16 @@ public class WristSubsystem extends SubsystemBase{
     public Command move(float percent) {
         return this.runEnd(() -> wristMotorController.moveAtPercent(percent), () -> wristMotorController.moveAtPercent(0));
     }
+
+    public Boolean isFlipped() {
+        return wristMotorController.getRotations() > 10;
+    }
+
+    // public Command flipWrist() {
+    //     return this.run(() -> wristMotorController.moveAtPercent(1)).wait(100, 0).runOnce(() -> wristMotorController.moveAtPercent(0));
+    // }
+
+    // public Command returnWrist() {
+    //     return this.run(() -> wristMotorController.moveAtPercent(-1)).wait(100, 0).runOnce(() -> wristMotorController.moveAtPercent(0));
+    // }
 }

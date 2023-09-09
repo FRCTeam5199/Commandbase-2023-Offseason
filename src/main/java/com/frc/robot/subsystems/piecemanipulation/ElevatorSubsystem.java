@@ -60,7 +60,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
 	public void medium() {
-		elevatorPIDController.setSetpoint(1);
+		elevatorPIDController.setSetpoint(4);
 	}
 
 	public void high() {

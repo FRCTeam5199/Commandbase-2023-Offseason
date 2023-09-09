@@ -4,8 +4,6 @@
 
 package com.frc.robot;
 
-import java.util.Map;
-
 import com.frc.robot.commands.Auton;
 import com.frc.robot.commands.CompositeCommand;
 import com.frc.robot.commands.CompressorCommand;
@@ -14,6 +12,7 @@ import com.frc.robot.commands.CompressorCommand;
 
 import com.frc.robot.commands.DriveCommand;
 import com.frc.robot.controls.ManualControls;
+import com.frc.robot.controls.customcontrollers.CommandButtonPanel;
 import com.frc.robot.subsystems.CompressorSubsystem;
 import com.frc.robot.subsystems.Drivetrain;
 import com.frc.robot.subsystems.piecemanipulation.ArmSubsystem;
@@ -26,19 +25,18 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   final Drivetrain drivetrain;
   private final DriveCommand driveCommand;
-  private final ManualControls manualControls = new ManualControls(new XboxController(0));
+  private final XboxController driveXboxController = new XboxController(0);
+  private final ManualControls manualControls = new ManualControls(driveXboxController);
 
-  CommandXboxController commandXboxController = new CommandXboxController(1);
+  public CommandXboxController commandXboxController;
+  public CommandButtonPanel buttonPanel;
+  
   // not public or private so Robot.java has access to it.
   public final static ArmSubsystem arm = new ArmSubsystem();
 
@@ -89,15 +87,16 @@ public class RobotContainer {
 
     // tagManager.init();
 
+    createControllers();
+
     configureBindings();
 
     CompressorCommand compressorRun = new CompressorCommand(compressor);
 
     compressor.setDefaultCommand(compressorRun);
-
   }
 
-  // Determine which command to run based on robot state
+// Determine which command to run based on robot state
   private ArmPositionStateSelector select() {
     if (arm.isFront()) {
       System.out.println("Arm Is Front");
@@ -108,29 +107,12 @@ public class RobotContainer {
     }
   }
 
-  // Move the arm to the front of the robot if it is in the back
-  private final Command m_MoveArmFrontCommand = new SelectCommand(
-      // Maps selector values to commands
-      Map.ofEntries(
-          Map.entry(ArmPositionStateSelector.ARMFRONT, new WaitCommand(0)),
-          Map.entry(ArmPositionStateSelector.ARMBACK, new SequentialCommandGroup(
-              new InstantCommand(() -> arm.retract()),
-              new InstantCommand(() -> elevator.low()),
-              new WaitUntilCommand(() -> arm.isRetracted()),
-              new InstantCommand(() -> arm.rotateBack())))),
-      this::select);
+  private void createControllers() {
+    commandXboxController = new CommandXboxController(1);
 
-  // Move the arm to the back of the robot if it is in the front
-  private final Command m_MoveArmBackCommand = new SelectCommand(
-      // Maps selector values to commands
-      Map.ofEntries(
-          Map.entry(ArmPositionStateSelector.ARMFRONT, new SequentialCommandGroup(
-              new InstantCommand(() -> arm.retract()),
-              new InstantCommand(() -> elevator.low()),
-              new WaitUntilCommand(() -> arm.isRetracted()),
-              new InstantCommand(() -> arm.rotateFront()))),
-          Map.entry(ArmPositionStateSelector.ARMBACK, new WaitCommand(0))),
-      this::select);
+    buttonPanel = new CommandButtonPanel();
+  }
+      
 
   public void configureBindings() {
     if (Constants.ENABLE_CLAW) {
@@ -142,12 +124,6 @@ public class RobotContainer {
     // commandXboxController.x().whileTrue(elevator.move(1));
     // commandXboxController.b().whileTrue(elevator.move(-1));
     // }
-    // // TEMPORARY ELSE STATEMENT REMOVE LATER
-    // else {
-    // commandXboxController.x().whileTrue(elevator.setSetpoint(5));
-    // commandXboxController.b().whileTrue(elevator.setSetpoint(30));
-    // }
-    // commandXboxController.b().onTrue(compositeCommand);
 
     // Stable
     ParallelCommandGroup stableCommandGroup = new ParallelCommandGroup();
@@ -182,6 +158,10 @@ public class RobotContainer {
         new InstantCommand(() -> elevator.humanplayer()),
         new InstantCommand(() -> arm.rotateHumanplayer()),
         new InstantCommand(() -> arm.extendHumanplayer()));
+        // new InstantCommand(() -> wrist.move(1)),
+        // new WaitUntilCommand(() -> wrist.isFlipped()),
+        // new InstantCommand(() -> wrist.move(0)),
+        // new PrintCommand("Moved"));
 
     // High goal
     ParallelCommandGroup highGoalCommandGroup = new ParallelCommandGroup();
@@ -222,7 +202,7 @@ public class RobotContainer {
     lowGoalCommandGroup.addCommands(
         // (new SelectCommand(
         //   // Maps selector values to commands
-        //   Map.ofEntries(
+        //   Map.ofEntries( w
         //       Map.entry(ArmPositionStateSelector.ARMFRONT, new SequentialCommandGroup(
         //           new InstantCommand(() -> arm.retract()),
         //           new InstantCommand(() -> elevator.low()),
@@ -234,11 +214,18 @@ public class RobotContainer {
         new InstantCommand(() -> arm.rotateLow()),
         new InstantCommand(() -> arm.retract()));
 
-    commandXboxController.povUp().onTrue(humanPlayerCommandGroup);
-    commandXboxController.povDown().onTrue(stableCommandGroup);
-    commandXboxController.povLeft().onTrue(highGoalCommandGroup);
-    commandXboxController.povRight().onTrue(mediumGoalCommandGroup);
-    commandXboxController.leftBumper().onTrue(lowGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(mediumGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
+
+    // driveXboxController.a().onTrue(() -> System.out.println());
+    // commandXboxController.povUp().onTrue(humanPlayerCommandGroup);
+    // commandXboxController.leftBumper().onTrue(stableCommandGroup);
+    // commandXboxController.povLeft().onTrue(highGoalCommandGroup);
+    // commandXboxController.povRight().onTrue(mediumGoalCommandGroup);
+    // commandXboxController.povDown().onTrue(lowGoalCommandGroup);
 
     // commandXboxController.b().onTrue(humanPlayerCommandGroup);
 
@@ -251,14 +238,6 @@ public class RobotContainer {
     //   commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
     //   commandXboxController.povRight().whileTrue(arm.moveExtend(20));
     // }
-    // TEMPORARY ELSE STATEMENT REMOVE LATER
-    // else {
-      // commandXboxController.povUp().whileTrue(arm.setRotateSetpoint(-20));
-      // commandXboxController.povDown().whileTrue(arm.setRotateSetpoint(30));
-
-      // commandXboxController.povLeft().onTrue(new InstantCommand(() -> arm.retract()));
-      // commandXboxController.povRight().onTrue(new InstantCommand(() -> arm.extend()));/*new InstantCommand(() -> arm.setExtendSetpoint(20/*21*/ //)));
-    // }
 
     if (Constants.WRIST_MANUAL && Constants.ENABLE_WRIST) {
       // commandXboxController.leftBumper().whileTrue(wrist.move(5));
@@ -270,14 +249,21 @@ public class RobotContainer {
     //   commandXboxController.rightBumper().whileTrue(wrist.setSetpoint(5));
     // }
 
-    if (Constants.INTAKE_MANUAL && Constants.ENABLE_INTAKE) {
-      // commandXboxController.x().toggleOnTrue(intake.spinBottomWithLimit());
-      // commandXboxController.x().onTrue(intake.deployPiston());
-      // commandXboxController.b().onTrue(intake.retractPiston());
+    if (Constants.ENABLE_INTAKE) {
+      if (Constants.INTAKE_MANUAL) {
+        commandXboxController.x().toggleOnTrue(intake.spinBottomWithLimit());
+        // commandXboxController.x().onTrue(intake.deployPiston());
+        // commandXboxController.b().onTrue(intake.retractPiston());
 
-      // commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
-      // commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
+        commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
+        commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
+      } else {
+        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 6).toggleOnTrue(intake.spinBottomWithLimit());
 
+        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 4).onTrue(intake.deployPiston());
+
+        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());
+      }
     }
   }
 

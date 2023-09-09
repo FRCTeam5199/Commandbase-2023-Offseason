@@ -126,7 +126,7 @@ public final class Constants {
 
   // Intake
   public static final boolean ENABLE_INTAKE = true;
-  public static final boolean INTAKE_MANUAL = true;
+  public static final boolean INTAKE_MANUAL = false;
   public static final int SPIKE_OUT_ID = 11;
   public static final int SPIKE_IN_ID = 8;
   public static final int BottomIntakeMotor_ID = 54;
@@ -140,6 +140,9 @@ public final class Constants {
     public static final int FIRST_DRIVER_CONTROLLER = 0;
     public static final int SECOND_DRIVER_CONTROL_STATION = 1;
     public static final int SECOND_DRIVER_CONTROLLER = 2;
+
+    public static final int BUTTON_PANEL_1 = 2;
+    public static final int BUTTON_PANEL_2 = 3;
 
     public static final int XBOX_L_JOY_X = 0;
     public static final int XBOX_L_JOY_Y = 1;
@@ -170,7 +173,6 @@ public final class Constants {
     public static final int DRIVER_STATION_X_AXIS = 0;
     public static final int DRIVER_STATION_Y_AXIS = 1;
   }
-
 
   public static final class FieldConstants {
     public static final double length = Units.feetToMeters(54);
