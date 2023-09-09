@@ -24,7 +24,7 @@ public class SwerveMotorController {
     public SwerveMotorController(int driverID, AbstractMotorController.SupportedMotors driverMotorType, int steeringID, AbstractMotorController.SupportedMotors steeringMotorType) {
         if (driverMotorType != null) {
             driver = driverMotorType.createMotorOfType(Constants.DRIVE_MOTOR_CANBUS, driverID);
-            driver.setCurrentLimit(30);
+            driver.setCurrentLimit(40);
         }
         if (steeringMotorType != null) {
             steering = steeringMotorType.createMotorOfType(Constants.DRIVE_MOTOR_CANBUS, steeringID);
