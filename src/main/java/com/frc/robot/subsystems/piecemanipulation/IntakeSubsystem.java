@@ -13,12 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.frc.robot.Constants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-
-import javax.swing.text.StyledEditorKit;
-import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 public class IntakeSubsystem extends SubsystemBase {
     /** Creates a new BottomIntakeSubsystem. */
@@ -35,7 +31,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Boolean OnceTimer;
     public Boolean biggerIfTimer;
     public Boolean keeperSpin;
-    public Boolean stopIntake;
+    public boolean stopIntake;
 
     public Timer bottomIntakeTimer;
     public Timer spinBottomToKeep;
@@ -60,14 +56,14 @@ public class IntakeSubsystem extends SubsystemBase {
       spinBottomToKeep.start();
       bottomIntakeTimer.start();
       checkTheTimer.start();
+      intakeTimer = new Timer();
 
       stopBottomIntake = true;
       OnceTimer = false;
       spinWithCube = false;
       keeperSpin = true;
       biggerIfTimer = true;
-      double intakeTimer;
-      
+
 
       bottomPiston = new DoubleSolenoid(Constants.PCM_ID,Constants.PNEUMATICS_MODULE_TYPE, Constants.SPIKE_OUT_ID, Constants.SPIKE_IN_ID);
       bottomIntakeMotorInit();
@@ -160,7 +156,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
     public CommandBase deployPiston() {
       // return this.run(()-> System.out.println("DEPLOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"));
-      return this.run(() -> bottomPiston.set(Value.kForward));
+      return this.runOnce(() -> bottomPiston.set(Value.kForward));
     }
 
 
@@ -168,11 +164,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public CommandBase retractPiston() {
       // return this.run(()-> System.out.println("RETRACTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"));
-        int i = 0;
-        while(i < 10000){
-            i++;
-        }
-      return this.runOnce(() -> bottomPiston.set(Value.kReverse)).andThen(retractPiston());
+      return this.runOnce(() -> bottomPiston.set(Value.kReverse));
     }
 
     ////////////
@@ -221,22 +213,14 @@ public class IntakeSubsystem extends SubsystemBase {
         return run(()-> bottomIntake.moveAtPercent(1));
     }
 
-    public BooleanSupplier stopIntake(){
-        if(bottomIntake.getCurrent() > 13.5){
-            return ()-> true;
-        }else {
-            intake();
-            return ()-> false;
-        }
-
+    public Command autonIntake() {
+        currentCheck();
+        return runOnce(()-> bottomIntake.moveAtPercent(-1)).until(checkCurrent());
     }
 
-    public boolean checkCurrent(){
-      if(bottomIntake.getCurrent() > 13.5){
-        return stopIntake = true;
-      }else{
-        return stopIntake = false;
-      }
+    public BooleanSupplier checkCurrent(){
+        stopIntake = bottomIntake.getCurrent() > 13.5;
+        return ()-> stopIntake;
     }
 
     public Runnable currentCheck(){
@@ -244,20 +228,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command dropAndStop(){
-      currentCheck();
+      intakeTimer.reset();
       intakeTimer.start();
-      while(!stopIntake){
-        if(intakeTimer.get() > 3){
-          break;
-          
-        }else{
-          return intake();
-        }
-      }
-      return stopSpin().andThen(retractPiston());
+
+      return autonIntake().until(()-> intakeTimer.get() > 3);
     }
-
-
-
-
 }
