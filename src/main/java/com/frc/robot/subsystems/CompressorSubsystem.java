@@ -31,6 +31,7 @@ public class CompressorSubsystem extends SubsystemBase {
     if (Constants.PNEUMATICS_MODULE_TYPE == PneumaticsModuleType.REVPH) {
       pneumaticsHub = new PneumaticHub(Constants.PCM_ID);
       pneumaticsHub.clearStickyFaults();
+      System.out.println("Initializing Compressor");
     }
   
   }

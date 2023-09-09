@@ -10,6 +10,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import com.frc.robot.Constants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -213,10 +215,6 @@ public class IntakeSubsystem extends SubsystemBase {
         return run(()-> bottomIntake.moveAtPercent(1));
     }
 
-    public Command autonIntake() {
-        currentCheck();
-        return runOnce(()-> bottomIntake.moveAtPercent(-1)).until(checkCurrent());
-    }
 
     public BooleanSupplier checkCurrent(){
         stopIntake = bottomIntake.getCurrent() > 13.5;
@@ -231,6 +229,6 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeTimer.reset();
       intakeTimer.start();
 
-      return autonIntake().until(()-> intakeTimer.get() > 3);
+      return intake().andThen(new WaitCommand(2).andThen(stopSpin()));
     }
 }
