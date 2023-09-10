@@ -201,7 +201,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command stopSpin(){
-        return runOnce(()-> bottomIntake.moveAtPercent(0));
+        return run(()-> bottomIntake.moveAtPercent(0));
     }
 
     public Command intake(){
@@ -212,7 +212,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command outtake(){
-        return run(()-> bottomIntake.moveAtPercent(10));
+        return runOnce(()-> bottomIntake.moveAtPercent(5));
     }
 
 
