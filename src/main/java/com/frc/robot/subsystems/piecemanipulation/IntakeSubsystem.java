@@ -212,7 +212,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command outtake(){
-        return run(()-> bottomIntake.moveAtPercent(1));
+        return run(()-> bottomIntake.moveAtPercent(10));
     }
 
 

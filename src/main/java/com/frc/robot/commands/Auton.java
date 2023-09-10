@@ -155,6 +155,32 @@ public class Auton {
 
 
   
+  // public Command TaxiCubeShootWall(){
+  //   List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(1.25, 0.9));
+  //   List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back", new PathConstraints(1.25, 1));
+    
+  //   return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(0)), autoBuilder.fullAuto(pathGroup2.get(0)));
+  // }
+  /**
+   * only goes foward and cube shooter
+   * @return
+   */
+  public Command TaxiWall() {
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(1.25, 0.9));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(1),intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)));
+  }
+  
+  /**
+   * 
+   * @return only moves foward and backward on side of wall cube shooter
+   */
+  public Command TaxiCubeShoot(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi", new PathConstraints(1.25, 0.9));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Back", new PathConstraints(1.25, 1));
+    
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(1),intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)), autoBuilder.fullAuto(pathGroup2.get(0)));
+  }
+  
 
   public Command getTaxiCharge(){
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TaxiCharge", new PathConstraints(2, 1));
