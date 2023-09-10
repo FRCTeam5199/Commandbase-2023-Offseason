@@ -4,19 +4,19 @@
 
 package com.frc.robot.controls;
 
-import com.frc.robot.commands.DriveCommand;
+import static com.frc.robot.utility.NetworkTable.NtValueDisplay.ntDispTab;
+
 import com.frc.robot.Constants;
-import com.frc.robot.Constants.*;
+import com.frc.robot.commands.DriveCommand;
 import com.frc.robot.utility.NumberStepper;
 import com.frc.robot.utility.PovNumberStepper;
-import static com.frc.robot.utility.NetworkTable.NtValueDisplay.ntDispTab;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ManualControls implements DriveCommand.Controls {
   private XboxController xbox;
@@ -95,6 +95,94 @@ public class ManualControls implements DriveCommand.Controls {
 
     armTable.getEntry("overrideSoftLimits").setBoolean(false);
 
+  }
+
+  /**
+   * Constructs an event instance around the A button's digital signal.
+   *
+   * @return an event instance representing the A button's digital signal attached to the {@link
+   *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
+   * @see #a(EventLoop)
+   */
+  public Trigger a() {
+    return a(CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  /**
+   * Constructs an event instance around the A button's digital signal.
+   *
+   * @param loop the event loop instance to attach the event to.
+   * @return an event instance representing the A button's digital signal attached to the given
+   *     loop.
+   */
+  public Trigger a(EventLoop loop) {
+    return xbox.a(loop).castTo(Trigger::new);
+  }
+
+  /**
+   * Constructs an event instance around the B button's digital signal.
+   *
+   * @return an event instance representing the B button's digital signal attached to the {@link
+   *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
+   * @see #a(EventLoop)
+   */
+  public Trigger b() {
+    return b(CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  /**
+   * Constructs an event instance around the B button's digital signal.
+   *
+   * @param loop the event loop instance to attach the event to.
+   * @return an event instance representing the B button's digital signal attached to the given
+   *     loop.
+   */
+  public Trigger b(EventLoop loop) {
+    return xbox.b(loop).castTo(Trigger::new);
+  }
+
+  /**
+   * Constructs an event instance around the X button's digital signal.
+   *
+   * @return an event instance representing the X button's digital signal attached to the {@link
+   *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
+   * @see #a(EventLoop)
+   */
+  public Trigger x() {
+    return x(CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  /**
+   * Constructs an event instance around the X button's digital signal.
+   *
+   * @param loop the event loop instance to attach the event to.
+   * @return an event instance representing the X button's digital signal attached to the given
+   *     loop.
+   */
+  public Trigger x(EventLoop loop) {
+    return xbox.x(loop).castTo(Trigger::new);
+  }
+
+  /**
+   * Constructs an event instance around the Y button's digital signal.
+   *
+   * @return an event instance representing the Y button's digital signal attached to the {@link
+   *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
+   * @see #a(EventLoop)
+   */
+  public Trigger y() {
+    return y(CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  /**
+   * Constructs an event instance around the Y button's digital signal.
+   *
+   * @param loop the event loop instance to attach the event to.
+   * @return an event instance representing the Y button's digital signal attached to the given
+   *     loop.
+   */
+  public Trigger y(EventLoop loop) {
+    return xbox.y(loop).castTo(Trigger::new);
   }
 
   private static double deadband(double value, double deadband) {
