@@ -216,6 +216,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
+    public Command autonOuttake(){
+      return outtake();
+    }
+
+
     public BooleanSupplier checkCurrent(){
         stopIntake = bottomIntake.getCurrent() > 13.5;
         return ()-> stopIntake;

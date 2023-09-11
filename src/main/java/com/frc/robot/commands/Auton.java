@@ -108,7 +108,7 @@ public class Auton {
         () -> drivetrain.getOdometryPose2dNoApriltags(), // Pose2d supplier TODO: possibly revert back to no apriltags
         (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
         Constants.m_kinematics, // SwerveDriveKinematics
-        new PIDConstants(3.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(1.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
         new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
                                                           // subsystem
@@ -139,18 +139,26 @@ public class Auton {
   }
 
   public Command TaxiandLevel(){
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(1.25, .9));
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(1.5, 2));
 
-    return new SequentialCommandGroup(intake.deployPiston().withTimeout(1), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2 ), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
   }
 
   public Command TaxiCubeLevel(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge", new PathConstraints(1.25, 1));
-    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.25, .9));
-    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Move Forward a Bit", new PathConstraints(1.25, .9));
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge", new PathConstraints(2, 2));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.5, 2));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), new ChargingStationAuto(drivetrain));
+  }
+
+  public Command TaxiCubeLevel180(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge", new PathConstraints(2, 2));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.7, 2));
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("180", new PathConstraints(1, 1));
+
+    double initHeading = drivetrain.getHeading();
 
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.25), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup3)), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2.get(0)), new ChargingStationAuto(drivetrain));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), new ZeroHeading(drivetrain), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), intake.retractPiston(), new ChargingStationAuto(drivetrain), autoBuilder.fullAuto(pathGroup3),intake.autonOuttake().alongWith(new ChargingStationAuto(drivetrain)));
   }
 
 

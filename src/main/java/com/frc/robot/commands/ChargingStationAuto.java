@@ -11,6 +11,7 @@ public class ChargingStationAuto extends CommandBase {
   private double pitchOffsetDegrees;
   private double rollOffsetDegrees;
   private static final double k = 0.035 / 1.3;
+  private boolean roll;
 
   private boolean rolledOver = true;
 
@@ -36,7 +37,7 @@ public class ChargingStationAuto extends CommandBase {
   public void execute() {
     double speedMultiplier = 2;
 
-    boolean roll = Math.hypot(drivetrain.getPitch().getDegrees() - pitchOffsetDegrees, drivetrain.getRoll().getDegrees() - rollOffsetDegrees) > 1.5;
+    roll = Math.hypot(drivetrain.getPitch().getDegrees() - pitchOffsetDegrees, drivetrain.getRoll().getDegrees() - rollOffsetDegrees) > 1.5;
 
     if(!rolledOver){
       speedMultiplier = 2;
@@ -64,14 +65,13 @@ public class ChargingStationAuto extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.stopModules();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
 
-    return !DriverStation.isAutonomousEnabled();
+    return !roll || !DriverStation.isAutonomousEnabled();
   }
 }
 
