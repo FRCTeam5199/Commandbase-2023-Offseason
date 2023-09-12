@@ -5,11 +5,7 @@
 package com.frc.robot;
 
 import com.frc.robot.commands.Auton;
-import com.frc.robot.commands.CompositeCommand;
 import com.frc.robot.commands.CompressorCommand;
-
-// import java.io.File;
-
 import com.frc.robot.commands.DriveCommand;
 import com.frc.robot.controls.ManualControls;
 import com.frc.robot.controls.customcontrollers.CommandButtonPanel;
@@ -23,8 +19,11 @@ import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -36,7 +35,7 @@ public class RobotContainer {
 
   public CommandXboxController commandXboxController;
   public CommandButtonPanel buttonPanel;
-  
+
   // not public or private so Robot.java has access to it.
   public final static ArmSubsystem arm = new ArmSubsystem();
 
@@ -50,14 +49,7 @@ public class RobotContainer {
 
   public final CompressorSubsystem compressor = new CompressorSubsystem();
 
-  private final CompositeCommand compositeCommand;
-
   public final Auton auton;
-
-  private enum ArmPositionStateSelector {
-    ARMFRONT,
-    ARMBACK
-  }
 
   // final AprilTagManager tagManager = new AprilTagManager();
 
@@ -68,9 +60,6 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     driveCommand = new DriveCommand(drivetrain, manualControls);
     drivetrain.setDefaultCommand(driveCommand);
-
-    compositeCommand = new CompositeCommand(elevator, arm);
-
     compressor.init();
 
     claw.init();
@@ -96,28 +85,18 @@ public class RobotContainer {
     compressor.setDefaultCommand(compressorRun);
   }
 
-// Determine which command to run based on robot state
-  private ArmPositionStateSelector select() {
-    if (arm.isFront()) {
-      System.out.println("Arm Is Front");
-      return ArmPositionStateSelector.ARMFRONT;
-    } else {
-      System.out.println("Arm Is Back");
-      return ArmPositionStateSelector.ARMBACK;
-    }
-  }
-
   private void createControllers() {
     commandXboxController = new CommandXboxController(1);
 
     buttonPanel = new CommandButtonPanel();
   }
-      
 
   public void configureBindings() {
     if (Constants.ENABLE_CLAW) {
-      commandXboxController.a().onTrue(claw.openPiston());
-      commandXboxController.y().onTrue(claw.closePiston());
+      // commandXboxController.a().onTrue(claw.openPiston());
+      // commandXboxController.y().onTrue(claw.closePiston());
+      manualControls.a().onTrue(claw.openPiston());
+      manualControls.y().onTrue(claw.closePiston());
     }
 
     // if (Constants.ENABLE_ELEVATOR && Constants.ARM_ELEVATOR_MANUAL) {
@@ -125,118 +104,132 @@ public class RobotContainer {
     // commandXboxController.b().whileTrue(elevator.move(-1));
     // }
 
+    // Wrist 
+    SequentialCommandGroup wristCommandGroup = new SequentialCommandGroup(
+        new InstantCommand(() -> wrist.palmUp()),
+        new WaitUntilCommand(wrist::isPalmUp),
+        new InstantCommand(() -> wrist.stopRotation()),
+        new WaitCommand(0.5),
+        new InstantCommand(() -> wrist.palmDown()),
+        new WaitUntilCommand(wrist::isPalmDown),
+        new InstantCommand(() -> wrist.stopRotation())
+    );
+
     // Stable
-    ParallelCommandGroup stableCommandGroup = new ParallelCommandGroup();
-    stableCommandGroup.addCommands(
-        // (new SelectCommand(
-        //   // Maps selector values to commands
-        //   Map.ofEntries(
-        //       Map.entry(ArmPositionStateSelector.ARMFRONT, new WaitCommand(0)),
-        //       Map.entry(ArmPositionStateSelector.ARMBACK, new SequentialCommandGroup(
-        //           new InstantCommand(() -> arm.retract()),
-        //           new InstantCommand(() -> elevator.low()),
-        //           new WaitUntilCommand(() -> arm.isRetracted()),
-        //           new InstantCommand(() -> arm.rotateBack())))),
-        //   this::select)),
-        new InstantCommand(() -> arm.rotateFront()),
-        new InstantCommand(() -> elevator.low()),
-        new InstantCommand(() -> arm.retract()));
+    ConditionalCommand stableCommandGroup = new ConditionalCommand(
+        new SequentialCommandGroup(
+          new InstantCommand(() -> elevator.low()),
+          new InstantCommand(() -> arm.retract()),
+          new InstantCommand(() -> arm.rotateStable())),
+        new SequentialCommandGroup(
+          new InstantCommand(() -> arm.retract()),
+          new InstantCommand(() -> elevator.low()),
+          new InstantCommand(() -> arm.rotateStable()),
+          new InstantCommand(() -> wrist.palmDown()),
+          new WaitUntilCommand(wrist::isPalmDown),
+          new InstantCommand(() -> wrist.stopRotation())),
+        arm::isFront);
+
 
     // Human player
-    ParallelCommandGroup humanPlayerCommandGroup = new ParallelCommandGroup();
-    humanPlayerCommandGroup.addCommands(
-        // (new SelectCommand(
-        //   // Maps selector values to commands
-        //   Map.ofEntries(
-        //       Map.entry(ArmPositionStateSelector.ARMFRONT, new WaitCommand(0)),
-        //       Map.entry(ArmPositionStateSelector.ARMBACK, new SequentialCommandGroup(
-        //           new InstantCommand(() -> arm.retract()),
-        //           new InstantCommand(() -> elevator.low()),
-        //           new WaitUntilCommand(() -> arm.isRetracted()),
-        //           new InstantCommand(() -> arm.rotateBack())))),
-        //   this::select)),
-        new InstantCommand(() -> elevator.humanplayer()),
-        new InstantCommand(() -> arm.rotateHumanplayer()),
-        new InstantCommand(() -> arm.extendHumanplayer()));
-        // new InstantCommand(() -> wrist.move(1)),
-        // new WaitUntilCommand(() -> wrist.isFlipped()),
-        // new InstantCommand(() -> wrist.move(0)),
-        // new PrintCommand("Moved"));
+    ConditionalCommand humanPlayerCommandGroup = new ConditionalCommand(
+      new SequentialCommandGroup(
+        new InstantCommand(() -> elevator.humanPlayer()),
+        new InstantCommand(() -> arm.rotateHumanPlayer()),
+        new InstantCommand(() -> arm.extendHumanPlayer())),
+      new SequentialCommandGroup(
+        new InstantCommand(() -> arm.retract()),
+        new InstantCommand(() -> elevator.low()),
+        new InstantCommand(() -> arm.rotateHumanPlayer()),
+        new WaitCommand(1.5),
+        new InstantCommand(() -> elevator.humanPlayer()),
+        new InstantCommand(() -> arm.extendHumanPlayer()),
+        new InstantCommand(() -> wrist.palmDown()),
+        new WaitUntilCommand(wrist::isPalmDown),
+        new InstantCommand(() -> wrist.stopRotation())),
+      arm::isFront);
+
 
     // High goal
-    ParallelCommandGroup highGoalCommandGroup = new ParallelCommandGroup();
-    highGoalCommandGroup.addCommands(
-        // (new SelectCommand(
-        //   // Maps selector values to commands
-        //   Map.ofEntries(
-        //       Map.entry(ArmPositionStateSelector.ARMFRONT, new SequentialCommandGroup(
-        //           new InstantCommand(() -> arm.retract()),
-        //           new InstantCommand(() -> elevator.low()),
-        //           new WaitUntilCommand(() -> arm.isRetracted()),
-        //           new InstantCommand(() -> arm.rotateFront()))),
-        //       Map.entry(ArmPositionStateSelector.ARMBACK, new WaitCommand(0))),
-        //   this::select)),
+    ConditionalCommand highGoalCommandGroup = new ConditionalCommand(
+      new SequentialCommandGroup(
+        new InstantCommand(() -> elevator.low()),
+        new InstantCommand(() -> arm.retract()),
+        new InstantCommand(() -> arm.rotateHigh()),
+        new WaitCommand(1.5),
+        new InstantCommand(() -> arm.extend()),
+        new InstantCommand(() -> elevator.high()),
+        new InstantCommand(() -> wrist.palmUp()),
+        new WaitUntilCommand(wrist::isPalmUp),
+        new InstantCommand(() -> wrist.stopRotation())
+      ),
+      new SequentialCommandGroup(
         new InstantCommand(() -> elevator.high()),
         new InstantCommand(() -> arm.rotateHigh()),
-        new InstantCommand(() -> arm.extend()));
+        new InstantCommand(() -> arm.extend())
+      ),
+      arm::isFront);
 
     // Medium goal
-    ParallelCommandGroup mediumGoalCommandGroup = new ParallelCommandGroup();
-    mediumGoalCommandGroup.addCommands(
-        // (new SelectCommand(
-        //   // Maps selector values to commands
-        //   Map.ofEntries(
-        //       Map.entry(ArmPositionStateSelector.ARMFRONT, new SequentialCommandGroup(
-        //           new InstantCommand(() -> arm.retract()),
-        //           new InstantCommand(() -> elevator.low()),
-        //           new WaitUntilCommand(() -> arm.isRetracted()),
-        //           new InstantCommand(() -> arm.rotateFront()))),
-        //       Map.entry(ArmPositionStateSelector.ARMBACK, new WaitCommand(0))),
-        //   this::select)),
+    ConditionalCommand midGoalCommandGroup = new ConditionalCommand(
+      new SequentialCommandGroup(
+        new InstantCommand(() -> arm.retract()),
+        new InstantCommand(() -> elevator.low()),
+        new InstantCommand(() -> arm.rotateMedium()),
+        new WaitCommand(1.5),
+        new InstantCommand(() -> arm.extendMedium()),
+        new InstantCommand(() -> elevator.medium()),
+        new InstantCommand(() -> wrist.palmUp()),
+        new WaitUntilCommand(wrist::isPalmUp),
+        new InstantCommand(() -> wrist.stopRotation())
+      ),
+      new SequentialCommandGroup(
         new InstantCommand(() -> elevator.medium()),
         new InstantCommand(() -> arm.rotateMedium()),
-        new InstantCommand(() -> arm.extendMedium()));
+        new InstantCommand(() -> arm.extendMedium())
+      ),
+      arm::isFront);
 
     // Low goal
-    ParallelCommandGroup lowGoalCommandGroup = new ParallelCommandGroup();
-    lowGoalCommandGroup.addCommands(
-        // (new SelectCommand(
-        //   // Maps selector values to commands
-        //   Map.ofEntries( w
-        //       Map.entry(ArmPositionStateSelector.ARMFRONT, new SequentialCommandGroup(
-        //           new InstantCommand(() -> arm.retract()),
-        //           new InstantCommand(() -> elevator.low()),
-        //           new WaitUntilCommand(() -> arm.isRetracted()),
-        //           new InstantCommand(() -> arm.rotateFront()))),
-        //       Map.entry(ArmPositionStateSelector.ARMBACK, new WaitCommand(0))),
-        //   this::select)),
+    ConditionalCommand lowGoalCommandGroup = new ConditionalCommand(
+      new SequentialCommandGroup(
+        new InstantCommand(() -> arm.retract()),
         new InstantCommand(() -> elevator.low()),
         new InstantCommand(() -> arm.rotateLow()),
-        new InstantCommand(() -> arm.retract()));
+        new WaitCommand(1.5),
+        new InstantCommand(() -> arm.retract()),
+        new InstantCommand(() -> wrist.palmUp()),
+        new WaitUntilCommand(wrist::isPalmUp),
+        new InstantCommand(() -> wrist.stopRotation())
+      ),
+      new SequentialCommandGroup(
+        new InstantCommand(() -> elevator.low()),
+        new InstantCommand(() -> arm.rotateLow()),
+        new InstantCommand(() -> arm.retract())
+      ),
+      arm::isFront);
 
+
+    // Map button triggers
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
+    // buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(wristCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(mediumGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
 
-    // driveXboxController.a().onTrue(() -> System.out.println());
     // commandXboxController.povUp().onTrue(humanPlayerCommandGroup);
     // commandXboxController.leftBumper().onTrue(stableCommandGroup);
     // commandXboxController.povLeft().onTrue(highGoalCommandGroup);
     // commandXboxController.povRight().onTrue(mediumGoalCommandGroup);
     // commandXboxController.povDown().onTrue(lowGoalCommandGroup);
 
-    // commandXboxController.b().onTrue(humanPlayerCommandGroup);
-
-    // new InstantCommand(()->arm.rotateForward()),
-    // new InstantCommand(()->arm.extend())
     // if (Constants.ENABLE_ARM && Constants.ARM_ELEVATOR_MANUAL) {
-    //   commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
-    //   commandXboxController.povDown().whileTrue(arm.moveRotate(1));
+    // commandXboxController.povUp().whileTrue(arm.moveRotate(-1));
+    // commandXboxController.povDown().whileTrue(arm.moveRotate(1));
 
-    //   commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
-    //   commandXboxController.povRight().whileTrue(arm.moveExtend(20));
+    // commandXboxController.povLeft().whileTrue(arm.moveExtend(-20));
+    // commandXboxController.povRight().whileTrue(arm.moveExtend(20));
     // }
 
     if (Constants.WRIST_MANUAL && Constants.ENABLE_WRIST) {
@@ -245,18 +238,22 @@ public class RobotContainer {
     }
     // TEMPORARY ELSE STATEMENT REMOVE LATER
     // else {
-    //   commandXboxController.leftBumper().whileTrue(wrist.setSetpoint(0));
-    //   commandXboxController.rightBumper().whileTrue(wrist.setSetpoint(5));
+    // commandXboxController.leftBumper().whileTrue(wrist.setSetpoint(0));
+    // commandXboxController.rightBumper().whileTrue(wrist.setSetpoint(5));
     // }
 
     if (Constants.ENABLE_INTAKE) {
       if (Constants.INTAKE_MANUAL) {
-        commandXboxController.x().toggleOnTrue(intake.spinBottomWithLimit());
-        // commandXboxController.x().onTrue(intake.deployPiston());
-        // commandXboxController.b().onTrue(intake.retractPiston());
+        manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
 
-        commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
-        commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
+        manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
+
+        // commandXboxController.x().toggleOnTrue(intake.spinBottomWithLimit());
+        // // commandXboxController.x().onTrue(intake.deployPiston());
+        // // commandXboxController.b().onTrue(intake.retractPiston());
+
+        // commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
+        // commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
       } else {
         buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 6).toggleOnTrue(intake.spinBottomWithLimit());
 

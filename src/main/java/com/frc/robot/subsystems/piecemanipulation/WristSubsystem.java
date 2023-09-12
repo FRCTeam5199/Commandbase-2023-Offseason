@@ -1,12 +1,12 @@
 package com.frc.robot.subsystems.piecemanipulation;
 
-import com.revrobotics.CANSparkMaxLowLevel;
+import com.frc.robot.Constants;
+import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.frc.robot.Constants;
-import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
 
 public class WristSubsystem extends SubsystemBase{
     public static SparkMotorController wristMotorController;
@@ -35,7 +35,6 @@ public class WristSubsystem extends SubsystemBase{
 	}
 
     public void motorInit(){
-        wristMotorController = new SparkMotorController(com.frc.robot.Constants.WRIST_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushed);
         //wrist.setCurrentLimit(2,40);
         wristMotorController.setCurrentLimit(40);
         wristMotorController.setBrake(true);
@@ -59,15 +58,27 @@ public class WristSubsystem extends SubsystemBase{
         return this.runEnd(() -> wristMotorController.moveAtPercent(percent), () -> wristMotorController.moveAtPercent(0));
     }
 
-    public Boolean isFlipped() {
-        return wristMotorController.getRotations() > 10;
+    public void palmDown() {
+        wristMotorController.moveAtPercent(-1);
+		this.isPalmDown = true;
+	}
+    
+    public boolean isPalmDown() {
+        System.out.println("IS PALM DOWN: " +  wristMotorController.getRotations());
+        return (wristMotorController.getRotations() > 3900) || ((wristMotorController.getRotations() > 0) && (wristMotorController.getRotations() < 1000)); 
     }
 
-    // public Command flipWrist() {
-    //     return this.run(() -> wristMotorController.moveAtPercent(1)).wait(100, 0).runOnce(() -> wristMotorController.moveAtPercent(0));
-    // }
+    public void palmUp() {
+        wristMotorController.moveAtPercent(1);
+		this.isPalmDown = false;
+	}
 
-    // public Command returnWrist() {
-    //     return this.run(() -> wristMotorController.moveAtPercent(-1)).wait(100, 0).runOnce(() -> wristMotorController.moveAtPercent(0));
-    // }
+    public boolean isPalmUp() {
+        System.out.println("IS PALM UP: " +  wristMotorController.getRotations());
+        return (wristMotorController.getRotations() < 3600) && !((wristMotorController.getRotations() > 0) && (wristMotorController.getRotations() < 1000)); 
+    }
+
+    public void stopRotation() {
+        wristMotorController.moveAtPercent(0);
+    }
 }

@@ -115,8 +115,8 @@ public final class Constants {
   public static final boolean ENABLE_ARM = true;
   public static final int ARM_EXTEND_MOTOR_ID = 43;
   public static final int ARM_ROTATE_MOTOR_ID = 39;
-  public static final PID ARM_ROTATE_PID = new PID(0.01, 0, 0);
-  public static final PID ARM_EXTEND_PID = new PID(0.03, 0, 0);
+  public static final PID ARM_ROTATE_PID = new PID(0.03, 0, 0);
+  public static final PID ARM_EXTEND_PID = new PID(0.06, 0, 0);
 
   // Wrist
   public static final boolean ENABLE_WRIST = true;
@@ -126,7 +126,7 @@ public final class Constants {
 
   // Intake
   public static final boolean ENABLE_INTAKE = true;
-  public static final boolean INTAKE_MANUAL = false;
+  public static final boolean INTAKE_MANUAL = true;
   public static final int SPIKE_OUT_ID = 11;
   public static final int SPIKE_IN_ID = 8;
   public static final int BottomIntakeMotor_ID = 54;
