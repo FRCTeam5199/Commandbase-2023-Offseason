@@ -201,7 +201,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command stopSpin(){
-        return run(()-> bottomIntake.moveAtPercent(0));
+        return runOnce(()-> bottomIntake.moveAtPercent(0));
     }
 
     public Command intake(){
@@ -217,7 +217,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public Command autonOuttake(){
-      return outtake();
+      intakeTimer.reset();
+      intakeTimer.start();
+
+      return outtake().andThen(new WaitCommand(2).andThen(retractPiston()).andThen(stopSpin()));
     }
 
 
@@ -234,6 +237,6 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeTimer.reset();
       intakeTimer.start();
 
-      return intake().andThen(new WaitCommand(2).andThen(stopSpin()));
+      return intake().andThen(new WaitCommand(2).andThen(retractPiston()).andThen(stopSpin()));
     }
 }

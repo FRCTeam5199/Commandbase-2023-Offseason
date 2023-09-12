@@ -16,6 +16,7 @@ import com.frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
+import com.frc.robot.utility.TagManager;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,6 +51,13 @@ public class RobotContainer {
 
   public final CompressorSubsystem compressor = new CompressorSubsystem();
 
+<<<<<<< Updated upstream
+=======
+  public final TagManager tagManager = new TagManager();
+
+  private final CompositeCommand compositeCommand;
+
+>>>>>>> Stashed changes
   public final Auton auton;
 
   // final AprilTagManager tagManager = new AprilTagManager();
@@ -72,6 +80,8 @@ public class RobotContainer {
     wrist.init();
 
     intake.init();
+
+    tagManager.print();
 
     auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
 
@@ -271,7 +281,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return auton.TaxiWallCubeShoot();
+    return auton.TaxiCubeLevel180();
   }
 
 }

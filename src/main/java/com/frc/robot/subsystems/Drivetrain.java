@@ -18,6 +18,7 @@ import com.swervedrivespecialties.swervelib.MotorType;
 // UTIL:
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
@@ -27,8 +28,10 @@ import static com.frc.robot.Constants.*;
 
 import java.util.function.Supplier;
 
+
 import com.frc.robot.Constants;
 import com.frc.robot.utility.NetworkTable.NtValueDisplay;
+import com.frc.robot.utility.TagManager;
 
 // SWERVE:
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -55,6 +58,7 @@ public class Drivetrain extends SubsystemBase {
         public static final double MAX_VOLTAGE = 12.0;
 
         private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(GYRO_ID);
+        private final TagManager tagManager = new TagManager();
 
         private final SwerveModule m_frontLeftModule;
         private final SwerveModule m_frontRightModule;
@@ -213,8 +217,18 @@ public class Drivetrain extends SubsystemBase {
                 return getOdometryPose2dNoApriltags().getRotation();
         }
 
+
         public Pose2d getOdometryPose2dNoApriltags() {
                 return odometry.getPoseMeters();
+        }
+
+        public Pose2d getOdometryPose2dAprilTags(){
+                Pose2d deadPose = new Pose2d(new Translation2d(1, 1), new Rotation2d(1));
+                if(tagManager.getEstimatedGlobalPose() == deadPose){
+                        return getOdometryPose2dNoApriltags();
+                }else{
+                        return tagManager.getEstimatedGlobalPose();
+                }
         }
 
         public SwerveModulePosition[] getModulePositions() {
