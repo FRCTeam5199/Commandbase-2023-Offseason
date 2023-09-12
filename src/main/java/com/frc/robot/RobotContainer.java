@@ -9,6 +9,9 @@ import com.frc.robot.commands.CompressorCommand;
 import com.frc.robot.commands.DriveCommand;
 import com.frc.robot.controls.ManualControls;
 import com.frc.robot.controls.customcontrollers.CommandButtonPanel;
+import com.frc.robot.controls.customcontrollers.CommandControllerEnums.ButtonPanelButtonsElse20239199;
+import com.frc.robot.controls.customcontrollers.CommandControllerEnums.ButtonPanelButtonsPlacement2023;
+import com.frc.robot.controls.customcontrollers.CommandControllerEnums.ButtonPanelButtonsPlacement20239199;
 import com.frc.robot.subsystems.CompressorSubsystem;
 import com.frc.robot.subsystems.Drivetrain;
 import com.frc.robot.subsystems.piecemanipulation.ArmSubsystem;
@@ -51,13 +54,10 @@ public class RobotContainer {
 
   public final CompressorSubsystem compressor = new CompressorSubsystem();
 
-<<<<<<< Updated upstream
-=======
   public final TagManager tagManager = new TagManager();
 
   private final CompositeCommand compositeCommand;
 
->>>>>>> Stashed changes
   public final Auton auton;
 
   // final AprilTagManager tagManager = new AprilTagManager();
@@ -99,7 +99,7 @@ public class RobotContainer {
   private void createControllers() {
     commandXboxController = new CommandXboxController(1);
 
-    buttonPanel = new CommandButtonPanel();
+    buttonPanel = new CommandButtonPanel(Constants.ControllerIds.BUTTON_PANEL_1, Constants.ControllerIds.BUTTON_PANEL_2);
   }
 
   public void configureBindings() {
@@ -222,12 +222,12 @@ public class RobotContainer {
 
 
     // Map button triggers
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, ButtonPanelButtonsPlacement20239199.HP1).onTrue(humanPlayerCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, ButtonPanelButtonsElse20239199.Stable).onTrue(stableCommandGroup);
     // buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(wristCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, ButtonPanelButtonsElse20239199.High).onTrue(highGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, ButtonPanelButtonsElse20239199.Mid).onTrue(midGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, ButtonPanelButtonsElse20239199.Low).onTrue(lowGoalCommandGroup);
 
     // commandXboxController.povUp().onTrue(humanPlayerCommandGroup);
     // commandXboxController.leftBumper().onTrue(stableCommandGroup);
@@ -266,6 +266,8 @@ public class RobotContainer {
         // commandXboxController.b().onTrue(intake.spinOutakeOnBottom(false));
         // commandXboxController.b().onFalse(intake.spinOutakeOnBottom(true));
       } else {
+        // TODO: Change button mappings to whatever we desire.
+        // Also make sure it references ButtonPanelButtonsPlacement20239199 for Arduino #1 or ButtonPanelButtonsElse20239199 for Arduino #2
         buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 6).toggleOnTrue(intake.spinBottomWithLimit());
 
         buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 4).onTrue(intake.deployPiston());

@@ -39,4 +39,8 @@ public class CommandButtonPanel {
             return this.ports.get(this.ports.size() - 1).button(buttonID); // Reference the .button() Trigger of the latest item added at end of ports<> list
         }
     }
+
+    public Trigger button(int portID, ControllerInterfaces.IDiscreteInput buttonID){
+        return this.button(portID, buttonID.getChannel());
+    }
 }
