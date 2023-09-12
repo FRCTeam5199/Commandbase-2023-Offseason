@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   final Drivetrain drivetrain;
@@ -270,7 +271,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return auton.TaxiCubeLevel();
+    return auton.TaxiWallCubeShoot();
   }
 
 }

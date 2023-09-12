@@ -4,6 +4,7 @@
 
 package com.frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
 // WPI & REV & SYSTEM:
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -284,5 +285,18 @@ public class Drivetrain extends SubsystemBase {
         public ChassisSpeeds getChassisSpeeds() {
                 return Constants.m_kinematics.toChassisSpeeds(getStates());
         }
+
+        public double getHeading(){
+                return getGyroscopeRotationNoApriltags().getRadians();
+        }
+
+        public Command setInitHeading(){
+                return runOnce(()-> getHeading());
+        }
+
+        public Command zeroHeading(double zero){
+                return runOnce(()-> drive(new ChassisSpeeds(0,0, zero)));
+        }
+
 
 }
