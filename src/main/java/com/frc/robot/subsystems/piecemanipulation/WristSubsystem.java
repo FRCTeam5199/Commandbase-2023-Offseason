@@ -61,21 +61,17 @@ public class WristSubsystem extends SubsystemBase{
 
     public void palmDown() {
         wristMotorController.moveAtPercent(-1);
-		this.isPalmDown = true;
 	}
     
     public boolean isPalmDown() {
-        System.out.println("IS PALM DOWN: " +  wristMotorController.getRotations());
         return (wristMotorController.getRotations() > 3900) || ((wristMotorController.getRotations() > 0) && (wristMotorController.getRotations() < 1000)); 
     }
 
     public void palmUp() {
         wristMotorController.moveAtPercent(1);
-		this.isPalmDown = false;
 	}
 
     public boolean isPalmUp() {
-        System.out.println("IS PALM UP: " +  wristMotorController.getRotations());
         return (wristMotorController.getRotations() < 3600) && !((wristMotorController.getRotations() > 0) && (wristMotorController.getRotations() < 1000)); 
     }
 
