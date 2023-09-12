@@ -35,6 +35,7 @@ public class WristSubsystem extends SubsystemBase{
 	}
 
     public void motorInit(){
+        wristMotorController = new SparkMotorController(Constants.WRIST_MOTOR_ID, MotorType.kBrushed);
         //wrist.setCurrentLimit(2,40);
         wristMotorController.setCurrentLimit(40);
         wristMotorController.setBrake(true);
