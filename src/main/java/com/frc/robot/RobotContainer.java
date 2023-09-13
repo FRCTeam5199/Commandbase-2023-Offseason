@@ -268,11 +268,11 @@ public class RobotContainer {
       } else {
         // TODO: Change button mappings to whatever we desire.
         // Also make sure it references ButtonPanelButtonsPlacement20239199 for Arduino #1 or ButtonPanelButtonsElse20239199 for Arduino #2
-        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 6).toggleOnTrue(intake.spinBottomWithLimit());
+        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, ButtonPanelButtonsElse20239199.PickUp).toggleOnTrue(intake.spinBottomWithLimit());
 
-        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 4).onTrue(intake.deployPiston());
+        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, ButtonPanelButtonsElse20239199.SpikeD).onTrue(intake.deployPiston());
 
-        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());
+        buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, ButtonPanelButtonsElse20239199.SpikeU).onTrue(intake.retractPiston());
       }
     }
   }
