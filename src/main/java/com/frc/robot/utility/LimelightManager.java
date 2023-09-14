@@ -12,7 +12,7 @@ public class LimelightManager extends SubsystemBase {
 
     NetworkTableEntry valueX = limelight.getEntry("tx");
     NetworkTableEntry valueY = limelight.getEntry("ty");
-    NetworkTableEntry valueZ = limelight.getEntry("tz");
+    
 
     // public Command getTape() {
     //     return;
