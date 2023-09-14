@@ -115,6 +115,7 @@ public class RobotContainer {
               new InstantCommand(() -> arm.rotateStable())
             ),
             new SequentialCommandGroup(
+              new WaitCommand(0.5),
               new InstantCommand(() -> wrist.rotateLeft()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
@@ -141,9 +142,10 @@ public class RobotContainer {
             new InstantCommand(() -> arm.extendHumanPlayer())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateLeft()),
-              new WaitCommand(0.5),
-              new InstantCommand(() -> wrist.stopRotation())
+            new WaitCommand(0.5),
+            new InstantCommand(() -> wrist.rotateLeft()),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> wrist.stopRotation())
           )
         ),
       arm::isFront);
