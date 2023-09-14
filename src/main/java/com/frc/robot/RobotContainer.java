@@ -50,13 +50,8 @@ public class RobotContainer {
 
   public final CompressorSubsystem compressor = new CompressorSubsystem();
 
-<<<<<<< Updated upstream
-=======
   public final TagManager tagManager = new TagManager();
 
-  private final CompositeCommand compositeCommand;
-
->>>>>>> Stashed changes
   public final Auton auton;
 
   // final AprilTagManager tagManager = new AprilTagManager();
