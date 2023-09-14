@@ -115,14 +115,14 @@ public final class Constants {
   public static final boolean ENABLE_ARM = true;
   public static final int ARM_EXTEND_MOTOR_ID = 43;
   public static final int ARM_ROTATE_MOTOR_ID = 39;
-  public static final PID ARM_ROTATE_PID = new PID(0.03, 0, 0);
+  public static final PID ARM_ROTATE_PID = new PID(0.08, 0, 0);
   public static final PID ARM_EXTEND_PID = new PID(0.06, 0, 0);
 
   // Wrist
   public static final boolean ENABLE_WRIST = true;
   public static final boolean WRIST_MANUAL = false;
   public static final int WRIST_MOTOR_ID = 27;
-  public static final PID WRIST_PID = new PID(0.1, 0, 0);
+  public static final PID WRIST_PID = new PID(0.08, 0, 0);
 
   // Intake
   public static final boolean ENABLE_INTAKE = true;
