@@ -30,7 +30,7 @@ public class DriveCommand extends CommandBase {
 
     private Controls controls;
 
-    private PIDController driveRotationPIDController = new PIDController(0.06, 0.05, 0.0);
+    private PIDController driveRotationPIDController = new PIDController(0.8, 0.05, 0.0);
     private PIDController driveTranslationYPIDController = new PIDController(0.13, 0.02, 0.0);
     private PIDController driveTranslationXPIDController = new PIDController(0.13, 0.02, 0.0);
 

@@ -75,6 +75,8 @@ public class RobotContainer {
 
     intake.init();
 
+    tagManager.init();
+
     tagManager.print();
 
     auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
