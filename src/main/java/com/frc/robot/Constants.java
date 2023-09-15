@@ -69,7 +69,7 @@ public final class Constants {
   public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 5;
   public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 6;
   public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 13;
-  public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(67.9586792);
+  public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(100.0442505);
 
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
       SdsModuleConfigurations.MK4I_L2.getDriveReduction() *
@@ -115,14 +115,14 @@ public final class Constants {
   public static final boolean ENABLE_ARM = true;
   public static final int ARM_EXTEND_MOTOR_ID = 43;
   public static final int ARM_ROTATE_MOTOR_ID = 39;
-  public static final PID ARM_ROTATE_PID = new PID(0.03, 0, 0);
+  public static final PID ARM_ROTATE_PID = new PID(0.08, 0, 0);
   public static final PID ARM_EXTEND_PID = new PID(0.06, 0, 0);
 
   // Wrist
   public static final boolean ENABLE_WRIST = true;
   public static final boolean WRIST_MANUAL = false;
   public static final int WRIST_MOTOR_ID = 27;
-  public static final PID WRIST_PID = new PID(0.1, 0, 0);
+  public static final PID WRIST_PID = new PID(0.08, 0, 0);
 
   // Intake
   public static final boolean ENABLE_INTAKE = true;

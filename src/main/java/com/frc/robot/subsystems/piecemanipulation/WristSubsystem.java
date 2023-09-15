@@ -59,21 +59,17 @@ public class WristSubsystem extends SubsystemBase{
         return this.runEnd(() -> wristMotorController.moveAtPercent(percent), () -> wristMotorController.moveAtPercent(0));
     }
 
-    public void palmDown() {
+    public void rotateLeft() {
         wristMotorController.moveAtPercent(-1);
 	}
     
-    public boolean isPalmDown() {
+    public boolean rotateRight() {
         return (wristMotorController.getRotations() > 3900) || ((wristMotorController.getRotations() > 0) && (wristMotorController.getRotations() < 1000)); 
     }
 
     public void palmUp() {
         wristMotorController.moveAtPercent(1);
 	}
-
-    public boolean isPalmUp() {
-        return (wristMotorController.getRotations() < 3600) && !((wristMotorController.getRotations() > 0) && (wristMotorController.getRotations() < 1000)); 
-    }
 
     public void stopRotation() {
         wristMotorController.moveAtPercent(0);
