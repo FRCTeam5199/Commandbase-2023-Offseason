@@ -185,6 +185,8 @@ public class ManualControls implements DriveCommand.Controls {
     return xbox.y(loop).castTo(Trigger::new);
   }
 
+  public Trigger rT(EventLoop loop) {return xbox.rightTrigger(loop).castTo(Trigger::new);}
+
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
       if (value > 0.0) {

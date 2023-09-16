@@ -8,7 +8,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class DriveCommand extends CommandBase {
+
+public class PrecisionDrive extends CommandBase {
     private final Drivetrain drivetrain;
 
     /**
@@ -28,7 +29,7 @@ public class DriveCommand extends CommandBase {
         boolean driveResetGlobalPose();
     }
 
-    private Controls controls;
+    private DriveCommand.Controls controls;
 
     private PIDController driveRotationPIDController = new PIDController(1, 0.05, 0.0);
     private PIDController driveTranslationYPIDController = new PIDController(0.13, 0.02, 0.0);
@@ -42,7 +43,7 @@ public class DriveCommand extends CommandBase {
      * @param drivetrainSubsystem the `Drivetrain` subsystem used by the command
      * @param controls            the controls for the command
      */
-    public DriveCommand(Drivetrain drivetrainSubsystem, Controls controls) {
+    public PrecisionDrive(Drivetrain drivetrainSubsystem, DriveCommand.Controls controls) {
         this.drivetrain = drivetrainSubsystem;
         this.controls = controls;
 
@@ -78,9 +79,9 @@ public class DriveCommand extends CommandBase {
 
         drivetrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        -controls.driveX(),
-                        -controls.driveY(),
-                        controls.driveRotationX(),
+                        -Math.pow(controls.driveX(), 5),
+                        -Math.pow(controls.driveY(), 5),
+                        Math.pow(controls.driveRotationX(), 5),
                         drivetrain.getGyroscopeRotationNoApriltags())); // perhaps use getRawGyroRotation() instead?
     }
 
@@ -88,6 +89,7 @@ public class DriveCommand extends CommandBase {
     public void end(boolean interrupted) {
         drivetrain.stopModules();
     }
+
 
 
 }
