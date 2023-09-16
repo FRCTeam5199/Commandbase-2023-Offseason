@@ -239,4 +239,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
       return intake().andThen(new WaitCommand(2).andThen(retractPiston()).andThen(stopSpin()));
     }
+
+    public Command fastOutake(){
+      bottomIntake.setCurrentLimit(50);
+      return this.run(()-> bottomIntake.moveAtPercent(100));
+      
+    }
 }
