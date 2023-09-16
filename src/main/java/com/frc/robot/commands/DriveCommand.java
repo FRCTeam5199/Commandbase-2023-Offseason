@@ -17,6 +17,8 @@ public class DriveCommand extends CommandBase {
     public static interface Controls {
         double driveX();
 
+        boolean rT();
+
         double driveY();
 
         double driveRotationX();
@@ -75,13 +77,21 @@ public class DriveCommand extends CommandBase {
         if (controls.driveResetGlobalPose())
             drivetrain.resetOdometry(new Pose2d());
 
-
-        drivetrain.drive(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        -controls.driveX(),
-                        -controls.driveY(),
-                        controls.driveRotationX(),
-                        drivetrain.getGyroscopeRotationNoApriltags())); // perhaps use getRawGyroRotation() instead?
+        if(controls.rT()){
+            drivetrain.drive(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                            -controls.driveX()/10,
+                            -controls.driveY()/10,
+                            controls.driveRotationX(),
+                            drivetrain.getGyroscopeRotationNoApriltags()));
+        }else {
+            drivetrain.drive(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                            -controls.driveX(),
+                            -controls.driveY(),
+                            controls.driveRotationX(),
+                            drivetrain.getGyroscopeRotationNoApriltags()));
+        }// perhaps use getRawGyroRotation() instead?
     }
 
     @Override

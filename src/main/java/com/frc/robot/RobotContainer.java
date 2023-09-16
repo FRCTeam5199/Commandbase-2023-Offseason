@@ -7,7 +7,6 @@ package com.frc.robot;
 import com.frc.robot.commands.Auton;
 import com.frc.robot.commands.CompressorCommand;
 import com.frc.robot.commands.DriveCommand;
-import com.frc.robot.commands.PrecisionDrive;
 import com.frc.robot.controls.ManualControls;
 import com.frc.robot.controls.customcontrollers.CommandButtonPanel;
 import com.frc.robot.subsystems.CompressorSubsystem;
@@ -20,7 +19,6 @@ import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import com.frc.robot.utility.TagManager;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -32,7 +30,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   final Drivetrain drivetrain;
   private final DriveCommand driveCommand;
-  private final PrecisionDrive precisionDrive;
 
   private final ManualControls manualControls = new ManualControls(new XboxController(0));
 
@@ -63,12 +60,9 @@ public class RobotContainer {
    */
   public RobotContainer() {
     drivetrain = new Drivetrain();
-    precisionDrive = new PrecisionDrive(drivetrain, manualControls);
     driveCommand = new DriveCommand(drivetrain, manualControls);
     drivetrain.setDefaultCommand(driveCommand);
-    if(manualControls.rT().onTrue()){
-        drivetrain.setDefaultCommand(precisionDrive);
-    }
+
     compressor.init();
 
     claw.init();
@@ -246,6 +240,7 @@ public class RobotContainer {
         manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
         manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
     }
+
 
   }
 
