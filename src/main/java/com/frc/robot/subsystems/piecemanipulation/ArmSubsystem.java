@@ -127,6 +127,11 @@ public class ArmSubsystem extends SubsystemBase {
 		extendPIDController.setSetpoint(2.5);
 		this.isRetracted = false;
 	}
+	
+	public void extendLow() {
+		extendPIDController.setSetpoint(4);
+		this.isRetracted = true;
+	}
 
 	public void extendHumanPlayer() {
 		extendPIDController.setSetpoint(7);
