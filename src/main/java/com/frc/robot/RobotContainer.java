@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   final Drivetrain drivetrain;
@@ -115,8 +114,7 @@ public class RobotContainer {
               new InstantCommand(() -> arm.rotateStable())
             ),
             new SequentialCommandGroup(
-              new WaitCommand(0.5),
-              new InstantCommand(() -> wrist.rotateLeft()),
+              new InstantCommand(() -> wrist.moveLeft()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
             )
@@ -142,10 +140,9 @@ public class RobotContainer {
             new InstantCommand(() -> arm.extendHumanPlayer())
           ),
           new SequentialCommandGroup(
-            new WaitCommand(0.5),
-            new InstantCommand(() -> wrist.rotateLeft()),
-            new WaitCommand(0.5),
-            new InstantCommand(() -> wrist.stopRotation())
+              new InstantCommand(() -> wrist.moveLeft()),
+              new WaitCommand(0.5),
+              new InstantCommand(() -> wrist.stopRotation())
           )
         ),
       arm::isFront);
@@ -163,7 +160,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.high())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -188,7 +185,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.medium())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -209,10 +206,10 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateLow()),
             new WaitCommand(0.8),
-            new InstantCommand(() -> arm.retract())
+            new InstantCommand(() -> arm.extendLow())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -220,7 +217,7 @@ public class RobotContainer {
         new ParallelCommandGroup(
           new InstantCommand(() -> elevator.low()),
           new InstantCommand(() -> arm.rotateLow()),
-          new InstantCommand(() -> arm.retract())
+          new InstantCommand(() -> arm.extendLow())
         ),
       arm::isFront);
 
