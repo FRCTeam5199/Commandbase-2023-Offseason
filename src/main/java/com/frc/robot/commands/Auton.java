@@ -32,6 +32,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -40,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 
 /**
  * 
@@ -78,7 +80,7 @@ public class Auton {
   private ElevatorSubsystem elevator;
   private ClawSubsystem claw;
   private WristSubsystem wrist;
-
+  public SendableChooser<Command> autonChooser = new SendableChooser<>();
 
   private SwerveAutoBuilder teleopAutoBuilder;
 
@@ -100,6 +102,8 @@ public class Auton {
     this.wrist = wrist;
 
     eventMap = new HashMap<>();
+
+
     
     // eventMap.put("PLACE_CONE_HIGH", new RunCommand( () ->
     // arm.setArmState(ArmPose.HIGH_CONE), arm).until( () ->
@@ -132,6 +136,15 @@ public class Auton {
         drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
+    autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
+
+    Shuffleboard.getTab("Auton").add(autonChooser);
+
+  }
+
+  public Command getAuton(){
+    return autonChooser.getSelected();
+
   }
   
   public Command getAutoCommand(String pathName) {
@@ -141,7 +154,7 @@ public class Auton {
   }
 
   public Command TaxiandLevel(){
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(1.5, 2));
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level Red", new PathConstraints(1.5, 2));
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2 ), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
   }

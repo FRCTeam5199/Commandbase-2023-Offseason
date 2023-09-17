@@ -19,6 +19,7 @@ import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import com.frc.robot.utility.TagManager;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import com.frc.robot.utility.UserInterface;
 
 import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
 
@@ -38,6 +40,8 @@ public class RobotContainer {
 
   // public CommandXboxController commandXboxController;
   public CommandButtonPanel buttonPanel;
+
+  public UserInterface uI;
 
   // not public or private so Robot.java has access to it.
   public final static ArmSubsystem arm = new ArmSubsystem();
@@ -67,6 +71,8 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     driveCommand = new DriveCommand(drivetrain, manualControls);
     drivetrain.setDefaultCommand(driveCommand);
+
+    uI = new UserInterface();
 
     compressor.init();
 
@@ -265,7 +271,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return auton.RedTaxiCubeLevel180();
+    
+    return auton.getAuton();
   }
 
 }

@@ -6,7 +6,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+
 import com.frc.robot.AbstractMotorInterfaces.AbstractMotorController;
 import com.frc.robot.Constants;
 
@@ -18,10 +21,13 @@ public class UserInterface {
     public static NetworkTable autoDataTable = instance.getTable("autodata");
     public static NetworkTableEntry autoPath = autoDataTable.getEntry("autoPath");
 
+
     private static NetworkTable position = autoDataTable.getSubTable("position");
     public static NetworkTableEntry xPos = position.getEntry("x");
     public static NetworkTableEntry yPos = position.getEntry("y");
     public static NetworkTableEntry enabled = autoDataTable.getEntry("enabled");
+
+    
 
     //TABS
     public static final ShuffleboardTab DRIVE_TAB = Shuffleboard.getTab("drive"),
@@ -32,9 +38,12 @@ public class UserInterface {
             AUTON_TAB = Shuffleboard.getTab("Auton"),
             CAMERA_TAB = Shuffleboard.getTab("Camera");
 
+    
+
     //LAYOUTS
     public static final ShuffleboardLayout DRIVE_PID_LAYOUT = DRIVE_TAB.getLayout("PID", BuiltInLayouts.kList).withProperties(Map.of("Label position", "LEFT")).withSize(2, 3),
             PDP_SETTINGS_LAYOUT = ROBOT_TAB.getLayout("PowerDistribution", BuiltInLayouts.kList).withProperties(Map.of("Label position", "LEFT")).withSize(2, 1);
+        
 
     //DRIVETRAIN
     public static final SimpleWidget
@@ -60,9 +69,11 @@ public class UserInterface {
             DRIVE_SPEED = DRIVE_TAB.add("Drivebase Speed", 0).withWidget(BuiltInWidgets.kDial).withProperties(Map.of("Min", 0, "Max", 20)),
     //PowerDistribution
     PDP_BROWNOUT_MIN_OVERRIDE = PDP_SETTINGS_LAYOUT.add("Settings Override", false).withWidget(BuiltInWidgets.kToggleSwitch),
+
             PDP_BROWNOUT_MIN_VAL = PDP_SETTINGS_LAYOUT.add("Minimum Brownout Voltage", 9),
     //DANGER PANEL
     GET_RANDOM_FIX = ROBOT_TAB.add("Get random fix", false).withWidget(BuiltInWidgets.kToggleButton);
+
     public static final HashMap<AbstractMotorController, SimpleWidget> motorTemperatureMonitors = new HashMap<>();
 
     //STATIC STUFF
@@ -97,5 +108,6 @@ public class UserInterface {
             camera.setResolution(640, 480);
             //UserInterface.SMART_DASHBOARD.add("CameraViewer", camera);
         }
+
     }
 }
