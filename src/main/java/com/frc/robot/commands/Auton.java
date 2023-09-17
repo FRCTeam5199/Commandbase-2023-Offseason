@@ -135,8 +135,16 @@ public class Auton {
         false,
         drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
     );
-
-    autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
+    //Autons must be manually entered into the auton chooser
+    autonChooser.setDefaultOption("Red Taxi Cube Level", RedTaxiCubeLevel());
+    autonChooser.addOption("Blue Taxi Cube Level", BlueTaxiCubeLevel());
+    autonChooser.addOption("Red Taxi Cube Level 180", RedTaxiCubeLevel180());
+    autonChooser.addOption("Blue Taxi Cube Level 180", BlueTaxiCubeLevel180());
+    autonChooser.addOption("Red Taxi Over Charge", RedTaxiOverCharge());
+    autonChooser.addOption("Blue Taxi Over Charge", BlueTaxiOverCharge());
+    autonChooser.addOption("Red Taxi Over Charge Level", RedTaxiOverChargeLevel());
+    autonChooser.addOption("Blue Taxi Over Charge Level", BlueTaxiOverChargeLevel());
+  
 
     Shuffleboard.getTab("Auton").add(autonChooser);
 
