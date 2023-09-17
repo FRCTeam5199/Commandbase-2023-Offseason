@@ -17,6 +17,7 @@ import com.pathplanner.lib.PathPlannerTrajectory.StopEvent.ExecutionBehavior;
 import com.pathplanner.lib.PathPlannerTrajectory.StopEvent.WaitBehavior;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.frc.robot.subsystems.Drivetrain;
 import com.frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
@@ -55,6 +56,7 @@ public class Auton {
    * A HashMap containing "marker" events and corresponding actions.
    */
   private HashMap<String, Command> eventMap;
+
 
 
   /**
@@ -98,7 +100,7 @@ public class Auton {
     this.wrist = wrist;
 
     eventMap = new HashMap<>();
-    eventMap.put("printCommand", new PrintCommand("test Print command"));
+    
     // eventMap.put("PLACE_CONE_HIGH", new RunCommand( () ->
     // arm.setArmState(ArmPose.HIGH_CONE), arm).until( () ->
     // arm.isArmAtSetpoint()));
@@ -122,7 +124,7 @@ public class Auton {
         (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
         Constants.m_kinematics, // SwerveDriveKinematics
         new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-        new PIDConstants(0.6, 0.1, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        new PIDConstants(1.0, 0.1, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
                                                           // subsystem
         eventMap,
@@ -144,7 +146,8 @@ public class Auton {
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2 ), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
   }
 
-  public Command TaxiCubeLevel(){
+  
+  public Command RedTaxiCubeLevel(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge Red", new PathConstraints(2, 2));
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.5, 2));
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), new ChargingStationAuto(drivetrain));
@@ -160,20 +163,32 @@ public class Auton {
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), new ZeroHeading(drivetrain), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), intake.retractPiston(), new ChargingStationAuto180(drivetrain), autoBuilder.fullAuto(pathGroup3),intake.autonOuttake().alongWith(new ChargingStationAuto(drivetrain)));
   }
-
-
   
-  // public Command TaxiCubeShootWall(){
-  //   List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(1.25, 0.9));
-  //   List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back", new PathConstraints(1.25, 1));
-    
-  //   return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(0)), autoBuilder.fullAuto(pathGroup2.get(0)));
-  // }
+
+  public Command RedTaxiOverCharge(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge Red", new PathConstraints(1, 1));
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1));
+  }
+
+  public Command BlueTaxiOverCharge(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge Blue", new PathConstraints(1, 1));
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1));
+  }
+
+  public Command RedTaxiOverChargeLevel(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Taxi and Level Red", new PathConstraints(1, 1));
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1), new ChargingStationAuto(drivetrain));
+  }
+  public Command BlueTaxiOverChargeLevel(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Taxi and Level Blue", new PathConstraints(1, 1));
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1), new ChargingStationAuto(drivetrain));
+  }
+  
   /**
    * only goes foward and cube shooter
    * @return
    */
-  public Command TaxiWall() {
+  public Command RedTaxiWall() {
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(1.25, 0.9));
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(1),intake.retractPiston(), autoBuilder.fullAuto(pathGroup1.get(0)));
   }
@@ -182,7 +197,7 @@ public class Auton {
    * 
    * @return only moves foward and backward on side of wall cube shooter
    */
-  public Command TaxiWallCube(){
+  public Command RedTaxiWallCube(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(1.25, 0.9));
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back", new PathConstraints(1.25, 1));
     
@@ -192,13 +207,68 @@ public class Auton {
    * 
    * @return moves foward and backwards cube shooter and picks up cube and scores
    */
-  public Command TaxiWallCubeShoot(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(1.25, 0.9));
-    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn End", new PathConstraints(1.25, 1));
+  public Command RedTaxiWallCubeShootFake(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(2,1.5 ));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn End dif", new PathConstraints(2, 1.5));
+    
+    return new SequentialCommandGroup( autoBuilder.fullAuto(pathGroup1.get(0)), autoBuilder.fullAuto(pathGroup2.get(0)));
+    
+  }
+  public Command RedTaxiWallCubeShoot(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(2,1.5 ));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn End dif", new PathConstraints(2, 1.5));
     
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.25), autoBuilder.fullAuto(pathGroup1.get(0)).alongWith(intake.intake()), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2.get(0)), intake.outtake(), new WaitCommand(.50), intake.stopSpin());
   }
-  
+  public Command FastRedTaxiWallCubeShoot(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(3,3 ));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn End", new PathConstraints(2, 1.5));
+    
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.25), autoBuilder.fullAuto(pathGroup1.get(0)).alongWith(intake.intake()), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2.get(0)), intake.outtake(), new WaitCommand(.50), intake.stopSpin());
+  }
+  public Command RedTaxiWallCubeShootCube(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(3,3 ));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn End dif", new PathConstraints(2, 1.5));
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn Cube", new PathConstraints(2, 1.5));
+    eventMap.put("event1", intake.deployPiston());
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.25), autoBuilder.fullAuto(pathGroup1.get(0)).alongWith(intake.intake()), 
+    intake.retractPiston(), autoBuilder.fullAuto(pathGroup2.get(0)), intake.outtake(), new WaitCommand(.50), intake.stopSpin());
+  }
+  public Command RedTaxiWallCubeShootCubeShoot(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(3,3 ));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn End dif", new PathConstraints(2, 1.5));
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn cube", new PathConstraints(2, 1.5));
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Red Taxi Wall Back Turn cube end", new PathConstraints(2, 1.5));
+    
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(0)),autoBuilder.fullAuto(pathGroup2.get(0)),autoBuilder.fullAuto(pathGroup3.get(0)), autoBuilder.fullAuto(pathGroup4.get(0)));
+  }
+  public Command RedTaxiHP(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi HP",new PathConstraints(1.25, 1));
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(0)));
+  }
+
+  public Command BlueTaxiHP(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi HP",new PathConstraints(1.25, 0.9));
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(1)));
+  }  
+  public Command BlueTaxiWallCubeShoot(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Wall", new PathConstraints(1.25,0.9 ));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Blue Taxi Wall Back", new PathConstraints(1.25, 0.9));
+    
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.25), autoBuilder.fullAuto(pathGroup1.get(0)).alongWith(intake.intake()), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2.get(0)), intake.outtake(), new WaitCommand(.50), intake.stopSpin());
+  }
+  public Command BlueTaxiWallCubeShootFake(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Wall", new PathConstraints(1.25,0.9 ));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Blue Taxi Wall Back", new PathConstraints(1.25, 0.9));
+    
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(0)), autoBuilder.fullAuto(pathGroup2.get(0)));
+  }
+
+  public Command BlueTaxiHPCubeShootFake(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi HP",new PathConstraints(1.25, 0.9));
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Blue Taxi HP Back",new PathConstraints(1.25, 0.9));
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(1)), autoBuilder.fullAuto(pathGroup2.get(0)));
+  }
 
 
   public Command getTaxiCharge(){
@@ -209,7 +279,6 @@ public class Auton {
       new ChargingStationAuto(drivetrain)
     );
   }
-
 
 
   public Command getCharge(){

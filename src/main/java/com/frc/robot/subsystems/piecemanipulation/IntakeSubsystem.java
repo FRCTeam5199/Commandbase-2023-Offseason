@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import com.frc.robot.Constants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
+import com.pathplanner.lib.PathPlannerTrajectory.StopEvent;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -156,7 +158,7 @@ public class IntakeSubsystem extends SubsystemBase {
         }
       }
     
-    public CommandBase deployPiston() {
+    public Command deployPiston() {
       // return this.run(()-> System.out.println("DEPLOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"));
       return this.runOnce(() -> bottomPiston.set(Value.kForward));
     }
