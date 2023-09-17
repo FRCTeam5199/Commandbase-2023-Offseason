@@ -54,22 +54,22 @@ public final class CompConstants {
   public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
   public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2;
   public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 11;
-  public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(23);
+  public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(21.2056275);//23
 
   public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 3;
   public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 4;
   public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 12;
-  public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(206);
+  public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(206.202392578125);//206
 
   public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
   public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8;
   public static final int BACK_LEFT_MODULE_STEER_ENCODER = 14;
-  public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(171);
+  public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(170.859619140625);//171
 
   public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 5;
   public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 6;
   public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 13;
-  public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(245);
+  public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(248.00712890624997);//245
 
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
       SdsModuleConfigurations.MK4I_L2.getDriveReduction() *
