@@ -138,15 +138,30 @@ public class Auton {
     //Autons must be manually entered into the auton chooser
     autonChooser.setDefaultOption("Red Taxi Cube Level", RedTaxiCubeLevel());
     autonChooser.addOption("Blue Taxi Cube Level", BlueTaxiCubeLevel());
+    autonChooser.addOption("Red Taxi Wall", RedTaxiWall());
+    autonChooser.addOption("Blue Taxi Wall", BlueTaxiWall());
+    autonChooser.addOption("Red Taxi Wall Cube", RedTaxiWallCube());
+    autonChooser.addOption("Red Taxi Wall Cube Shoot", RedTaxiWallCubeShoot());
+    autonChooser.addOption("Blue Taxi Wall Cube Shoot", BlueTaxiWallCubeShoot());
     autonChooser.addOption("Red Taxi Cube Level 180", RedTaxiCubeLevel180());
     autonChooser.addOption("Blue Taxi Cube Level 180", BlueTaxiCubeLevel180());
     autonChooser.addOption("Red Taxi Over Charge", RedTaxiOverCharge());
     autonChooser.addOption("Blue Taxi Over Charge", BlueTaxiOverCharge());
     autonChooser.addOption("Red Taxi Over Charge Level", RedTaxiOverChargeLevel());
     autonChooser.addOption("Blue Taxi Over Charge Level", BlueTaxiOverChargeLevel());
+    autonChooser.addOption("Red Taxi Wall Cube Shoot Fake", RedTaxiWallCubeShootFake());
+    autonChooser.addOption("Blue Taxi HP Cube Shoot Fake", BlueTaxiHPCubeShootFake());
+    autonChooser.addOption("Fast Blue Taxi Wall Cube Shoot", FastBlueTaxiWallCubeShoot());
+    autonChooser.addOption("Red Taxi Wall Cube Shoot Cube", RedTaxiWallCubeShootCube());
+    autonChooser.addOption("Red Taxi Wall Cube Shoot Cube Shoot", RedTaxiWallCubeShootCubeShoot());
+    autonChooser.addOption("Red Taxi HP", RedTaxiHP());
+    autonChooser.addOption("Red Taxi HP Cube", RedTaxiHPCube());
   
 
-    Shuffleboard.getTab("Auton").add(autonChooser);
+    Shuffleboard.getTab("Auton").add("Auton Style",autonChooser)
+            .withWidget(BuiltInWidgets.kComboBoxChooser)
+            .withPosition(0, 0)
+            .withSize(2, 1);;
 
   }
 
