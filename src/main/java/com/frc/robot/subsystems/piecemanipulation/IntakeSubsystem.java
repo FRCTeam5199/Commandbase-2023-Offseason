@@ -247,4 +247,8 @@ public class IntakeSubsystem extends SubsystemBase {
       return this.run(()-> bottomIntake.moveAtPercent(100));
       
     }
+
+    public Command slowIntake(){
+        return this.runOnce(() ->bottomIntake.moveAtPercent(-.05));
+    }
 }

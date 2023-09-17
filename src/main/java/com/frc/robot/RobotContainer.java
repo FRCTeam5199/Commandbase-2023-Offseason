@@ -19,12 +19,15 @@ import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import com.frc.robot.utility.TagManager;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+
+import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -52,6 +55,8 @@ public class RobotContainer {
   public final TagManager tagManager = new TagManager();
 
   public final Auton auton;
+
+  SendableChooser<Command> autonChooser = new SendableChooser<>();
 
   // final AprilTagManager tagManager = new AprilTagManager();
 
@@ -90,6 +95,16 @@ public class RobotContainer {
     CompressorCommand compressorRun = new CompressorCommand(compressor);
 
     compressor.setDefaultCommand(compressorRun);
+
+      autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
+      autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
+      autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
+      autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
+      autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
+
+
+
+      ROBOT_TAB.add(autonChooser);
   }
 
   private void createControllers() {
@@ -250,7 +265,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return auton.TaxiCubeLevel180();
+    return autonChooser.getSelected();
   }
 
 }
