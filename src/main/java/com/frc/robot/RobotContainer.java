@@ -154,7 +154,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.extendStable()),
             new InstantCommand(() -> arm.rotateHigh()),
-            new WaitCommand(/*0.8*/0.1),
+            new WaitCommand(/*0.8*/0.2),
             new InstantCommand(() -> arm.extendHigh()),
             new InstantCommand(() -> elevator.high())
           ),
@@ -179,7 +179,7 @@ public class RobotContainer {
             new InstantCommand(() -> arm.extendStable()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateMid()),
-            new WaitCommand(0.8),
+            new WaitCommand(0.2), // 0.8
             new InstantCommand(() -> arm.extendMid()),
             new InstantCommand(() -> elevator.mid())
           ),
@@ -201,11 +201,11 @@ public class RobotContainer {
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
-            new InstantCommand(() -> arm.extendStable()),
+            new InstantCommand(() -> arm.extendMid()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateLow()),
-            new WaitCommand(0.8),
-            new InstantCommand(() -> arm.extendStable())
+            new WaitCommand(0.2), // 0.8
+            new InstantCommand(() -> arm.extendMid())
           ),
           new SequentialCommandGroup(
               new InstantCommand(() -> wrist.moveRight()),
@@ -216,7 +216,7 @@ public class RobotContainer {
         new ParallelCommandGroup(
           new InstantCommand(() -> elevator.low()),
           new InstantCommand(() -> arm.rotateLow()),
-          new InstantCommand(() -> arm.extendStable())
+          new InstantCommand(() -> arm.extendMid())
         ),
         arm::isFront
       );

@@ -118,7 +118,7 @@ public final class CompConstants {
     public static final int ARM_EXTEND_MOTOR_ID = 43;
     public static final int ARM_ROTATE_MOTOR_ID = 39;
     public static final PID ARM_ROTATE_PID = new PID(0.005, 0, 0); // 0.08
-    public static final PID ARM_EXTEND_PID = new PID(0.01, 0, 0); // 0.05
+    public static final PID ARM_EXTEND_PID = new PID(0.05, 0, 0); // 0.05
 
     // Wrist
     public static final boolean ENABLE_WRIST = true;
@@ -141,22 +141,22 @@ public final class CompConstants {
 
   public static final class Setpoints { 
     // Arm
-    public static final double ARM_ROTATE_SETPOINT_HUMANPLAYER = 22;
+    public static final double ARM_ROTATE_SETPOINT_HUMANPLAYER = 23;
     public static final double ARM_ROTATE_SETPOINT_STABLE = 0;
-    public static final double ARM_ROTATE_SETPOINT_HIGH = -60;
-    public static final double ARM_ROTATE_SETPOINT_MID = -44;
+    public static final double ARM_ROTATE_SETPOINT_HIGH = -63;
+    public static final double ARM_ROTATE_SETPOINT_MID = -60;
     public static final double ARM_ROTATE_SETPOINT_LOW = -75;
-    
-    public static final double ARM_EXTEND_SETPOINT_HUMANPLAYER = 7;
-    public static final double ARM_EXTEND_SETPOINT_STABLE = 0;
-    public static final double ARM_EXTEND_SETPOINT_HIGH = 23;
-    public static final double ARM_EXTEND_SETPOINT_MID = 2.5;
+
+    public static final double ARM_EXTEND_SETPOINT_HUMANPLAYER = 11;
+    public static final double ARM_EXTEND_SETPOINT_STABLE = 6;
+    public static final double ARM_EXTEND_SETPOINT_HIGH = 28;
+    public static final double ARM_EXTEND_SETPOINT_MID = 0;
     // public static final double ARM_EXTEND_SETPOINT_LOW = 27;
     
     //Elevator
     public static final double ELEVATOR_SETPOINT_HUMANPLAYER = 34;
     public static final double ELEVATOR_SETPOINT_HIGH = 36;
-    public static final double ELEVATOR_SETPOINT_MID = 4;
+    public static final double ELEVATOR_SETPOINT_MID = 13;
     public static final double ELEVATOR_SETPOINT_LOW = 0;
   }
 
