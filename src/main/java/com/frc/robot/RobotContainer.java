@@ -27,8 +27,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-
-
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   final Drivetrain drivetrain;
@@ -99,54 +97,54 @@ public class RobotContainer {
   }
 
   public void configureBindings() {
-// Stable command composition
-ConditionalCommand stableCommandGroup = 
-new ConditionalCommand(
-    new ParallelCommandGroup(
-      new InstantCommand(() -> elevator.low()),
-      new InstantCommand(() -> arm.retract()),
-      new InstantCommand(() -> arm.rotateStable())
-    ),
-    new ParallelCommandGroup(
-      new SequentialCommandGroup(
-        new InstantCommand(() -> arm.retract()),
-        new InstantCommand(() -> elevator.low()),
-        new InstantCommand(() -> arm.rotateStable())
+    // Stable command composition
+    ConditionalCommand stableCommandGroup = 
+    new ConditionalCommand(
+        new ParallelCommandGroup(
+          new InstantCommand(() -> elevator.low()),
+          new InstantCommand(() -> arm.extendStable()),
+          new InstantCommand(() -> arm.rotateStable())
+        ),
+        new ParallelCommandGroup(
+          new SequentialCommandGroup(
+            new InstantCommand(() -> arm.extendStable()),
+            new InstantCommand(() -> elevator.low()),
+            new InstantCommand(() -> arm.rotateStable())
+          ),
+          new SequentialCommandGroup(
+            new InstantCommand(() -> wrist.moveLeft()),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> wrist.stopRotation())
+          )
+        ),
+      arm::isFront
+    );
+
+    // Human player command composition
+    ConditionalCommand humanPlayerCommandGroup = 
+    new ConditionalCommand(
+      new ParallelCommandGroup(
+        new InstantCommand(() -> elevator.humanPlayer()),
+        new InstantCommand(() -> arm.rotateHumanPlayer()),
+        new InstantCommand(() -> arm.extendHumanPlayer())
       ),
-      new SequentialCommandGroup(
-        new InstantCommand(() -> wrist.rotateLeft()),
-        new WaitCommand(0.5),
-        new InstantCommand(() -> wrist.stopRotation())
-      )
-    ),
-  arm::isFront
-);
-
-// Human player command composition
-ConditionalCommand humanPlayerCommandGroup = 
-new ConditionalCommand(
-  new ParallelCommandGroup(
-    new InstantCommand(() -> elevator.humanPlayer()),
-    new InstantCommand(() -> arm.rotateHumanPlayer()),
-    new InstantCommand(() -> arm.extendHumanPlayer())
-  ),
-  new ParallelCommandGroup(
-    new SequentialCommandGroup(
-      new InstantCommand(() -> arm.retract()),
-      new InstantCommand(() -> elevator.low()),
-      new InstantCommand(() -> arm.rotateHumanPlayer()),
-      new WaitCommand(0.8),
-      new InstantCommand(() -> elevator.humanPlayer()),
-      new InstantCommand(() -> arm.extendHumanPlayer())
-    ),
-    new SequentialCommandGroup(
-        new InstantCommand(() -> wrist.rotateLeft()),
-        new WaitCommand(0.5),
-        new InstantCommand(() -> wrist.stopRotation())
-    )
-  ),
-      arm::isFront);
-
+      new ParallelCommandGroup(
+        new SequentialCommandGroup(
+          new InstantCommand(() -> arm.extendStable()),
+          new InstantCommand(() -> elevator.low()),
+          new InstantCommand(() -> arm.rotateHumanPlayer()),
+          new WaitCommand(0.8),
+          new InstantCommand(() -> elevator.humanPlayer()),
+          new InstantCommand(() -> arm.extendHumanPlayer())
+        ),
+        new SequentialCommandGroup(
+            new InstantCommand(() -> wrist.moveLeft()),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> wrist.stopRotation())
+        )
+      ),
+      arm::isFront
+    );
 
     // High goal command composition
     ConditionalCommand highGoalCommandGroup = 
@@ -154,14 +152,14 @@ new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
             new InstantCommand(() -> elevator.low()),
-            new InstantCommand(() -> arm.retract()),
+            new InstantCommand(() -> arm.extendStable()),
             new InstantCommand(() -> arm.rotateHigh()),
-            new WaitCommand(0.8),
-            new InstantCommand(() -> arm.extend()),
+            new WaitCommand(/*0.8*/0.1),
+            new InstantCommand(() -> arm.extendHigh()),
             new InstantCommand(() -> elevator.high())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -169,7 +167,7 @@ new ConditionalCommand(
         new ParallelCommandGroup(
           new InstantCommand(() -> elevator.high()),
           new InstantCommand(() -> arm.rotateHigh()),
-          new InstantCommand(() -> arm.extend())
+          new InstantCommand(() -> arm.extendHigh())
         ),
       arm::isFront);
 
@@ -178,23 +176,23 @@ new ConditionalCommand(
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
-            new InstantCommand(() -> arm.retract()),
+            new InstantCommand(() -> arm.extendStable()),
             new InstantCommand(() -> elevator.low()),
-            new InstantCommand(() -> arm.rotateMedium()),
+            new InstantCommand(() -> arm.rotateMid()),
             new WaitCommand(0.8),
-            new InstantCommand(() -> arm.extendMedium()),
-            new InstantCommand(() -> elevator.medium())
+            new InstantCommand(() -> arm.extendMid()),
+            new InstantCommand(() -> elevator.mid())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
         ),
         new ParallelCommandGroup(
-          new InstantCommand(() -> elevator.medium()),
-          new InstantCommand(() -> arm.rotateMedium()),
-          new InstantCommand(() -> arm.extendMedium())
+          new InstantCommand(() -> elevator.mid()),
+          new InstantCommand(() -> arm.rotateMid()),
+          new InstantCommand(() -> arm.extendMid())
         ),
       arm::isFront);
 
@@ -203,14 +201,14 @@ new ConditionalCommand(
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
-            new InstantCommand(() -> arm.retract()),
+            new InstantCommand(() -> arm.extendStable()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateLow()),
             new WaitCommand(0.8),
-            new InstantCommand(() -> arm.retract())
+            new InstantCommand(() -> arm.extendStable())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -218,30 +216,35 @@ new ConditionalCommand(
         new ParallelCommandGroup(
           new InstantCommand(() -> elevator.low()),
           new InstantCommand(() -> arm.rotateLow()),
-          new InstantCommand(() -> arm.retract())
+          new InstantCommand(() -> arm.extendStable())
         ),
-      arm::isFront);
+        arm::isFront
+      );
 
 
     // Map position commands to button panel triggers
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
+
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 4).onTrue(intake.deployPiston());
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());
 
     // Map claw commands toxbox controler triggers
-    if (Constants.ENABLE_CLAW) {
+    if (CompConstants.Piecemanipulation.ENABLE_CLAW) {
       manualControls.a().onTrue(claw.openPiston());
       manualControls.y().onTrue(claw.closePiston());
     }
-    
+
     // Map claw commands toxbox controler triggers
-    if (Constants.ENABLE_INTAKE) {
-      manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
-      manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
+    if (CompConstants.Piecemanipulation.ENABLE_INTAKE) {
+      // manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
+      // manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
+
+      // manualCotntrols.b().on
       }
-      
     }
 
   /**

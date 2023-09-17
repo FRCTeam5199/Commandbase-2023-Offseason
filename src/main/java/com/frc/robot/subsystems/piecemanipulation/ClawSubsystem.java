@@ -1,10 +1,11 @@
 package com.frc.robot.subsystems.piecemanipulation;
 
+import com.frc.robot.CompConstants;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.frc.robot.Constants;
 
 public class ClawSubsystem extends SubsystemBase {
   private DoubleSolenoid clawPiston;
@@ -13,7 +14,7 @@ public class ClawSubsystem extends SubsystemBase {
   public ClawSubsystem() {}
 
   public void init() {
-    System.out.println("Claw - init()");
+    // System.out.println("Claw - init()");
     pneumaticsInit();
   }
 
@@ -28,16 +29,16 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void pneumaticsInit() {
-    System.out.println("Claw - pneumaticsInit()");
+    // System.out.println("Claw - pneumaticsInit()");
 
-    clawPiston = new DoubleSolenoid(Constants.PCM_ID,Constants.PNEUMATICS_MODULE_TYPE, Constants.CLAW_IN_ID, Constants.CLAW_OUT_ID);
+    clawPiston = new DoubleSolenoid(CompConstants.PCM_ID, CompConstants.PNEUMATICS_MODULE_TYPE, CompConstants.Piecemanipulation.CLAW_IN_ID, CompConstants.Piecemanipulation.CLAW_OUT_ID);
   }
 
   /**
    * Opens the Claw piston
    */
   public Command openPiston() {
-    System.out.println("Claw - Opening Piston...");
+    // System.out.println("Claw - Opening Piston...");
     return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kForward));
   }
 
@@ -45,7 +46,7 @@ public class ClawSubsystem extends SubsystemBase {
    * Closes the Claw piston
    */
   public Command closePiston() {
-    System.out.println("Claw - Closing Piston...");
+    // System.out.println("Claw - Closing Piston...");
     return this.runOnce(() -> clawPiston.set(DoubleSolenoid.Value.kReverse));
   }
 }

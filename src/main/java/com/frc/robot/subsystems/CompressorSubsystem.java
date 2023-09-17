@@ -7,7 +7,7 @@ package com.frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.*;
 
@@ -28,8 +28,8 @@ public class CompressorSubsystem extends SubsystemBase {
   }
 
   public void init() {
-    if (Constants.PNEUMATICS_MODULE_TYPE == PneumaticsModuleType.REVPH) {
-      pneumaticsHub = new PneumaticHub(Constants.PCM_ID);
+    if (CompConstants.PNEUMATICS_MODULE_TYPE == PneumaticsModuleType.REVPH) {
+      pneumaticsHub = new PneumaticHub(CompConstants.PCM_ID);
       pneumaticsHub.clearStickyFaults();
     }
   

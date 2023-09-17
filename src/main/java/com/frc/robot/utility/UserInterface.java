@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.frc.robot.AbstractMotorInterfaces.AbstractMotorController;
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,7 +92,7 @@ public class UserInterface {
             MUSIC_SELECTOR = MUSICK_TAB.add("SongSelector", Chirp.MUSIC_SELECTION).withWidget(BuiltInWidgets.kComboBoxChooser);
         }*/
 
-        if (Constants.ENABLE_CAMERA) {
+        if (CompConstants.ENABLE_CAMERA) {
             UsbCamera camera = CameraServer.startAutomaticCapture(0);
             camera.setResolution(640, 480);
             //UserInterface.SMART_DASHBOARD.add("CameraViewer", camera);

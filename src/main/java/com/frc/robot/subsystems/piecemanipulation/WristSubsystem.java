@@ -1,6 +1,6 @@
 package com.frc.robot.subsystems.piecemanipulation;
 
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -14,7 +14,7 @@ public class WristSubsystem extends SubsystemBase{
 
     public void init(){
         motorInit();
-        if (!Constants.WRIST_MANUAL) {
+        if (!CompConstants.Piecemanipulation.WRIST_MANUAL) {
             PIDInit();
         }
 
@@ -24,9 +24,9 @@ public class WristSubsystem extends SubsystemBase{
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-        if (!Constants.ENABLE_WRIST) {
-		    wristMotorController.moveAtPercent(wristPIDController.calculate(wristMotorController.getRotations()));
-        }
+        // if (!Constants.Piecemanipulation.ENABLE_WRIST) {
+		    // wristMotorController.moveAtPercent(wristPIDController.calculate(wristMotorController.getRotations()));
+        // }
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class WristSubsystem extends SubsystemBase{
 	}
 
     public void motorInit(){
-        wristMotorController = new SparkMotorController(Constants.WRIST_MOTOR_ID, MotorType.kBrushed);
+        wristMotorController = new SparkMotorController(CompConstants.Piecemanipulation.WRIST_MOTOR_ID, MotorType.kBrushed);
         //wrist.setCurrentLimit(2,40);
         wristMotorController.setCurrentLimit(40);
         wristMotorController.setBrake(true);
@@ -44,7 +44,7 @@ public class WristSubsystem extends SubsystemBase{
     }
 
     public void PIDInit() {
-        wristPIDController = new PIDController(Constants.WRIST_PID.P, Constants.WRIST_PID.I, Constants.WRIST_PID.D);
+        wristPIDController = new PIDController(CompConstants.Piecemanipulation.WRIST_PID.P, CompConstants.Piecemanipulation.WRIST_PID.I, CompConstants.Piecemanipulation.WRIST_PID.D);
     }
 
     public Command resetEncoder() {
@@ -59,18 +59,14 @@ public class WristSubsystem extends SubsystemBase{
         return this.runEnd(() -> wristMotorController.moveAtPercent(percent), () -> wristMotorController.moveAtPercent(0));
     }
 
-    public void rotateLeft() {
-        wristMotorController.moveAtPercent(-1);
+    public void moveLeft() {
+        wristMotorController.moveAtPercent(-0.7);
 	}
     
-    public boolean rotateRight() {
-        return (wristMotorController.getRotations() > 3900) || ((wristMotorController.getRotations() > 0) && (wristMotorController.getRotations() < 1000)); 
-    }
-
-    public void palmUp() {
-        wristMotorController.moveAtPercent(1);
+    public void moveRight() {
+        wristMotorController.moveAtPercent(0.7);
 	}
-
+    
     public void stopRotation() {
         wristMotorController.moveAtPercent(0);
     }

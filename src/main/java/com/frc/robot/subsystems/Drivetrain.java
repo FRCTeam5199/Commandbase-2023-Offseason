@@ -24,12 +24,12 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
-import static com.frc.robot.Constants.*;
+import static com.frc.robot.CompConstants.*;
 
 import java.util.function.Supplier;
 
 
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import com.frc.robot.utility.NetworkTable.NtValueDisplay;
 import com.frc.robot.utility.TagManager;
 
@@ -297,7 +297,7 @@ public class Drivetrain extends SubsystemBase {
         }
 
         public ChassisSpeeds getChassisSpeeds() {
-                return Constants.m_kinematics.toChassisSpeeds(getStates());
+                return CompConstants.m_kinematics.toChassisSpeeds(getStates());
         }
 
         public double getHeading(){

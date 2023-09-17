@@ -6,7 +6,7 @@ package com.frc.robot.controls;
 
 import static com.frc.robot.utility.NetworkTable.NtValueDisplay.ntDispTab;
 
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import com.frc.robot.commands.DriveCommand;
 import com.frc.robot.utility.NumberStepper;
 import com.frc.robot.utility.PovNumberStepper;
@@ -58,15 +58,15 @@ public class ManualControls implements DriveCommand.Controls {
       this.controlStation = controlStation;
 
     this.speed = new PovNumberStepper(
-        new NumberStepper(Constants.MAX_VELOCITY_METERS_PER_SECOND * 0.4, 0.0,
-            Constants.MAX_VELOCITY_METERS_PER_SECOND * 0.6, Constants.MAX_VELOCITY_METERS_PER_SECOND * 0.025),
+        new NumberStepper(CompConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.4, 0.0,
+            CompConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.6, CompConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.025),
         xbox,
         PovNumberStepper.PovDirection.VERTICAL);
 
     this.turnSpeed = new PovNumberStepper(
-        new NumberStepper(Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.175, 0.0,
-            Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.15,
-            Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.0025),
+        new NumberStepper(CompConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.175, 0.0,
+            CompConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.15,
+            CompConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.0025),
         xbox,
         PovNumberStepper.PovDirection.HORIZONTAL);
     

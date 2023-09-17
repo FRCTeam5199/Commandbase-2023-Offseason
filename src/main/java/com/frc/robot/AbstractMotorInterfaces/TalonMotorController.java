@@ -26,7 +26,7 @@ public class TalonMotorController extends AbstractMotorController {
         super();
         motor = new WPI_TalonFX(id, bus);
 
-        sensorToRealDistanceFactor = 1D / com.frc.robot.Constants.CTRE_SENSOR_UNITS_PER_ROTATION;
+        sensorToRealDistanceFactor = 1D / com.frc.robot.CompConstants.CTRE_SENSOR_UNITS_PER_ROTATION;
         sensorToRealTimeFactor = 60D * 10D / 1D;
     }
 
@@ -87,7 +87,7 @@ public class TalonMotorController extends AbstractMotorController {
 
     @Override
     public void setRealFactorFromMotorRPM(double r2rf, double t2tf) {
-        sensorToRealDistanceFactor = r2rf / com.frc.robot.Constants.CTRE_SENSOR_UNITS_PER_ROTATION;
+        sensorToRealDistanceFactor = r2rf / com.frc.robot.CompConstants.CTRE_SENSOR_UNITS_PER_ROTATION;
         sensorToRealTimeFactor = t2tf * 60D * 10D / 1D;
     }
 

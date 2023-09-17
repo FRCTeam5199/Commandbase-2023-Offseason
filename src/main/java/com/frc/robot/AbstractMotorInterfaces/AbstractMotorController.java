@@ -231,14 +231,14 @@ public abstract class AbstractMotorController {
      * @return invert {@link #isOverheated}
      */
     protected boolean isTemperatureAcceptable() {
-        if (com.frc.robot.Constants.ENABLE_OVERHEAT_DETECTION) {
-            if (getMotorTemperature() >= com.frc.robot.Constants.OVERHEAT_THRESHOLD) {
+        if (com.frc.robot.CompConstants.ENABLE_OVERHEAT_DETECTION) {
+            if (getMotorTemperature() >= com.frc.robot.CompConstants.OVERHEAT_THRESHOLD) {
                 if (!isOverheated) {
                     UserInterface.smartDashboardPutBoolean("OVERHEAT " + getID(), false);
                     isOverheated = true;
                 }
             } //wait 5 degrees to unoverheat
-            else if (isOverheated && getMotorTemperature() < com.frc.robot.Constants.OVERHEAT_THRESHOLD - 5) {
+            else if (isOverheated && getMotorTemperature() < com.frc.robot.CompConstants.OVERHEAT_THRESHOLD - 5) {
                 isOverheated = false;
                 UserInterface.smartDashboardPutBoolean("OVERHEAT " + getID(), true);
             }

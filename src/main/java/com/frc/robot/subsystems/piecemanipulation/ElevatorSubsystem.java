@@ -3,7 +3,7 @@ package com.frc.robot.subsystems.piecemanipulation;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -14,7 +14,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 	public void init() {
 		motorInit();
-        if (!Constants.ARM_ELEVATOR_MANUAL) {
+        if (!CompConstants.Piecemanipulation.ARM_ELEVATOR_MANUAL) {
 			PIDInit();
 		}
 
@@ -24,7 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-        if (!Constants.ARM_ELEVATOR_MANUAL) {
+        if (!CompConstants.Piecemanipulation.ARM_ELEVATOR_MANUAL) {
 			elevatorMotorController.moveAtPercent(elevatorPIDController.calculate(elevatorMotorController.getRotations()));
 		}
 	}
@@ -35,12 +35,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
 	public void motorInit() {
-		elevatorMotorController = new SparkMotorController(Constants.ELEVATOR_MOTOR_ID);
+		elevatorMotorController = new SparkMotorController(CompConstants.Piecemanipulation.ELEVATOR_MOTOR_ID);
         elevatorMotorController.setBrake(true);
 	}
 
     public void PIDInit() {
-		elevatorPIDController = new PIDController(Constants.ARM_ROTATE_PID.P, Constants.ARM_ROTATE_PID.I, Constants.ARM_ROTATE_PID.D);
+		elevatorPIDController = new PIDController(CompConstants.Piecemanipulation.ELEVATOR_PID.P, CompConstants.Piecemanipulation.ELEVATOR_PID.I, CompConstants.Piecemanipulation.ELEVATOR_PID.D);
     }
 
 	public Command resetEncoder() {
@@ -52,19 +52,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
 	public void humanPlayer() {
-		elevatorPIDController.setSetpoint(34);
+		elevatorPIDController.setSetpoint(CompConstants.Setpoints.ELEVATOR_SETPOINT_HUMANPLAYER);
+	}
+	
+	public void high() {
+		elevatorPIDController.setSetpoint(CompConstants.Setpoints.ELEVATOR_SETPOINT_HIGH);
+	}
+	
+	public void mid() {
+		elevatorPIDController.setSetpoint(CompConstants.Setpoints.ELEVATOR_SETPOINT_MID);
 	}
 
 	public void low() {
-		elevatorPIDController.setSetpoint(0);
-	}
-
-	public void medium() {
-		elevatorPIDController.setSetpoint(4);
-	}
-
-	public void high() {
-		elevatorPIDController.setSetpoint(36);
+		elevatorPIDController.setSetpoint(CompConstants.Setpoints.ELEVATOR_SETPOINT_LOW);
 	}
 
 	/**

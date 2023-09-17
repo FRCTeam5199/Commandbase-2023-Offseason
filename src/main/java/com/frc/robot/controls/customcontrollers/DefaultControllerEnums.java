@@ -1,6 +1,6 @@
 package com.frc.robot.controls.customcontrollers;
 
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 
 public class DefaultControllerEnums {
 

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -40,7 +40,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public Timer checkTheTimer;
     public Timer intakeTimer;
   
-
     public IntakeSubsystem() {}
 
     @Override
@@ -66,14 +65,10 @@ public class IntakeSubsystem extends SubsystemBase {
       keeperSpin = true;
       biggerIfTimer = true;
 
-
-      bottomPiston = new DoubleSolenoid(Constants.PCM_ID,Constants.PNEUMATICS_MODULE_TYPE, Constants.SPIKE_OUT_ID, Constants.SPIKE_IN_ID);
+      bottomPiston = new DoubleSolenoid(CompConstants.PCM_ID, CompConstants.PNEUMATICS_MODULE_TYPE, CompConstants.Piecemanipulation.SPIKE_OUT_ID, CompConstants.Piecemanipulation.SPIKE_IN_ID);
       bottomIntakeMotorInit();
       bottomIntake.setBrake(true);
       bottomIntake.setCurrentLimit(10);
-      
-      
-
     }
 
     // public boolean getBottomIntakeStop() {
@@ -82,8 +77,8 @@ public class IntakeSubsystem extends SubsystemBase {
     // }
 
     public void bottomIntakeMotorInit() {
-      if (Constants.RobotNum == 5199) {
-        bottomIntake = new SparkMotorController(Constants.BottomIntakeMotor_ID, MotorType.kBrushed);
+      if (CompConstants.RobotNum == 5199) {
+        bottomIntake = new SparkMotorController(CompConstants.Piecemanipulation.BottomIntakeMotor_ID, MotorType.kBrushed);
       }
       // if (Constants.RobotNum == 9199) {
       //   bottomIntake = new Victor

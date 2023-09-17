@@ -20,13 +20,13 @@ public class VictorMotorController extends AbstractMotorController {
         super();
         motor = new VictorSPX(id);
 
-        sensorToRealDistanceFactor = 1 / com.frc.robot.Constants.CTRE_SENSOR_UNITS_PER_ROTATION;
+        sensorToRealDistanceFactor = 1 / com.frc.robot.CompConstants.CTRE_SENSOR_UNITS_PER_ROTATION;
         sensorToRealTimeFactor = 60D * 10D / 1D;
     }
 
     @Override
     public void setRealFactorFromMotorRPM(double r2rf, double t2tf) {
-        sensorToRealDistanceFactor = r2rf / com.frc.robot.Constants.CTRE_SENSOR_UNITS_PER_ROTATION;
+        sensorToRealDistanceFactor = r2rf / com.frc.robot.CompConstants.CTRE_SENSOR_UNITS_PER_ROTATION;
         sensorToRealTimeFactor = t2tf * 60D * 10D / 1D;
     }
 

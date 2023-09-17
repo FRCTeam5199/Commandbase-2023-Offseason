@@ -1,6 +1,6 @@
 package com.frc.robot.subsystems.piecemanipulation;
 
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -37,11 +37,11 @@ public class ArmSubsystem extends SubsystemBase {
 		// if (!Constants.ARM_ELEVATOR_MANUAL) {
 		rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
 		if (extendMotorController.getRotations() < 1000) {
-			extendMotorController.moveAtPercent(extendPIDController.calculate(extendMotorController.getRotations()));
+			extendMotorController.moveAtPercent(-extendPIDController.calculate(extendMotorController.getRotations()));
 		} else {
-			extendMotorController.moveAtPercent(5);
+			extendMotorController.moveAtPercent(-5);
 		}
-		// }P
+		// }
 	}
 
 	@Override
@@ -50,18 +50,18 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void motorInit() {
-		rotateMotorController = new SparkMotorController(Constants.ARM_ROTATE_MOTOR_ID, MotorType.kBrushless);
-		extendMotorController = new SparkMotorController(Constants.ARM_EXTEND_MOTOR_ID, MotorType.kBrushed);
+		rotateMotorController = new SparkMotorController(CompConstants.Piecemanipulation.ARM_ROTATE_MOTOR_ID, MotorType.kBrushless);
+		extendMotorController = new SparkMotorController(CompConstants.Piecemanipulation.ARM_EXTEND_MOTOR_ID, MotorType.kBrushed);
 
 		rotateMotorController.setBrake(true);
 		extendMotorController.setBrake(true);
 	}
 
 	public void PIDInit() {
-		rotatePIDController = new PIDController(Constants.ARM_ROTATE_PID.P, Constants.ARM_ROTATE_PID.I,
-				Constants.ARM_ROTATE_PID.D);
-		extendPIDController = new PIDController(Constants.ARM_EXTEND_PID.P, Constants.ARM_EXTEND_PID.I,
-				Constants.ARM_EXTEND_PID.D);
+		rotatePIDController = new PIDController(CompConstants.Piecemanipulation.ARM_ROTATE_PID.P, CompConstants.Piecemanipulation.ARM_ROTATE_PID.I,
+				CompConstants.Piecemanipulation.ARM_ROTATE_PID.D);
+		extendPIDController = new PIDController(CompConstants.Piecemanipulation.ARM_EXTEND_PID.P, CompConstants.Piecemanipulation.ARM_EXTEND_PID.I,
+				CompConstants.Piecemanipulation.ARM_EXTEND_PID.D);
 	}
 
 	public Command resetRotateEncoder() {
@@ -98,49 +98,49 @@ public class ArmSubsystem extends SubsystemBase {
 				() -> extendMotorController.moveAtPercent(0));
 	}
 
-	public void rotateStable() {
-		rotatePIDController.setSetpoint(0);
+	public void rotateHumanPlayer() {
+		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_HUMANPLAYER);
 		this.isFront = true;
 	}
 
-	public void rotateHumanPlayer() {
-		rotatePIDController.setSetpoint(35);
+	public void rotateStable() {
+		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_STABLE);
 		this.isFront = true;
 	}
 
 	public void rotateHigh() {
-		rotatePIDController.setSetpoint(-105);
+		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_HIGH);
 		this.isFront = false;
 	}
 
-	public void rotateMedium() {
-		rotatePIDController.setSetpoint(-89);
+	public void rotateMid() {
+		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_MID);
 		this.isFront = false;
 	}
 
 	public void rotateLow() {
-		rotatePIDController.setSetpoint(-120);
+		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_LOW);
 		this.isFront = false;
 	}
-
-	public void extendMedium() {
-		extendPIDController.setSetpoint(2.5);
-		this.isRetracted = false;
-	}
-
+	
 	public void extendHumanPlayer() {
-		extendPIDController.setSetpoint(7);
+		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_HUMANPLAYER);
 		this.isRetracted = false;
 	}
-
-	public void extend() {
-		extendPIDController.setSetpoint(23);
-		this.isRetracted = false;
-	}
-
-	public void retract() {
-		extendPIDController.setSetpoint(5);
+	
+	public void extendStable() {
+		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_STABLE);
 		this.isRetracted = true;
+	}
+
+	public void extendHigh() {
+		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_HIGH);
+		this.isRetracted = false;
+	}
+
+	public void extendMid() {
+		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_MID);
+		this.isRetracted = false;
 	}
 
 	public boolean isFront() {

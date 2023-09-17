@@ -23,7 +23,7 @@ import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.ArmSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 import com.frc.robot.subsystems.CompressorSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -107,7 +107,7 @@ public class Auton {
     autoBuilder = new SwerveAutoBuilder(
         () -> drivetrain.getOdometryPose2dAprilTags(), // Pose2d supplier TODO: possibly revert back to no apriltags
         (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
-        Constants.m_kinematics, // SwerveDriveKinematics
+        CompConstants.m_kinematics, // SwerveDriveKinematics
         new PIDConstants(1.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
         new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
@@ -120,7 +120,7 @@ public class Auton {
     teleopAutoBuilder = new SwerveAutoBuilder(
         () -> drivetrain.getPose(), // Pose2d supplier
         (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
-        Constants.m_kinematics, // SwerveDriveKinematics
+        CompConstants.m_kinematics, // SwerveDriveKinematics
         new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
         new PIDConstants(0.6, 0.1, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive

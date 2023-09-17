@@ -1,6 +1,6 @@
 package com.frc.robot.AbstractMotorInterfaces;
 
-import com.frc.robot.Constants;
+import com.frc.robot.CompConstants;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -23,11 +23,11 @@ public class SwerveMotorController {
      */
     public SwerveMotorController(int driverID, AbstractMotorController.SupportedMotors driverMotorType, int steeringID, AbstractMotorController.SupportedMotors steeringMotorType) {
         if (driverMotorType != null) {
-            driver = driverMotorType.createMotorOfType(Constants.DRIVE_MOTOR_CANBUS, driverID);
+            driver = driverMotorType.createMotorOfType(CompConstants.DRIVE_MOTOR_CANBUS, driverID);
             driver.setCurrentLimit(40);
         }
         if (steeringMotorType != null) {
-            steering = steeringMotorType.createMotorOfType(Constants.DRIVE_MOTOR_CANBUS, steeringID);
+            steering = steeringMotorType.createMotorOfType(CompConstants.DRIVE_MOTOR_CANBUS, steeringID);
             steering.setCurrentLimit(30);
         }
     }

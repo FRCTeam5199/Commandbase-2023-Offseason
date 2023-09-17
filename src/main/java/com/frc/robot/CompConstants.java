@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class CompConstants {
 
   public static final int robotNum = 5199;
 
@@ -104,37 +104,61 @@ public final class Constants {
   // Compressor
   public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
 
-  // Subsystems
-  public static final boolean ARM_ELEVATOR_MANUAL = false;
+  public static final class Piecemanipulation {
+    // Subsystems
+    public static final boolean ARM_ELEVATOR_MANUAL = false;
 
-  // Elevator
-  public static final boolean ENABLE_ELEVATOR = true;
-  public static final int ELEVATOR_MOTOR_ID = 40;
-  
-  // Arm
-  public static final boolean ENABLE_ARM = true;
-  public static final int ARM_EXTEND_MOTOR_ID = 43;
-  public static final int ARM_ROTATE_MOTOR_ID = 39;
-  public static final PID ARM_ROTATE_PID = new PID(0.08, 0, 0);
-  public static final PID ARM_EXTEND_PID = new PID(0.06, 0, 0);
+    // Elevator
+    public static final boolean ENABLE_ELEVATOR = true;
+    public static final int ELEVATOR_MOTOR_ID = 40;
+    public static final PID ELEVATOR_PID = new PID(0.01, 0, 0); // 0.08
+    
+    // Arm
+    public static final boolean ENABLE_ARM = true;
+    public static final int ARM_EXTEND_MOTOR_ID = 43;
+    public static final int ARM_ROTATE_MOTOR_ID = 39;
+    public static final PID ARM_ROTATE_PID = new PID(0.005, 0, 0); // 0.08
+    public static final PID ARM_EXTEND_PID = new PID(0.01, 0, 0); // 0.05
 
-  // Wrist
-  public static final boolean ENABLE_WRIST = true;
-  public static final boolean WRIST_MANUAL = false;
-  public static final int WRIST_MOTOR_ID = 27;
-  public static final PID WRIST_PID = new PID(0.08, 0, 0);
+    // Wrist
+    public static final boolean ENABLE_WRIST = true;
+    public static final boolean WRIST_MANUAL = false;
+    public static final int WRIST_MOTOR_ID = 27;
+    public static final PID WRIST_PID = new PID(0.03, 0, 0); // 0.08
 
-  // Intake
-  public static final boolean ENABLE_INTAKE = true;
-  public static final boolean INTAKE_MANUAL = true;
-  public static final int SPIKE_OUT_ID = 11;
-  public static final int SPIKE_IN_ID = 8;
-  public static final int BottomIntakeMotor_ID = 54;
+    // Intake
+    public static final boolean ENABLE_INTAKE = true;
+    public static final boolean INTAKE_MANUAL = true;
+    public static final int SPIKE_OUT_ID = 11;
+    public static final int SPIKE_IN_ID = 8;
+    public static final int BottomIntakeMotor_ID = 54;
 
-  // Claw
-  public static final boolean ENABLE_CLAW = true;
-  public static final int CLAW_IN_ID = 9;
-  public static final int CLAW_OUT_ID = 10;
+    // Claw
+    public static final boolean ENABLE_CLAW = true;
+    public static final int CLAW_IN_ID = 9;
+    public static final int CLAW_OUT_ID = 10;
+  }
+
+  public static final class Setpoints { 
+    // Arm
+    public static final double ARM_ROTATE_SETPOINT_HUMANPLAYER = 22;
+    public static final double ARM_ROTATE_SETPOINT_STABLE = 0;
+    public static final double ARM_ROTATE_SETPOINT_HIGH = -60;
+    public static final double ARM_ROTATE_SETPOINT_MID = -44;
+    public static final double ARM_ROTATE_SETPOINT_LOW = -75;
+    
+    public static final double ARM_EXTEND_SETPOINT_HUMANPLAYER = 7;
+    public static final double ARM_EXTEND_SETPOINT_STABLE = 0;
+    public static final double ARM_EXTEND_SETPOINT_HIGH = 23;
+    public static final double ARM_EXTEND_SETPOINT_MID = 2.5;
+    // public static final double ARM_EXTEND_SETPOINT_LOW = 27;
+    
+    //Elevator
+    public static final double ELEVATOR_SETPOINT_HUMANPLAYER = 34;
+    public static final double ELEVATOR_SETPOINT_HIGH = 36;
+    public static final double ELEVATOR_SETPOINT_MID = 4;
+    public static final double ELEVATOR_SETPOINT_LOW = 0;
+  }
 
   public static final class ControllerIds {
     public static final int FIRST_DRIVER_CONTROLLER = 0;
