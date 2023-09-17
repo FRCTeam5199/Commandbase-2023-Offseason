@@ -72,8 +72,6 @@ public class RobotContainer {
     driveCommand = new DriveCommand(drivetrain, manualControls);
     drivetrain.setDefaultCommand(driveCommand);
 
-    uI = new UserInterface();
-
     compressor.init();
 
     claw.init();
@@ -258,8 +256,9 @@ public class RobotContainer {
 
     // Map claw commands toxbox controler triggers
     if (Constants.ENABLE_INTAKE) {
-        manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
+        // manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
         manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
+        manualControls.b().onTrue(intake.fastOutake()).onFalse((intake.stopSpin()));
     }
 
 
@@ -271,7 +270,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    
     return auton.getAuton();
   }
 
