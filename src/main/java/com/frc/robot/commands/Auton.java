@@ -23,6 +23,7 @@ import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.ArmSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
+import com.frc.robot.utility.UserInterface;
 import com.frc.robot.CompConstants;
 import com.frc.robot.subsystems.CompressorSubsystem;
 
@@ -31,6 +32,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -39,6 +43,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+
+import static com.frc.robot.utility.UserInterface.AUTON_TAB;
 
 /**
  * 
@@ -70,6 +76,7 @@ public class Auton {
    * An instance of Drivetrain that represents the drive subsystem.
    */
   private Drivetrain drivetrain;
+  private SendableChooser<Command> autonChooser;
 
   private ArmSubsystem arm;
   private IntakeSubsystem intake;
@@ -96,6 +103,7 @@ public class Auton {
     this.elevator = elevator;
     this.claw = claw;
     this.wrist = wrist;
+    autonChooser = new SendableChooser<>();
 
     eventMap = new HashMap<>();
     eventMap.put("printCommand", new PrintCommand("test Print command"));
@@ -129,9 +137,25 @@ public class Auton {
         false,
         drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
     );
+    
+    // List of auton options, must be manually edited
+    autonChooser.setDefaultOption("Taxi Wall", TaxiWall());
+    autonChooser.addOption("Taxi and Level", TaxiandLevel());
+    autonChooser.addOption("Taxi Cube Level", TaxiCubeLevel());
+    autonChooser.addOption("Taxi Cube Level 180", TaxiCubeLevel180());
+    autonChooser.addOption("Taxi Wall Cube", TaxiWallCube());
+    autonChooser.addOption("Taxi Wall Cube Shoot", TaxiWallCubeShoot());
+
+    Shuffleboard.getTab("Auton").add("Auton Style", autonChooser)
+            .withWidget(BuiltInWidgets.kComboBoxChooser)
+            .withPosition(0, 0)
+            .withSize(2, 1);;
 
   }
-  
+
+  public Command getAuton() {
+    return autonChooser.getSelected();
+  }
   public Command getAutoCommand(String pathName) {
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(pathName, new PathConstraints(1.5, 0.75));
 
@@ -139,7 +163,7 @@ public class Auton {
   }
 
   public Command TaxiandLevel(){
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level", new PathConstraints(1.5, 2));
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Taxi and Level Red", new PathConstraints(1.5, 2));
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2 ), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
   }
@@ -151,7 +175,7 @@ public class Auton {
   }
 
   public Command TaxiCubeLevel180(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge", new PathConstraints(2, 2));
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge Red", new PathConstraints(2, 2));
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.7, 2));
     List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("180", new PathConstraints(1, 1));
 

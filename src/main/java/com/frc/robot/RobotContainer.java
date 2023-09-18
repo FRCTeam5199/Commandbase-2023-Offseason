@@ -18,6 +18,7 @@ import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import com.frc.robot.utility.TagManager;
 
+import com.frc.robot.utility.UserInterface;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -51,6 +52,7 @@ public class RobotContainer {
   public final CompressorSubsystem compressor = new CompressorSubsystem();
 
   public final TagManager tagManager = new TagManager();
+  public UserInterface uI;
 
   public final Auton auton;
 
@@ -78,6 +80,7 @@ public class RobotContainer {
     tagManager.print();
 
     auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
+    uI = new UserInterface();
 
     // tagManager.init();
 
@@ -253,7 +256,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return auton.TaxiCubeLevel180();
+    return auton.getAuton();
   }
 
 }
