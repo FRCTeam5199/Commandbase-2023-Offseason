@@ -150,7 +150,7 @@ public class Auton {
     autonChooser.addOption("Red Taxi Over Charge Level", RedTaxiOverChargeLevel());
     autonChooser.addOption("Blue Taxi Over Charge Level", BlueTaxiOverChargeLevel());
     autonChooser.addOption("Red Taxi Wall Cube Shoot Fake", RedTaxiWallCubeShootFake());
-    autonChooser.addOption("Blue Taxi HP Cube Shoot Fake", BlueTaxiHPCubeShootFake());
+    autonChooser.addOption("Blue Taxi HP Cube Shoot", BlueTaxiHPCubeShoot());
     autonChooser.addOption("Fast Blue Taxi Wall Cube Shoot", FastBlueTaxiWallCubeShoot());
     autonChooser.addOption("Red Taxi Wall Cube Shoot Cube", RedTaxiWallCubeShootCube());
     autonChooser.addOption("Red Taxi Wall Cube Shoot Cube Shoot", RedTaxiWallCubeShootCubeShoot());
@@ -324,6 +324,11 @@ public class Auton {
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall",3, 3, true);
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Blue Taxi Wall Back Turn End dif",2, 1.5, true);
     return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1.get(0)), autoBuilder.fullAuto(pathGroup2.get(0)));
+  }
+  public Command BlueTaxiHPCubeShoot(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall",3, 3, true);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Blue Taxi Wall Back Turn End dif",2, 1.5, true);
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.25), autoBuilder.fullAuto(pathGroup1.get(0)).alongWith(intake.intake()), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2.get(0)), intake.fastOutake(), new WaitCommand(.50), intake.stopSpin());
   }
 
 
