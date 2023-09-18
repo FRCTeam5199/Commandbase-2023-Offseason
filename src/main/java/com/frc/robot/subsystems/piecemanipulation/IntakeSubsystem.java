@@ -244,7 +244,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command fastOutake(){
       bottomIntake.setCurrentLimit(50);
-      return this.run(()-> bottomIntake.moveAtPercent(100));
+      return this.runOnce(()-> bottomIntake.moveAtPercent(100));
       
     }
 
