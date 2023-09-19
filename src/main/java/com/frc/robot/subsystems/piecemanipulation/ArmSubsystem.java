@@ -109,7 +109,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void rotateHigh() {
-		rotatePIDController.setSetpoint(-105);
+		rotatePIDController.setSetpoint(-110);
 		this.isFront = false;
 	}
 
@@ -127,6 +127,11 @@ public class ArmSubsystem extends SubsystemBase {
 		extendPIDController.setSetpoint(2.5);
 		this.isRetracted = false;
 	}
+	
+	public void extendLow() {
+		extendPIDController.setSetpoint(4);
+		this.isRetracted = true;
+	}
 
 	public void extendHumanPlayer() {
 		extendPIDController.setSetpoint(7);
@@ -134,7 +139,7 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void extend() {
-		extendPIDController.setSetpoint(23);
+		extendPIDController.setSetpoint(22.5);
 		this.isRetracted = false;
 	}
 

@@ -19,13 +19,17 @@ import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import com.frc.robot.utility.TagManager;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import com.frc.robot.utility.UserInterface;
 
+import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -36,6 +40,8 @@ public class RobotContainer {
 
   // public CommandXboxController commandXboxController;
   public CommandButtonPanel buttonPanel;
+
+  public UserInterface uI;
 
   // not public or private so Robot.java has access to it.
   public final static ArmSubsystem arm = new ArmSubsystem();
@@ -54,6 +60,8 @@ public class RobotContainer {
 
   public final Auton auton;
 
+  SendableChooser<Command> autonChooser = new SendableChooser<>();
+
   // final AprilTagManager tagManager = new AprilTagManager();
 
   /**
@@ -63,6 +71,7 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     driveCommand = new DriveCommand(drivetrain, manualControls);
     drivetrain.setDefaultCommand(driveCommand);
+
     compressor.init();
 
     claw.init();
@@ -74,6 +83,8 @@ public class RobotContainer {
     wrist.init();
 
     intake.init();
+
+    tagManager.init();
 
     tagManager.print();
 
@@ -88,6 +99,16 @@ public class RobotContainer {
     CompressorCommand compressorRun = new CompressorCommand(compressor);
 
     compressor.setDefaultCommand(compressorRun);
+
+      autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
+      autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
+      autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
+      autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
+      autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
+
+
+
+      ROBOT_TAB.add(autonChooser);
   }
 
   private void createControllers() {
@@ -113,7 +134,7 @@ public class RobotContainer {
               new InstantCommand(() -> arm.rotateStable())
             ),
             new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateLeft()),
+              new InstantCommand(() -> wrist.moveLeft()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
             )
@@ -139,7 +160,7 @@ public class RobotContainer {
             new InstantCommand(() -> arm.extendHumanPlayer())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateLeft()),
+              new InstantCommand(() -> wrist.moveLeft()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -159,7 +180,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.high())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -184,7 +205,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.medium())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -205,10 +226,10 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateLow()),
             new WaitCommand(0.8),
-            new InstantCommand(() -> arm.retract())
+            new InstantCommand(() -> arm.extendLow())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.rotateRight()),
+              new InstantCommand(() -> wrist.moveRight()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -216,7 +237,7 @@ public class RobotContainer {
         new ParallelCommandGroup(
           new InstantCommand(() -> elevator.low()),
           new InstantCommand(() -> arm.rotateLow()),
-          new InstantCommand(() -> arm.retract())
+          new InstantCommand(() -> arm.extendLow())
         ),
       arm::isFront);
 
@@ -235,9 +256,11 @@ public class RobotContainer {
 
     // Map claw commands toxbox controler triggers
     if (Constants.ENABLE_INTAKE) {
-        manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
+        // manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
         manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
+        manualControls.b().onTrue(intake.fastOutake()).onFalse((intake.stopSpin()));
     }
+
 
   }
 
@@ -247,7 +270,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return auton.TaxiCubeLevel180();
+    return auton.getAuton();
   }
 
 }

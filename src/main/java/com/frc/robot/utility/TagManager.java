@@ -34,6 +34,7 @@ public class TagManager extends SubsystemBase {
 
   AprilTagPoseEstimate poseEstimate;
   PhotonPoseEstimator poseEstimator;
+  PhotonPoseEstimator poseEstimator2;
 
   PoseStrategy poseStrategy;
 
@@ -46,13 +47,14 @@ public class TagManager extends SubsystemBase {
 
 
   static final Transform3d campos1 = new Transform3d(new Translation3d(18 * (0.0254), 4 * (0.0254), 0),
-      new Rotation3d(0, 0.262, 0));
-  static final Transform3d camposBack = new Transform3d(new Translation3d(-5.5 * (0.0254), -3 * (0.0254), 0),
-      new Rotation3d(0, 0, Math.PI));
+          new Rotation3d(0, 0.262, 0));
+  static final Transform3d campos2 = new Transform3d(new Translation3d(-5.5 * (0.0254), -3 * (0.0254), 0),
+          new Rotation3d(0, 0, Math.PI));
 
   static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(), "apriltags",
-      "2023-chargedup.json");
+          "2023-chargedup.json");
   private static AprilTagFieldLayout tagLayout;
+
   static {
     try {
       tagLayout = new AprilTagFieldLayout(aprilPath);
@@ -68,10 +70,13 @@ public class TagManager extends SubsystemBase {
 
     camspos = new ArrayList<Pair<PhotonCamera, Transform3d>>();
     camspos.add(new Pair<>(photonCamera1, campos1));
+    camspos.add(new Pair<>(photonCamera2, campos2));
 
     poseStrategy = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP;
     poseEstimator = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera1, campos1);
+    poseEstimator2 = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera2, campos2);
     poseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+
 
   }
 
@@ -83,32 +88,38 @@ public class TagManager extends SubsystemBase {
   public boolean detect() {
     Optional<EstimatedRobotPose> result = poseEstimator.update();
 
-    if(result.isEmpty()){
+    if (result.isEmpty()) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
 
 
   public Pose2d getEstimatedGlobalPose() {
-      poseEstimator.setReferencePose(lastPose);
-    
-    
+    poseEstimator.setReferencePose(lastPose);
+
+
     double currentTime = Timer.getFPGATimestamp();
-    Optional<EstimatedRobotPose> result = poseEstimator.update();
+    Optional<EstimatedRobotPose> result1 = poseEstimator.update();
+    Optional<EstimatedRobotPose> result2 = poseEstimator2.update();
     // return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(),
     // currentTime - result.get().getSecond());
-    if (result.isEmpty()) {
+    if (result1.isEmpty() && result2.isEmpty()) {
       lastPose = new Pose2d(new Translation2d(1, 1), new Rotation2d(1));
       return lastPose;
-    } else {
-      lastPose = result.get().estimatedPose.toPose2d();
-      return lastPose;
+    }else{
+      if(result1.isPresent()){
+        lastPose = result1.get().estimatedPose.toPose2d();
+        return lastPose;
+      }else{
+        lastPose = result2.get().estimatedPose.toPose2d();
+        return lastPose;
+      }
     }
   }
 
-  public void update() {
+  public void update(){
     SmartDashboard.putNumber("Position X: ", getEstimatedGlobalPose().getX());
     SmartDashboard.putNumber("Postion Y: ", getEstimatedGlobalPose().getY());
   }

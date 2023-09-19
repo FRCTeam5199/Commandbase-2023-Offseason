@@ -36,10 +36,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Turn brake mode off shortly after the robot is disabled
-    new Trigger(this::isEnabled)
-      .negate()
-      .debounce(10.0)
-      .onTrue(new AlwaysRunInstantCommand(() -> m_robotContainer.drivetrain.setDriveMotorBrakeMode(false)));
+
 
     new Trigger(this::isEnabled)
     .onTrue(new AlwaysRunInstantCommand(() -> m_robotContainer.drivetrain.setDriveMotorBrakeMode(true)));

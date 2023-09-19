@@ -28,7 +28,7 @@ public class SwerveMotorController {
         }
         if (steeringMotorType != null) {
             steering = steeringMotorType.createMotorOfType(Constants.DRIVE_MOTOR_CANBUS, steeringID);
-            steering.setCurrentLimit(30);
+            steering.setCurrentLimit(35);
         }
     }
 
