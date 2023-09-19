@@ -20,6 +20,8 @@ import com.frc.robot.utility.TagManager;
 
 import com.frc.robot.utility.UserInterface;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,6 +29,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import com.frc.robot.utility.UserInterface;
+
+import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -56,6 +61,8 @@ public class RobotContainer {
 
   public final Auton auton;
 
+  SendableChooser<Command> autonChooser = new SendableChooser<>();
+
   // final AprilTagManager tagManager = new AprilTagManager();
 
   /**
@@ -65,6 +72,9 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     driveCommand = new DriveCommand(drivetrain, manualControls);
     drivetrain.setDefaultCommand(driveCommand);
+
+    uI = new UserInterface();
+
     compressor.init();
 
     claw.init();
@@ -77,7 +87,9 @@ public class RobotContainer {
 
     intake.init();
 
-    tagManager.print();
+    //tagManager.init();
+
+    //tagManager.print();
 
     auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
     uI = new UserInterface();
@@ -91,6 +103,17 @@ public class RobotContainer {
     CompressorCommand compressorRun = new CompressorCommand(compressor);
 
     compressor.setDefaultCommand(compressorRun);
+    
+      autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
+      autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
+      autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
+      autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
+      autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
+      autonChooser.addOption("TaxiWall", auton.TaxiWall());
+
+
+
+      ROBOT_TAB.add(autonChooser);
   }
 
   private void createControllers() {
@@ -247,6 +270,8 @@ public class RobotContainer {
       // manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
 
       // manualCotntrols.b().on
+      manualControls.x().onTrue(intake.manualSpinIn()).onFalse(intake.stopSpin());
+      manualControls.b().onTrue(intake.fastOutake()).onFalse(intake.stopSpin());
       }
     }
 

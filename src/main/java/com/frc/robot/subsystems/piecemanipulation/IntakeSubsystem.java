@@ -233,5 +233,18 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeTimer.start();
 
       return intake().andThen(new WaitCommand(2).andThen(retractPiston()).andThen(stopSpin()));
+      
+    }
+    public Command fastOutake(){
+      bottomIntake.setCurrentLimit(50);
+      return this.run(()-> bottomIntake.moveAtPercent(100));
+
+    }
+
+    public Command slowIntake(){
+        return this.runOnce(() ->bottomIntake.moveAtPercent(-.05));
+    }
+    public Command manualSpinIn(){
+      return this.runOnce(()-> bottomIntake.moveAtPercent(-1));
     }
 }
