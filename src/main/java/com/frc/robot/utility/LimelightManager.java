@@ -8,21 +8,20 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimelightManager extends SubsystemBase {
+    NetworkTableEntry tx;
+    NetworkTableEntry ty;
+    NetworkTableEntry tv;
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
+
+
 
     //read values periodically
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
 
     //post to smart dashboard periodically
     public void printlimelight(){
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area);
+        SmartDashboard.putNumber("LimelightX", getX());
+        SmartDashboard.putNumber("LimelightY", getY());
+        SmartDashboard.putBoolean("LimelightArea", getTarget());
     }
 
     public Command limelight(){
@@ -30,6 +29,21 @@ public class LimelightManager extends SubsystemBase {
     }
     
     //pipelines
+
+    public double getX(){
+        return table.getEntry("tx").getDouble(0);
+    }
+
+    public double getY(){
+
+        return table.getEntry("ty").getDouble(0);
+    }
+
+    public boolean getTarget(){
+        return table.getEntry("tv").getDouble(0) == 1;
+
+    }
+
 
     
 

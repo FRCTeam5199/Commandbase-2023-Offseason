@@ -108,6 +108,10 @@ public class ManualControls implements DriveCommand.Controls {
     return a(CommandScheduler.getInstance().getDefaultButtonLoop());
   }
 
+  public boolean rB(){
+    return xbox.getRightBumper();
+  }
+
   /**
    * Constructs an event instance around the A button's digital signal.
    *

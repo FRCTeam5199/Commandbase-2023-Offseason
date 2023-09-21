@@ -1,15 +1,19 @@
 package com.frc.robot.commands;
 
 import com.frc.robot.subsystems.Drivetrain;
+import com.frc.robot.utility.LimelightManager;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.frc.robot.commands.LimeLightCommand;
 
 public class DriveCommand extends CommandBase {
     private final Drivetrain drivetrain;
+    private final LimelightManager limelightManager = new LimelightManager();
+    private final LimeLightCommand limelight;
 
     /**
      * Interface for defining the controls for the drive command.
@@ -18,6 +22,8 @@ public class DriveCommand extends CommandBase {
         double driveX();
 
         boolean rT();
+
+        boolean rB();
 
         double driveY();
 
@@ -47,6 +53,8 @@ public class DriveCommand extends CommandBase {
     public DriveCommand(Drivetrain drivetrainSubsystem, Controls controls) {
         this.drivetrain = drivetrainSubsystem;
         this.controls = controls;
+        this.limelight = new LimeLightCommand(drivetrain, limelightManager);
+
 
         addRequirements(drivetrainSubsystem);
 
@@ -77,13 +85,17 @@ public class DriveCommand extends CommandBase {
         if (controls.driveResetGlobalPose())
             drivetrain.resetOdometry(new Pose2d());
 
-        if(controls.rT()){
+        if(controls.rT()) {
             drivetrain.drive(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
-                            -controls.driveX()/10,
-                            -controls.driveY()/10,
+                            -controls.driveX() / 10,
+                            -controls.driveY() / 10,
                             controls.driveRotationX(),
                             drivetrain.getGyroscopeRotationNoApriltags()));
+        } else if (controls.rB()) {
+            limelight.execute();
+
+
         }else {
             drivetrain.drive(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
