@@ -140,7 +140,7 @@ public class Auton {
     autonChooser.setDefaultOption("Taxi Wall", TaxiWall());
     autonChooser.addOption("Taxi and Level", TaxiandLevel());
     autonChooser.addOption("Taxi Cube Level", RedTaxiCubeLevel());
-    autonChooser.addOption("Taxi Cube Level 180", RedTaxiCubeLevel180());
+    //autonChooser.addOption("Taxi Cube Level 180", RedTaxiCubeLevel180());
     autonChooser.addOption("Taxi Wall Cube", TaxiWallCube());
     autonChooser.addOption("Taxi Wall Cube Shoot", TaxiWallCubeShoot());
 

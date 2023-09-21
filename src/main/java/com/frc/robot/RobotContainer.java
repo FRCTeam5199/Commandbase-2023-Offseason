@@ -107,8 +107,9 @@ public class RobotContainer {
       autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
       autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
       autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
-      autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
+      //autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
       autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
+      autonChooser.addOption("Red TaxiCubeWall", auton.RedTaxiWallCubeShootCube());
       autonChooser.addOption("TaxiWall", auton.TaxiWall());
 
 
