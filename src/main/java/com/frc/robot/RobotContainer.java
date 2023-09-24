@@ -185,7 +185,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.extendStable()),
             new InstantCommand(() -> arm.rotateHigh()),
-            new WaitCommand(/*0.8*/0.2),
+            new WaitCommand(0.8), //0.2
             new InstantCommand(() -> arm.extendHigh()),
             new InstantCommand(() -> elevator.high())
           ),
@@ -210,7 +210,7 @@ public class RobotContainer {
             new InstantCommand(() -> arm.extendStable()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateMid()),
-            new WaitCommand(0.2), // 0.8
+            new WaitCommand(0.8), // 0.2
             new InstantCommand(() -> arm.extendMid()),
             new InstantCommand(() -> elevator.mid())
           ),
@@ -235,7 +235,7 @@ public class RobotContainer {
             new InstantCommand(() -> arm.extendMid()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateLow()),
-            new WaitCommand(0.2), // 0.8
+            new WaitCommand(0.8), // 0.2
             new InstantCommand(() -> arm.extendMid())
           ),
           new SequentialCommandGroup(
@@ -254,21 +254,21 @@ public class RobotContainer {
 
 
     // Map position commands to button panel triggers
-    /*buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
 
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 4).onTrue(intake.deployPiston());
-    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());*/
-    opController.a().onTrue(lowGoalCommandGroup);
-    opController.b().onTrue(midGoalCommandGroup);
-    opController.x().onTrue(stableCommandGroup);
-    opController.y().onTrue(highGoalCommandGroup);
-    opController.leftBumper().onTrue(intake.deployPiston());
-    opController.rightBumper().onTrue(intake.retractPiston());
-    opController.povUp().onTrue(humanPlayerCommandGroup);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());
+    // opController.a().onTrue(lowGoalCommandGroup);
+    // opController.b().onTrue(midGoalCommandGroup);
+    // opController.x().onTrue(stableCommandGroup);
+    // opController.y().onTrue(highGoalCommandGroup);
+    // opController.leftBumper().onTrue(intake.deployPiston());
+    // opController.rightBumper().onTrue(intake.retractPiston());
+    // opController.povUp().onTrue(humanPlayerCommandGroup);
 
 
     // Map claw commands toxbox controler triggers
