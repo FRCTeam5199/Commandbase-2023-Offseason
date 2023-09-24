@@ -145,27 +145,28 @@ public class Auton {
     autonChooser.addOption("Correct Red Taxi Wall", CRedTaxiWall());
     autonChooser.addOption("Correct Blue Taxi Wall Cube", CBlueTaxiWallCube());
     autonChooser.addOption("Correct Red Taxi Wall Cube", CRedTaxiWallCube());
-
+    autonChooser.addOption("Correct Blue Taxi HP Cube", CBlueTaxiHP());
+    autonChooser.addOption("Correct Red Taxi HP Cube", CRedTaxiHP());
 
     //Wrong Autons
-    autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
-    autonChooser.addOption("Blue Taxi Cube Level", BlueTaxiCubeLevel());
-    autonChooser.addOption("Red Taxi Wall", RedTaxiWall());
-    autonChooser.addOption("Blue Taxi Wall", BlueTaxiWall());
-    autonChooser.addOption("Red Taxi Wall Cube", RedTaxiWallCube());
-    autonChooser.addOption("Red Taxi Wall Cube Shoot", RedTaxiWallCubeShoot());
-    autonChooser.addOption("Blue Taxi Wall Cube Shoot", BlueTaxiWallCubeShoot());
-    autonChooser.addOption("Red Taxi Cube Level 180", RedTaxiCubeLevel180());
-    autonChooser.addOption("Blue Taxi Cube Level 180", BlueTaxiCubeLevel180());
-    autonChooser.addOption("Red Taxi Over Charge", RedTaxiOverCharge());
-    autonChooser.addOption("Blue Taxi Over Charge", BlueTaxiOverCharge());
-    autonChooser.addOption("Red Taxi Over Charge Level", RedTaxiOverChargeLevel());
-    autonChooser.addOption("Blue Taxi Over Charge Level", BlueTaxiOverChargeLevel());
-    autonChooser.addOption("Blue Taxi HP Cube Shoot", BlueTaxiHPCubeShoot());
-    autonChooser.addOption("Red Taxi Wall Cube Shoot Cube", RedTaxiWallCubeShootCube());
-    autonChooser.addOption("Red Taxi Wall Cube Shoot Cube Shoot", RedTaxiWallCubeShootCubeShoot());
-    autonChooser.addOption("Red Taxi HP", RedTaxiHP());
-    autonChooser.addOption("Red Taxi HP Cube", RedTaxiHPCube());
+    // autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
+    // autonChooser.addOption("Blue Taxi Cube Level", BlueTaxiCubeLevel());
+    // autonChooser.addOption("Red Taxi Wall", RedTaxiWall());
+    // autonChooser.addOption("Blue Taxi Wall", BlueTaxiWall());
+    // autonChooser.addOption("Red Taxi Wall Cube", RedTaxiWallCube());
+    // autonChooser.addOption("Red Taxi Wall Cube Shoot", RedTaxiWallCubeShoot());
+    // autonChooser.addOption("Blue Taxi Wall Cube Shoot", BlueTaxiWallCubeShoot());
+    // autonChooser.addOption("Red Taxi Cube Level 180", RedTaxiCubeLevel180());
+    // autonChooser.addOption("Blue Taxi Cube Level 180", BlueTaxiCubeLevel180());
+    // autonChooser.addOption("Red Taxi Over Charge", RedTaxiOverCharge());
+    // autonChooser.addOption("Blue Taxi Over Charge", BlueTaxiOverCharge());
+    // autonChooser.addOption("Red Taxi Over Charge Level", RedTaxiOverChargeLevel());
+    // autonChooser.addOption("Blue Taxi Over Charge Level", BlueTaxiOverChargeLevel());
+    // autonChooser.addOption("Blue Taxi HP Cube Shoot", BlueTaxiHPCubeShoot());
+    // autonChooser.addOption("Red Taxi Wall Cube Shoot Cube", RedTaxiWallCubeShootCube());
+    // autonChooser.addOption("Red Taxi Wall Cube Shoot Cube Shoot", RedTaxiWallCubeShootCubeShoot());
+    // autonChooser.addOption("Red Taxi HP", RedTaxiHP());
+    // autonChooser.addOption("Red Taxi HP Cube", RedTaxiHPCube());
   
 
     Shuffleboard.getTab("Auton").add("Auton Style",autonChooser)
@@ -232,6 +233,16 @@ public class Auton {
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Red Taxi Wall", 2, 2, true);
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1));
+  }
+  public Command CBlueTaxiHP(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi HP", 2, 2);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Blue Taxi HP Back", 2, 2);
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1),autoBuilder.fullAuto(pathGroup2));
+  }
+  public Command CRedTaxiHP(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi Wall", 2, 2, true);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Blue Taxi HP Back", 2, 2,true);
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1),autoBuilder.fullAuto(pathGroup2));
   }
 
   public Command CRedTaxiWallCube(){

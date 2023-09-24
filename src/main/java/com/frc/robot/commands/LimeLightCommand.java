@@ -23,14 +23,12 @@ public class LimeLightCommand extends CommandBase {
         this.y = limelight.getY();
         this.a = limelight.getTarget();
         
-    }
-
+    } 
+    
 
 
     public void execute() {
-        double sppeed_y = y;
-
-        drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, sppeed_y, 0, drivetrain.getGyroscopeRotation()));
+        
     }
 
 }

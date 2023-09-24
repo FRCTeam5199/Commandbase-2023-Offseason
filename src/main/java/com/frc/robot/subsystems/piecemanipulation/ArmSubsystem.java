@@ -100,27 +100,28 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void rotateStable() {
-		rotatePIDController.setSetpoint(0);
+		rotatePIDController.setSetpoint(0+ setPointOffset);
 		this.isFront = true;
 	}
 
 	public void rotateHumanPlayer() {
-		rotatePIDController.setSetpoint(35);
+		System.out.println(rotateMotorController.getAbsoluteRotations()+ "--------------------------------------");
+		rotatePIDController.setSetpoint(35+ setPointOffset);
 		this.isFront = true;
 	}
 
 	public void rotateHigh() {
-		rotatePIDController.setSetpoint(-110);
+		rotatePIDController.setSetpoint(-110+ setPointOffset);
 		this.isFront = false;
 	}
 
 	public void rotateMedium() {
-		rotatePIDController.setSetpoint(-89);
+		rotatePIDController.setSetpoint(-89 + setPointOffset);
 		this.isFront = false;
 	}
 
 	public void rotateLow() {
-		rotatePIDController.setSetpoint(-120);
+		rotatePIDController.setSetpoint(-120 + setPointOffset);
 		this.isFront = false;
 	}
 
@@ -152,6 +153,7 @@ public class ArmSubsystem extends SubsystemBase {
 	public boolean isFront() {
 		return this.isFront;
 	}
+	
 
 	public Command addToRotate() {
 		return this.runOnce(() -> setPointOffset += 0.5);
