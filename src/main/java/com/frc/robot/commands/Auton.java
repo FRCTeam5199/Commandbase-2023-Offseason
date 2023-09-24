@@ -138,8 +138,9 @@ public class Auton {
     
     // List of auton options, must be manually edited
     autonChooser.setDefaultOption("Taxi Wall", TaxiWall());
+    autonChooser.addOption("Nothing", nothingCommand());
     autonChooser.addOption("Taxi and Level", TaxiandLevel());
-    autonChooser.addOption("Taxi Cube Level", RedTaxiCubeLevel());
+    //autonChooser.addOption("Taxi Cube Level", RedTaxiCubeLevel());
     //autonChooser.addOption("Taxi Cube Level 180", RedTaxiCubeLevel180());
     autonChooser.addOption("Taxi Wall Cube", TaxiWallCube());
     autonChooser.addOption("Taxi Wall Cube Shoot", TaxiWallCubeShoot());
@@ -148,7 +149,7 @@ public class Auton {
             .withWidget(BuiltInWidgets.kComboBoxChooser)
             .withPosition(0, 0)
             .withSize(2, 1);;
-    autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
+    //autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
 
     Shuffleboard.getTab("Auton").add(autonChooser);
 }
@@ -168,11 +169,11 @@ public class Auton {
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2 ), intake.retractPiston(), autoBuilder.fullAuto(pathGroup.get(0)), new ChargingStationAuto(drivetrain));
   }
 
-  public Command RedTaxiCubeLevel(){
+  /*public Command RedTaxiCubeLevel(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge Red", new PathConstraints(2, 2));
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("ChargeFromPiece", new PathConstraints(1.5, 2));
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), new ChargingStationAuto(drivetrain));
-  }
+  }*/
 
   public Command BlueTaxiCubeLevel(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("TaxiOverCharge Red", 2, 2, true);
@@ -202,7 +203,9 @@ public class Auton {
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), new ZeroHeading(drivetrain), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), intake.retractPiston(), new ChargingStationAuto180(drivetrain), autoBuilder.fullAuto(pathGroup3),intake.autonOuttake().alongWith(new ChargingStationAuto(drivetrain)));
   }
 
-
+  public Command nothingCommand(){
+    return null;
+  }
   
   // public Command TaxiCubeShootWall(){
   //   List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Red Taxi Wall", new PathConstraints(1.25, 0.9));

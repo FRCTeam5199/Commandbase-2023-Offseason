@@ -77,7 +77,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // }
 
     public void bottomIntakeMotorInit() {
-      if (CompConstants.RobotNum == 5199) {
+      if (CompConstants.RobotNum == 9995) {
         bottomIntake = new SparkMotorController(CompConstants.Piecemanipulation.BottomIntakeMotor_ID, MotorType.kBrushed);
       }
       // if (Constants.RobotNum == 9199) {

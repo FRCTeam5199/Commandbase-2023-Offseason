@@ -38,6 +38,8 @@ public class RobotContainer {
   final Drivetrain drivetrain;
   private final DriveCommand driveCommand;
   private final XboxController driveXboxController = new XboxController(0);
+  private final CommandXboxController opController = new CommandXboxController(1);
+  //private final ManualControls xboxop = new ManualControls(opController);
   private final ManualControls manualControls = new ManualControls(driveXboxController);
 
   public CommandXboxController commandXboxController;
@@ -105,11 +107,13 @@ public class RobotContainer {
     compressor.setDefaultCommand(compressorRun);
     
       autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
-      autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
+      autonChooser.addOption("Nothing", auton.nothingCommand());
+      //autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
       autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
       //autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
       autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
       autonChooser.addOption("Red TaxiCubeWall", auton.RedTaxiWallCubeShootCube());
+      autonChooser.addOption("Blue TaxiCubeWall", auton.BlueTaxiWallCubeShoot());
       autonChooser.addOption("TaxiWall", auton.TaxiWall());
 
 
@@ -139,7 +143,7 @@ public class RobotContainer {
             new InstantCommand(() -> arm.rotateStable())
           ),
           new SequentialCommandGroup(
-            new InstantCommand(() -> wrist.moveLeft()),
+            new InstantCommand(() -> wrist.moveRight()),
             new WaitCommand(0.5),
             new InstantCommand(() -> wrist.stopRotation())
           )
@@ -165,7 +169,7 @@ public class RobotContainer {
           new InstantCommand(() -> arm.extendHumanPlayer())
         ),
         new SequentialCommandGroup(
-            new InstantCommand(() -> wrist.moveLeft()),
+            new InstantCommand(() -> wrist.moveRight()),
             new WaitCommand(0.5),
             new InstantCommand(() -> wrist.stopRotation())
         )
@@ -186,7 +190,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.high())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.moveRight()),
+              new InstantCommand(() -> wrist.moveLeft()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -211,7 +215,7 @@ public class RobotContainer {
             new InstantCommand(() -> elevator.mid())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.moveRight()),
+              new InstantCommand(() -> wrist.moveLeft()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -235,7 +239,7 @@ public class RobotContainer {
             new InstantCommand(() -> arm.extendMid())
           ),
           new SequentialCommandGroup(
-              new InstantCommand(() -> wrist.moveRight()),
+              new InstantCommand(() -> wrist.moveLeft()),
               new WaitCommand(0.5),
               new InstantCommand(() -> wrist.stopRotation())
           )
@@ -250,14 +254,22 @@ public class RobotContainer {
 
 
     // Map position commands to button panel triggers
-    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
+    /*buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
 
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 4).onTrue(intake.deployPiston());
-    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());*/
+    opController.a().onTrue(lowGoalCommandGroup);
+    opController.b().onTrue(midGoalCommandGroup);
+    opController.x().onTrue(stableCommandGroup);
+    opController.y().onTrue(highGoalCommandGroup);
+    opController.leftBumper().onTrue(intake.deployPiston());
+    opController.rightBumper().onTrue(intake.retractPiston());
+    opController.povUp().onTrue(humanPlayerCommandGroup);
+
 
     // Map claw commands toxbox controler triggers
     if (CompConstants.Piecemanipulation.ENABLE_CLAW) {
@@ -267,12 +279,12 @@ public class RobotContainer {
 
     // Map claw commands toxbox controler triggers
     if (CompConstants.Piecemanipulation.ENABLE_INTAKE) {
-      // manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
-      // manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
-
+      //manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
+      manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
+      manualControls.b().onTrue(intake.fastOutake()).onFalse((intake.stopSpin()));
       // manualCotntrols.b().on
-      manualControls.x().onTrue(intake.manualSpinIn()).onFalse(intake.stopSpin());
-      manualControls.b().onTrue(intake.fastOutake()).onFalse(intake.stopSpin());
+      //manualControls.x().onTrue(intake.manualSpinIn()).onFalse(intake.stopSpin());
+      //manualControls.b().onTrue(intake.fastOutake()).onFalse(intake.stopSpin());
       }
     }
 
