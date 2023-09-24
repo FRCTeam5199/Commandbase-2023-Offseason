@@ -16,6 +16,7 @@ public class ArmSubsystem extends SubsystemBase {
 	PIDController extendPIDController;
 
 	private boolean isFront = true;
+	private boolean isRetracted = true;
 	private double setPointOffset = 0;
 	public int armLocation;
 
