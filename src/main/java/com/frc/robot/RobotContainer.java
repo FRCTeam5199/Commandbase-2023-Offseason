@@ -4,6 +4,8 @@
 
 package com.frc.robot;
 
+import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
+
 import com.frc.robot.commands.Auton;
 import com.frc.robot.commands.CompressorCommand;
 import com.frc.robot.commands.DriveCommand;
@@ -16,12 +18,11 @@ import com.frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
-import com.frc.robot.utility.TagManager;
 import com.frc.robot.utility.LimelightManager;
-import com.frc.robot.commands.LimeLightCommand;
+import com.frc.robot.utility.TagManager;
+import com.frc.robot.utility.UserInterface;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -29,9 +30,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import com.frc.robot.utility.UserInterface;
-
-import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -112,8 +110,6 @@ public class RobotContainer {
       autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
       autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
 
-
-
       ROBOT_TAB.add(autonChooser);
   }
 
@@ -129,6 +125,7 @@ public class RobotContainer {
     ConditionalCommand stableCommandGroup = 
       new ConditionalCommand(
           new ParallelCommandGroup(
+            new InstantCommand(() -> arm.setLastPosition(0)),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> arm.rotateStable())
@@ -152,6 +149,7 @@ public class RobotContainer {
     ConditionalCommand humanPlayerCommandGroup = 
       new ConditionalCommand(
         new ParallelCommandGroup(
+          new InstantCommand(() -> arm.setLastPosition(1)),
           new InstantCommand(() -> elevator.humanPlayer()),
           new InstantCommand(() -> arm.rotateHumanPlayer()),
           new InstantCommand(() -> arm.extendHumanPlayer())
@@ -178,6 +176,7 @@ public class RobotContainer {
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
+            new InstantCommand(() -> arm.setLastPosition(2)),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> arm.rotateHigh()),
@@ -203,6 +202,7 @@ public class RobotContainer {
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
+            new InstantCommand(() -> arm.setLastPosition(3)),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateMedium()),
@@ -228,6 +228,7 @@ public class RobotContainer {
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
+            new InstantCommand(() -> arm.setLastPosition(4)),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateLow()),
@@ -268,6 +269,8 @@ public class RobotContainer {
         manualControls.b().onTrue(intake.fastOutake()).onFalse((intake.stopSpin()));
     }
 
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 1).and(buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 10)).onTrue(arm.addToRotate());
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 2).and(buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 10)).onTrue(arm.lessToRotate());
 
   }
 

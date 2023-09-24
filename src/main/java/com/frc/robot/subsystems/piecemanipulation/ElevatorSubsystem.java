@@ -52,7 +52,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
 	public void humanPlayer() {
-		elevatorPIDController.setSetpoint(34);
+		elevatorPIDController.setSetpoint(32);
 	}
 
 	public void low() {

@@ -16,17 +16,17 @@ public class ArmSubsystem extends SubsystemBase {
 	PIDController extendPIDController;
 
 	private boolean isFront = true;
-	private boolean isRetracted = true;
+	private double setPointOffset = 0;
+	public int armLocation;
 
 	public ArmSubsystem() {
 	}
 
 	public void init() {
 		motorInit();
-		// if (!Constants.ARM_ELEVATOR_MANUAL) {
 		PIDInit();
-		// }
 
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> IIINNNNIIIITTT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		extendMotorController.resetEncoder();
 		rotateMotorController.resetEncoder();
 	}
@@ -150,6 +150,18 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public boolean isFront() {
 		return this.isFront;
+	}
+
+	public Command addToRotate() {
+		return this.runOnce(() -> setPointOffset += 0.5);
+	}
+
+	public Command lessToRotate() {
+		return this.runOnce(() -> setPointOffset -= 0.5);
+	}
+
+	public Command setLastPosition(int x) {
+		return this.runOnce(()-> armLocation = x);
 	}
 
 }
