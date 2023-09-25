@@ -9,8 +9,8 @@ import com.frc.robot.utility.LimelightManager;
 
 public class LimeLightCommand extends CommandBase {
     
-    private double x, y;
-    private boolean a;
+    public double x, y;
+    public boolean a;
     private final Drivetrain drivetrain;
     LimelightManager limelight;
 
@@ -19,16 +19,16 @@ public class LimeLightCommand extends CommandBase {
         addRequirements(limelight);
         this.drivetrain = drivetrain;
         this.limelight = limelight;
-        this.x = limelight.getX();
-        this.y = limelight.getY();
-        this.a = limelight.getTarget();
+        x = limelight.getX();
+        y = limelight.getY();
+        a = limelight.getTarget();
         
     } 
     
 
 
     public void execute() {
-        
+        drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(x*5, 0, 0, drivetrain.getGyroscopeRotation()));
     }
 
 }
