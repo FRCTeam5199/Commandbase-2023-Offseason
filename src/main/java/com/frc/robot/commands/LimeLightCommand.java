@@ -20,15 +20,35 @@ public class LimeLightCommand extends CommandBase {
         this.drivetrain = drivetrain;
         this.limelight = limelight;
         x = limelight.getX();
-        y = limelight.getY();
         a = limelight.getTarget();
         
-    } 
-    
-
-
-    public void execute() {
-        drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(x*5, 0, 0, drivetrain.getGyroscopeRotation()));
     }
+
+
+
+    @Override
+    public void execute() {
+        limelight.lightOn();
+        y = limelight.getY();
+        y =(y * .05) -.5;
+        drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -y, 0, drivetrain.getGyroscopeRotation()));
+
+        if(limelight.getY() > 6 && limelight.getY() < 8){
+            drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0,drivetrain.getGyroscopeRotation()));
+            limelight.lightOff();
+        }
+    }
+
+    @Override
+    public boolean isFinished(){
+        return limelight.getY() > 0 && limelight.getY() < 11;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        limelight.lightOff();
+    }
+
+
 
 }

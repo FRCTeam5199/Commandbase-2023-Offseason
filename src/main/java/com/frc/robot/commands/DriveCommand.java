@@ -23,7 +23,7 @@ public class DriveCommand extends CommandBase {
 
         boolean rT();
 
-        boolean rB();
+        boolean lThrottle();
 
         double driveY();
 
@@ -88,11 +88,11 @@ public class DriveCommand extends CommandBase {
         if(controls.rT()) {
             drivetrain.drive(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
-                            -controls.driveX() / 10,
-                            -controls.driveY() / 10,
+                            controls.driveX() / 10,
+                            controls.driveY() / 10,
                             controls.driveRotationX(),
                             drivetrain.getGyroscopeRotationNoApriltags()));
-        } else if (controls.rB()) {
+        } else if (controls.lThrottle()) {
             limelight.execute();
 
 

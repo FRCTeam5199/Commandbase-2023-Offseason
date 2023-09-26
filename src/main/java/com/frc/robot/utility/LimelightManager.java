@@ -1,5 +1,6 @@
 package com.frc.robot.utility;
 
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,6 +38,14 @@ public class LimelightManager extends SubsystemBase {
     public double getY(){
 
         return table.getEntry("ty").getDouble(0);
+    }
+
+    public void lightOn(){
+        table.getEntry("ledMode").setNumber(3);
+    }
+
+    public void lightOff(){
+        table.getEntry("ledMode").setNumber(1);
     }
 
     public boolean getTarget(){
