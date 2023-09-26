@@ -246,6 +246,9 @@ public class RobotContainer {
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
 
+    manualControls.leftTrigger().onTrue(new InstantCommand(() -> arm.setDunk()));
+    manualControls.leftTrigger().onFalse(new InstantCommand(() -> arm.resetDunk()));
+
     // Map claw commands toxbox controler triggers
     if (Constants.ENABLE_CLAW) {
       manualControls.a().onTrue(claw.openPiston());

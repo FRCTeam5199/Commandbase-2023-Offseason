@@ -97,6 +97,32 @@ public class ManualControls implements DriveCommand.Controls {
 
   }
 
+  public boolean rB(){
+    return xbox.getRightBumper();
+  }
+
+  /**
+   * Constructs an event instance around the left trigger's digital signal.
+   *
+   * @return an event instance representing the left trigger's digital signal attached to the {@link
+   *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
+   * @see #leftTrigger(EventLoop)
+   */
+  public Trigger leftTrigger() {
+    return leftTrigger(CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  /**
+   * Constructs an event instance around the left trigger's digital signal.
+   *
+   * @param loop the event loop instance to attach the event to.
+   * @return an event instance representing the left trigger's digital signal attached to the given
+   *     loop.
+   */
+  public Trigger leftTrigger(EventLoop loop) {
+    return xbox.leftTrigger(loop).castTo(Trigger::new);
+  }
+
   /**
    * Constructs an event instance around the A button's digital signal.
    *
@@ -106,10 +132,6 @@ public class ManualControls implements DriveCommand.Controls {
    */
   public Trigger a() {
     return a(CommandScheduler.getInstance().getDefaultButtonLoop());
-  }
-
-  public boolean rB(){
-    return xbox.getRightBumper();
   }
 
   /**
@@ -128,7 +150,7 @@ public class ManualControls implements DriveCommand.Controls {
    *
    * @return an event instance representing the B button's digital signal attached to the {@link
    *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
-   * @see #a(EventLoop)
+   * @see #b(EventLoop)
    */
   public Trigger b() {
     return b(CommandScheduler.getInstance().getDefaultButtonLoop());
@@ -150,7 +172,7 @@ public class ManualControls implements DriveCommand.Controls {
    *
    * @return an event instance representing the X button's digital signal attached to the {@link
    *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
-   * @see #a(EventLoop)
+   * @see #x(EventLoop)
    */
   public Trigger x() {
     return x(CommandScheduler.getInstance().getDefaultButtonLoop());
@@ -189,7 +211,9 @@ public class ManualControls implements DriveCommand.Controls {
     return xbox.y(loop).castTo(Trigger::new);
   }
 
-  public boolean rT() {return xbox.getRightBumper();}
+  public boolean rT() {
+    return xbox.getRightBumper();
+  }
 
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
