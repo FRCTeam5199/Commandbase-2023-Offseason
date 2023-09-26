@@ -96,7 +96,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
     public void runBottomIntake() {
         if(bottomIntake.getCurrent() < 13.5) {
-          bottomIntake.moveAtPercent(-1);
+          bottomIntake.moveAtPercent(1);
           if  (biggerIfTimer) {
             OnceTimer = true;
             biggerIfTimer = false;
@@ -143,7 +143,7 @@ public class IntakeSubsystem extends SubsystemBase {
         TimerResetKeeper(false);
         }
         if (spinBottomToKeep.get() > 2){
-          bottomIntake.moveAtPercent(-1);
+          bottomIntake.moveAtPercent(1);
           if(bottomIntake.getCurrent() > 14.5) {
             bottomIntake.moveAtPercent(0);
             TimerResetKeeper(true);
@@ -181,11 +181,11 @@ public class IntakeSubsystem extends SubsystemBase {
       bottomPiston.set(Value.kForward);
       stopBottomIntake = false;
     }
-
-    public Command spinBottomWithLimit() {
+// balls
+    public Command spinBottomWithLimit() { 
       return this.runOnce(() -> runTheIntakeWithLimit());
     }
-
+//runs spinBottomWithLimit
     /**
      * The command spin the intake to spit out cubes
      * @param stop if stop is true it stops intake, if false the intake is free to spin
@@ -237,7 +237,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     public Command fastOutake(){
       bottomIntake.setCurrentLimit(50);
-      return this.run(()-> bottomIntake.moveAtPercent(100));
+      return this.run(()-> bottomIntake.moveAtPercent(-.8));
 
     }
 
