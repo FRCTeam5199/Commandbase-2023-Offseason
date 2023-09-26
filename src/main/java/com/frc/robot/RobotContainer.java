@@ -252,6 +252,17 @@ public class RobotContainer {
         arm::isFront
       );
 
+    SequentialCommandGroup wristMoveRight = 
+      new SequentialCommandGroup(
+        new InstantCommand(() -> wrist.moveRight()),
+        new WaitCommand(0.5),
+        new InstantCommand(() -> wrist.stopRotation()));
+
+      SequentialCommandGroup wristMoveLeft = 
+        new SequentialCommandGroup(
+          new InstantCommand(() -> wrist.moveLeft()),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> wrist.stopRotation()));
 
     // Map position commands to button panel triggers
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
@@ -262,8 +273,11 @@ public class RobotContainer {
 
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 4).onTrue(intake.deployPiston());
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 9).onTrue(wristMoveRight);
+    buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 8).onTrue(wristMoveLeft);
     // opController.a().onTrue(lowGoalCommandGroup);
     // opController.b().onTrue(midGoalCommandGroup);
+
     // opController.x().onTrue(stableCommandGroup);
     // opController.y().onTrue(highGoalCommandGroup);
     // opController.leftBumper().onTrue(intake.deployPiston());

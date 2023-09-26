@@ -60,11 +60,15 @@ public class WristSubsystem extends SubsystemBase{
     }
 
     public void moveLeft() {
+        //return this.runEnd(() -> wristMotorController.moveAtPercent(-0.7), () -> wristMotorController.moveAtPercent(0));
         wristMotorController.moveAtPercent(-0.7);
+        //return null;
 	}
     
     public void moveRight() {
+        //return this.runEnd(() -> wristMotorController.moveAtPercent(0.7),() -> wristMotorController.moveAtPercent(0));
         wristMotorController.moveAtPercent(0.7);
+        //return null;
 	}
     
     public void stopRotation() {
