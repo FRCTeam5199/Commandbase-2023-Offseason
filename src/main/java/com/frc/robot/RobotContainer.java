@@ -37,42 +37,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class RobotContainer {
-  private enum CommandSelector {
-    STABLE,
-    HUMAN,
-    HIGH,
-    MEDIUM,
-    LOW
-  }
-
-  private CommandSelector select() {
-    System.out.println(arm.armLocation);
-    switch (arm.armLocation){
-      case 0: 
-        return CommandSelector.STABLE;
-      case 1:
-        return CommandSelector.HUMAN;
-      case 2:
-        return CommandSelector.HIGH;
-      case 3:
-        return CommandSelector.MEDIUM;
-      case 4:
-        return CommandSelector.LOW;
-      default:
-        return CommandSelector.STABLE;
-    }
-  }
-
-  private final Command armRotationCommand =
-      new SelectCommand(
-          Map.ofEntries(
-              Map.entry(CommandSelector.STABLE, new InstantCommand(()-> arm.rotateStable())),
-              Map.entry(CommandSelector.HUMAN, new InstantCommand(()-> arm.rotateHumanPlayer())),
-              Map.entry(CommandSelector.HIGH,  new InstantCommand(() -> arm.rotateHigh())),
-              Map.entry(CommandSelector.MEDIUM, new InstantCommand(()->arm.rotateMedium())),
-              Map.entry(CommandSelector.LOW, new InstantCommand(()-> arm.rotateLow()))),
-          this::select);
-  
   final Drivetrain drivetrain;
   private final DriveCommand driveCommand;
 
@@ -103,13 +67,10 @@ public class RobotContainer {
 
   SendableChooser<Command> autonChooser = new SendableChooser<>();
 
-  // final AprilTagManager tagManager = new AprilTagManager();
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    
 
     drivetrain = new Drivetrain();
     driveCommand = new DriveCommand(drivetrain, manualControls);
@@ -117,7 +78,6 @@ public class RobotContainer {
     LimelightManager limelight = new LimelightManager();
 
     compressor.init();
-
 
     claw.init();
 
@@ -134,8 +94,6 @@ public class RobotContainer {
     tagManager.print();
 
     auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
-
-    // tagManager.init();
 
     createControllers();
 
@@ -155,18 +113,14 @@ public class RobotContainer {
   }
 
   private void createControllers() {
-    // commandXboxController = new CommandXboxController(1);
-
     buttonPanel = new CommandButtonPanel();
   }
 
   public void configureBindings() {
-
     // Stable command composition
     ConditionalCommand stableCommandGroup = 
       new ConditionalCommand(
           new ParallelCommandGroup(
-            new InstantCommand(() -> arm.setLastPosition(0)),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> arm.rotateStable())
@@ -190,7 +144,6 @@ public class RobotContainer {
     ConditionalCommand humanPlayerCommandGroup = 
       new ConditionalCommand(
         new ParallelCommandGroup(
-          new InstantCommand(() -> arm.setLastPosition(1)),
           new InstantCommand(() -> elevator.humanPlayer()),
           new InstantCommand(() -> arm.rotateHumanPlayer()),
           new InstantCommand(() -> arm.extendHumanPlayer())
@@ -217,7 +170,6 @@ public class RobotContainer {
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
-            new InstantCommand(() -> arm.setLastPosition(2)),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> arm.rotateHigh()),
@@ -243,7 +195,6 @@ public class RobotContainer {
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
-            new InstantCommand(() -> arm.setLastPosition(3)),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateMedium()),
@@ -269,7 +220,6 @@ public class RobotContainer {
       new ConditionalCommand(
         new ParallelCommandGroup(
           new SequentialCommandGroup(
-            new InstantCommand(() -> arm.setLastPosition(4)),
             new InstantCommand(() -> arm.retract()),
             new InstantCommand(() -> elevator.low()),
             new InstantCommand(() -> arm.rotateLow()),
@@ -288,8 +238,6 @@ public class RobotContainer {
           new InstantCommand(() -> arm.extendLow())
         ),
       arm::isFront);
-
-    
     
     // Map position commands to button panel triggers
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
@@ -311,27 +259,8 @@ public class RobotContainer {
         manualControls.b().onTrue(intake.fastOutake()).onFalse((intake.stopSpin()));
     }
 
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 1).onTrue(arm.addToRotate());
-    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 2).onTrue(arm.lessToRotate());
-    // buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 1).onTrue(
-  //     new SequentialCommandGroup( arm.addToRotate(),
-  //       new SelectCommand(
-  //     Map.ofEntries(
-  //         Map.entry(CommandSelector.STABLE, new InstantCommand(()-> arm.rotateStable())),
-  //         Map.entry(CommandSelector.HUMAN, new InstantCommand(()-> arm.rotateHumanPlayer())),
-  //         Map.entry(CommandSelector.HIGH,  new InstantCommand(() -> arm.rotateHigh())),
-  //         Map.entry(CommandSelector.MEDIUM, new InstantCommand(()->arm.rotateMedium())),
-  //         Map.entry(CommandSelector.LOW, new InstantCommand(()-> arm.rotateLow()))),
-  //     this::select)));
-  //   buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 2).onTrue(new SequentialCommandGroup( arm.lessToRotate(),
-  //   new SelectCommand(
-  // Map.ofEntries(
-  //     Map.entry(CommandSelector.STABLE, new InstantCommand(()-> arm.rotateStable())),
-  //     Map.entry(CommandSelector.HUMAN, new InstantCommand(()-> arm.rotateHumanPlayer())),
-  //     Map.entry(CommandSelector.HIGH,  new InstantCommand(() -> arm.rotateHigh())),
-  //     Map.entry(CommandSelector.MEDIUM, new InstantCommand(()->arm.rotateMedium())),
-  //     Map.entry(CommandSelector.LOW, new InstantCommand(()-> arm.rotateLow()))),
-  // this::select)));
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 1).onTrue(arm.changeRotateOffset(1));
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 2).onTrue(arm.changeRotateOffset(-1));
   }
 
   /**

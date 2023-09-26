@@ -17,8 +17,10 @@ public class ArmSubsystem extends SubsystemBase {
 
 	private boolean isFront = true;
 	private boolean isRetracted = true;
-	private double setPointOffset = 0;
-	public int armLocation;
+	public double rotateSetpoint = 0;
+	public double rotateOffset = 0;
+	public double extendSetpoint = 0;
+	public double extendOffset = 0;
 
 	public ArmSubsystem() {
 	}
@@ -27,28 +29,26 @@ public class ArmSubsystem extends SubsystemBase {
 		motorInit();
 		PIDInit();
 
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> IIINNNNIIIITTT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		extendMotorController.resetEncoder();
 		rotateMotorController.resetEncoder();
 	}
 
+	// This method will be called once per scheduler run
 	@Override
 	public void periodic() {
-		// This method will be called once per scheduler run
 		// if (!Constants.ARM_ELEVATOR_MANUAL) {
-		rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
+		rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations(), this.rotateSetpoint + this.rotateOffset));
 		if (extendMotorController.getRotations() < 1000) {
-			extendMotorController.moveAtPercent(extendPIDController.calculate(extendMotorController.getRotations()));
+			extendMotorController.moveAtPercent(extendPIDController.calculate(extendMotorController.getRotations(), this.extendSetpoint + this.extendOffset));
 		} else {
 			extendMotorController.moveAtPercent(5);
 		}
-		// }P
+		// }
 	}
 
+	// This method will be called once per scheduler run during simulation
 	@Override
-	public void simulationPeriodic() {
-		// This method will be called once per scheduler run during simulation
-	}
+	public void simulationPeriodic() {}
 
 	public void motorInit() {
 		rotateMotorController = new SparkMotorController(Constants.ARM_ROTATE_MOTOR_ID, MotorType.kBrushless);
@@ -59,10 +59,8 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void PIDInit() {
-		rotatePIDController = new PIDController(Constants.ARM_ROTATE_PID.P, Constants.ARM_ROTATE_PID.I,
-				Constants.ARM_ROTATE_PID.D);
-		extendPIDController = new PIDController(Constants.ARM_EXTEND_PID.P, Constants.ARM_EXTEND_PID.I,
-				Constants.ARM_EXTEND_PID.D);
+		rotatePIDController = new PIDController(Constants.ARM_ROTATE_PID.P, Constants.ARM_ROTATE_PID.I, Constants.ARM_ROTATE_PID.D);
+		extendPIDController = new PIDController(Constants.ARM_EXTEND_PID.P, Constants.ARM_EXTEND_PID.I, Constants.ARM_EXTEND_PID.D);
 	}
 
 	public Command resetRotateEncoder() {
@@ -73,21 +71,12 @@ public class ArmSubsystem extends SubsystemBase {
 		return this.runOnce(() -> extendMotorController.resetEncoder());
 	}
 
-	public Command setRotateSetpoint(int setpoint) {
-		return this.runOnce(() -> rotatePIDController.setSetpoint(setpoint));
-	}
-
-	public Command setExtendSetpoint(int setpoint) {
-		return this.runOnce(() -> extendPIDController.setSetpoint(setpoint));
-	}
-
 	/**
 	 * Moves the Arm Rotate by a percent between -1 and 1 and stops it when
 	 * finished.
 	 */
 	public Command moveRotate(float percent) {
-		return this.runEnd(() -> rotateMotorController.moveAtPercent(percent),
-				() -> rotateMotorController.moveAtPercent(0));
+		return this.runEnd(() -> rotateMotorController.moveAtPercent(percent), () -> rotateMotorController.moveAtPercent(0));
 	}
 
 	/**
@@ -95,58 +84,80 @@ public class ArmSubsystem extends SubsystemBase {
 	 * finished.
 	 */
 	public Command moveExtend(float percent) {
-		return this.runEnd(() -> extendMotorController.moveAtPercent(percent),
-				() -> extendMotorController.moveAtPercent(0));
+		return this.runEnd(() -> extendMotorController.moveAtPercent(percent), () -> extendMotorController.moveAtPercent(0));
+	}
+
+	/**
+	 * Sets the setpoint of the Arm Rotate
+	 */
+	public Command setRotateSetpoint(int setpoint) {
+		return this.runOnce(() -> this.extendSetpoint = setpoint);
+	}
+
+	/**
+	 * Sets the setpoint of the Arm Extend
+	 */
+	public Command setExtendSetpoint(int setpoint) {
+		return this.runOnce(() -> this.extendSetpoint = setpoint);
 	}
 
 	public void rotateStable() {
-		rotatePIDController.setSetpoint(0+ setPointOffset);
+		// rotatePIDController.setSetpoint(0);
+		this.rotateSetpoint = 0;
 		this.isFront = true;
 	}
 
 	public void rotateHumanPlayer() {
-		System.out.println(rotateMotorController.getAbsoluteRotations()+ "--------------------------------------");
-		rotatePIDController.setSetpoint(35+ setPointOffset);
+		// rotatePIDController.setSetpoint(35);
+		this.rotateSetpoint = 35;
 		this.isFront = true;
 	}
 
 	public void rotateHigh() {
-		rotatePIDController.setSetpoint(-110+ setPointOffset);
+		// rotatePIDController.setSetpoint(-110);
+		this.rotateSetpoint = -110;
 		this.isFront = false;
 	}
 
 	public void rotateMedium() {
-		rotatePIDController.setSetpoint(-89 + setPointOffset);
+		// rotatePIDController.setSetpoint(-89);
+		this.rotateSetpoint = -89;
 		this.isFront = false;
 	}
 
 	public void rotateLow() {
-		rotatePIDController.setSetpoint(-120 + setPointOffset);
+		// rotatePIDController.setSetpoint(-120);
+		this.rotateSetpoint = -120;
 		this.isFront = false;
 	}
 
 	public void extendMedium() {
-		extendPIDController.setSetpoint(2.5);
+		// extendPIDController.setSetpoint(2.5);
+		this.extendSetpoint = 2.5;
 		this.isRetracted = false;
 	}
 	
 	public void extendLow() {
-		extendPIDController.setSetpoint(4);
+		// extendPIDController.setSetpoint(4);
+		this.extendSetpoint = 4;
 		this.isRetracted = true;
 	}
 
 	public void extendHumanPlayer() {
-		extendPIDController.setSetpoint(7);
+		// extendPIDController.setSetpoint(7);
+		this.extendSetpoint = 5;
 		this.isRetracted = false;
 	}
 
 	public void extend() {
-		extendPIDController.setSetpoint(22.5);
+		// extendPIDController.setSetpoint(22.5);
+		this.extendSetpoint = 21;
 		this.isRetracted = false;
 	}
 
 	public void retract() {
-		extendPIDController.setSetpoint(5);
+		// extendPIDController.setSetpoint(5);
+		this.extendSetpoint = 5;
 		this.isRetracted = true;
 	}
 
@@ -154,17 +165,11 @@ public class ArmSubsystem extends SubsystemBase {
 		return this.isFront;
 	}
 	
-
-	public Command addToRotate() {
-		return this.runOnce(() -> setPointOffset += 0.5);
+	public Command changeRotateOffset(double offset) {
+		return this.runOnce(() -> rotateOffset += offset);
 	}
 
-	public Command lessToRotate() {
-		return this.runOnce(() -> setPointOffset -= 0.5);
+	public Command changeExtendOffset(double offset) {
+		return this.runOnce(() -> rotateOffset += offset);
 	}
-
-	public Command setLastPosition(int x) {
-		return this.runOnce(()-> armLocation = x);
-	}
-
 }
