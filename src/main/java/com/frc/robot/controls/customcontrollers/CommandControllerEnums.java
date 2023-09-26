@@ -56,8 +56,8 @@ public class CommandControllerEnums {
     }
 
     public enum ButtonPanelButtonsPlacement20239199 implements ControllerInterfaces.IDiscreteInput{
-        T1(0), T2(1), T3(2), T4(3), T5(4), T6(5),
-        T7(6), T8(7), T9(8), Climb(9), HP1(10), HP2(11);
+        T1(1), T2(2), T3(3), T4(4), T5(5), T6(6),
+        T7(7), T8(8), T9(9), Climb(10), HP1(11), HP2(12);
 
         public final int AXIS_VALUE;
 
@@ -73,8 +73,8 @@ public class CommandControllerEnums {
     }
 
     public enum ButtonPanelButtonsElse20239199 implements ControllerInterfaces.IDiscreteInput{
-        Cone(0), Cube(1), SpikeU(2), SpikeD(3), Shute(4), 
-        PickUp(5), Stable(6), Floor(7), High(8), Mid(9), Low(10);
+        Cone(1), Cube(2), SpikeU(3), SpikeD(4), Shute(5), 
+        PickUp(6), Stable(7), Floor(8), High(9), Mid(10), Low(11);
 
         public final int AXIS_VALUE;
 
