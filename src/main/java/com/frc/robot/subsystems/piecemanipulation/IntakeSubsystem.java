@@ -50,7 +50,10 @@ public class IntakeSubsystem extends SubsystemBase {
       if (stopBottomIntake == false) {
         runBottomIntake();
       }
-      runTheKeeper();
+      if(spinWithCube) {
+        spinToKeepIn();
+      }
+      
       // This method will be called once per scheduler run
     }
     public void init() {
@@ -114,7 +117,7 @@ public class IntakeSubsystem extends SubsystemBase {
             }
         else{
           TimerResetrun(); 
-            stopper();
+          stopper();
       }
     }
     
@@ -126,12 +129,6 @@ public class IntakeSubsystem extends SubsystemBase {
         spinWithCube = true;
         biggerIfTimer = true;
         stopBottomIntake = true;
-      }
-    }
-
-    public void runTheKeeper() {
-      if(spinWithCube) {
-        spinToKeepIn();
       }
     }
 
@@ -243,6 +240,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command fastOutake(){
+      spinWithCube = false;
       bottomIntake.setCurrentLimit(50);
       return this.runOnce(()-> bottomIntake.moveAtPercent(100));
       
@@ -250,5 +248,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command slowIntake(){
         return this.runOnce(() ->bottomIntake.moveAtPercent(-.05));
+    }
+    public Command ManualRetract(){
+        return this.runOnce(()-> ManualRetractMethod());
+    }
+    public void ManualRetractMethod(){
+      bottomIntake.moveAtPercent(0);
+      bottomPiston.set(Value.kReverse);
+      stopBottomIntake = true;
     }
 }

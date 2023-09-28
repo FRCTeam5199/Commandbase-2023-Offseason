@@ -35,8 +35,12 @@ public class CompressorSubsystem extends SubsystemBase {
   
   }
 
-  public CommandBase runCompression() {
+  public Command runCompression() {
     return run(() ->pneumaticsHub.enableCompressorDigital());
   }
 
+  public Runnable compressioRunnable(){
+    return () -> pneumaticsHub.enableCompressorDigital();
+    
+  }
 }

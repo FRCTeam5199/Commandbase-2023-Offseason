@@ -22,6 +22,7 @@ import com.frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
+import com.frc.robot.utility.AlwaysRunCommand;
 import com.frc.robot.utility.LimelightManager;
 import com.frc.robot.utility.TagManager;
 import com.frc.robot.utility.UserInterface;
@@ -32,7 +33,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -100,15 +100,10 @@ public class RobotContainer {
     configureBindings();
 
     CompressorCommand compressorRun = new CompressorCommand(compressor);
-
+    
     compressor.setDefaultCommand(compressorRun);
 
-      autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
-      autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
-      autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
-      autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
-      autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
-
+    
       ROBOT_TAB.add(autonChooser);
   }
 
@@ -214,7 +209,6 @@ public class RobotContainer {
           new InstantCommand(() -> arm.extendMedium())
         ),
       arm::isFront);
-
     // Low goal command composition
     ConditionalCommand lowGoalCommandGroup = 
       new ConditionalCommand(
@@ -246,11 +240,14 @@ public class RobotContainer {
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
 
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.ManualRetract());
+
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 5).onTrue(wrist.moveLeftManual());
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 6).onTrue(wrist.moveRigthManual());
 
     manualControls.leftTrigger().onTrue(new InstantCommand(() -> arm.setDunk()));
     manualControls.leftTrigger().onFalse(new InstantCommand(() -> arm.resetDunk()));
+
 
     // Map claw commands toxbox controler triggers
     if (Constants.ENABLE_CLAW) {
