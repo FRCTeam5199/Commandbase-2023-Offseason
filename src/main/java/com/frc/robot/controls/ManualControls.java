@@ -215,7 +215,7 @@ public class ManualControls implements DriveCommand.Controls {
     return xbox.getRightBumper();
   }
 
-  public boolean lThrottle() {return xbox.getLeftTriggerAxis() > 4;}
+  public boolean lThrottle() {return xbox.getLeftBumper();}
 
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {

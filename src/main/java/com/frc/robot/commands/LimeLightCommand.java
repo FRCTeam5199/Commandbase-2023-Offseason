@@ -1,8 +1,10 @@
 package com.frc.robot.commands;
+import com.frc.robot.commands.DriveCommand.Controls;
 import com.frc.robot.controls.ManualControls;
 import com.frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.frc.robot.utility.LimelightManager;
@@ -13,16 +15,18 @@ public class LimeLightCommand extends CommandBase {
     public boolean a;
     private final Drivetrain drivetrain;
     LimelightManager limelight;
+    Controls controls;
+    XboxController controller = new XboxController(0);
 
-    public LimeLightCommand(Drivetrain drivetrain, LimelightManager limelight) {
+    public LimeLightCommand(Drivetrain drivetrain, LimelightManager limelight, Controls controls) {
         addRequirements(drivetrain);
         addRequirements(limelight);
         this.drivetrain = drivetrain;
         this.limelight = limelight;
-        x = limelight.getX();
-        a = limelight.getTarget();
-        
+        this.controls = controls;
+    
     }
+
 
 
 
@@ -30,13 +34,9 @@ public class LimeLightCommand extends CommandBase {
     public void execute() {
         limelight.lightOn();
         y = limelight.getY();
-        y =(y * .05) -.5;
-        drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -y, 0, drivetrain.getGyroscopeRotation()));
-
-        if(limelight.getY() > 6 && limelight.getY() < 8){
-            drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0,drivetrain.getGyroscopeRotation()));
-            limelight.lightOff();
-        }
+        x = controls.driveX();
+        y =(y * .05)-.5;
+        drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-x, -y, 0, drivetrain.getGyroscopeRotation()));
     }
 
     @Override

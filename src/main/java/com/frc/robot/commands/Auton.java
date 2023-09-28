@@ -147,6 +147,8 @@ public class Auton {
     autonChooser.addOption("Correct Red Taxi Wall Cube", CRedTaxiWallCube());
     autonChooser.addOption("Correct Blue Taxi HP Cube", CBlueTaxiHP());
     autonChooser.addOption("Correct Red Taxi HP Cube", CRedTaxiHP());
+    autonChooser.addOption("Level", Level());
+
 
     //Wrong Autons
     // autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
@@ -259,6 +261,12 @@ public class Auton {
     return new SequentialCommandGroup(intake.deployPiston(), intake.intake().alongWith(autoBuilder.fullAuto(pathGroup1)), intake.slowIntake(), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
 
   }
+
+  public Command Level(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("SOMETHING", 2,2);
+
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1));
+  } 
 
   //Wrong Autons
   public Command TaxiandLevel(){

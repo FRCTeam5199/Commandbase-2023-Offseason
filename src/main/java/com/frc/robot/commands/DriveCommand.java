@@ -53,7 +53,7 @@ public class DriveCommand extends CommandBase {
     public DriveCommand(Drivetrain drivetrainSubsystem, Controls controls) {
         this.drivetrain = drivetrainSubsystem;
         this.controls = controls;
-        this.limelight = new LimeLightCommand(drivetrain, limelightManager);
+        this.limelight = new LimeLightCommand(drivetrain, limelightManager, controls);
 
 
         addRequirements(drivetrainSubsystem);
@@ -103,6 +103,8 @@ public class DriveCommand extends CommandBase {
                             controls.driveY(),
                             controls.driveRotationX(),
                             drivetrain.getGyroscopeRotationNoApriltags()));
+            
+            limelightManager.lightOff();
         }// perhaps use getRawGyroRotation() instead?
     }
 
