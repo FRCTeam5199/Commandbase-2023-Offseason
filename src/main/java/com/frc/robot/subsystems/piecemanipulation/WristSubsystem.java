@@ -6,7 +6,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class WristSubsystem extends SubsystemBase{
     public static SparkMotorController wristMotorController;
@@ -69,5 +72,20 @@ public class WristSubsystem extends SubsystemBase{
 
     public void stopRotation() {
         wristMotorController.moveAtPercent(0);
+    }
+
+    public Command moveLeftManual(){
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> moveLeft()),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> stopRotation())
+        );
+    }
+    public Command moveRigthManual(){
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> moveRight()),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> stopRotation())
+        );
     }
 }

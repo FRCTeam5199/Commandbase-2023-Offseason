@@ -130,7 +130,7 @@ public class RobotContainer {
               new InstantCommand(() -> arm.retract()),
               new InstantCommand(() -> elevator.low()),
               new InstantCommand(() -> arm.rotateStable())
-            ),
+            ),  
             new SequentialCommandGroup(
               new InstantCommand(() -> wrist.moveLeft()),
               new WaitCommand(0.5),
@@ -245,6 +245,9 @@ public class RobotContainer {
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
+
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 5).onTrue(wrist.moveLeftManual());
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 6).onTrue(wrist.moveRigthManual());
 
     manualControls.leftTrigger().onTrue(new InstantCommand(() -> arm.setDunk()));
     manualControls.leftTrigger().onFalse(new InstantCommand(() -> arm.resetDunk()));
