@@ -245,14 +245,19 @@ public class RobotContainer {
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 5).onTrue(wrist.moveLeftManual());
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 6).onTrue(wrist.moveRigthManual());
 
-    manualControls.leftTrigger().onTrue(new InstantCommand(() -> arm.setDunk()));
+
+    manualControls.leftTrigger().onTrue(new ConditionalCommand(
+      new SequentialCommandGroup(new InstantCommand(() -> arm.setHighDunk())),
+      new SequentialCommandGroup(new InstantCommand(() -> arm.setMidDunk())),
+      arm::isHigh));
+
     manualControls.leftTrigger().onFalse(new InstantCommand(() -> arm.resetDunk()));
 
 
     // Map claw commands toxbox controler triggers
     if (Constants.ENABLE_CLAW) {
-      manualControls.a().onTrue(claw.openPiston());
-      manualControls.y().onTrue(claw.closePiston());
+      manualControls.y().onTrue(claw.openPiston());
+      manualControls.a().onTrue(claw.closePiston());
     }
 
     // Map claw commands toxbox controler triggers
@@ -274,5 +279,4 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return auton.getAuton();
   }
-  
 }

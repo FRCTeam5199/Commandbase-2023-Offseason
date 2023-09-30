@@ -22,9 +22,10 @@ public class Robot extends TimedRobot {
   public static final boolean SECOND_TRY = false;
 
   private Command m_autonomousCommand;
-  private LimelightManager limr = new LimelightManager();
 
   private RobotContainer m_robotContainer;
+
+  private LimelightManager lime = new LimelightManager();
 
   
   /**
@@ -63,7 +64,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    limr.lightOff();
+    lime.lightOff();
   }
 
   @Override

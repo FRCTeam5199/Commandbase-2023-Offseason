@@ -16,6 +16,7 @@ public class ArmSubsystem extends SubsystemBase {
 	PIDController extendPIDController;
 
 	private boolean isFront = true;
+	private boolean isHigh = false;
 	public double rotateSetpoint = 0;
 	public double rotateOffset = 0;
 	public double extendSetpoint = 0;
@@ -106,39 +107,43 @@ public class ArmSubsystem extends SubsystemBase {
 		// rotatePIDController.setSetpoint(0);
 		this.rotateSetpoint = 0;
 		this.isFront = true;
-		// this.isHigh = false;
+		this.isHigh = false;
 	}
 
 	public void rotateHumanPlayer() {
 		// rotatePIDController.setSetpoint(35);
 		this.rotateSetpoint = 35;
 		this.isFront = true;
-		// this.isHigh = false;
+		this.isHigh = false;
 	}
 
 	public void rotateHigh() {
 		// rotatePIDController.setSetpoint(-110);
 		this.rotateSetpoint = -107;
 		this.isFront = false;
-		// this.isHigh = true;
+		this.isHigh = true;
 	}
 
 	public void rotateMedium() {
 		// rotatePIDController.setSetpoint(-89);
 		this.rotateSetpoint = -89;
 		this.isFront = false;
-		// this.isHigh = false;
+		this.isHigh = false;
 	}
 
 	public void rotateLow() {
 		// rotatePIDController.setSetpoint(-120);
 		this.rotateSetpoint = -120;
 		this.isFront = false;
-		// this.isHigh = false;
+		this.isHigh = false;
 	}
 
-	public void setDunk() {
+	public void setHighDunk() {
 		this.dunkOffset = -9;
+	}
+
+	public void setMidDunk() {
+		this.dunkOffset = -11;
 	}
 	
 	public void resetDunk() {
@@ -159,7 +164,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public void extendHumanPlayer() {
 		// extendPIDController.setSetpoint(7);
-		this.extendSetpoint = 5;
+		this.extendSetpoint = 7.7;
 		// this.isRetracted = false;
 	}
 
@@ -179,15 +184,11 @@ public class ArmSubsystem extends SubsystemBase {
 		return this.isFront;
 	}
 
-	// public boolean isHigh() {
-	// 	return this.isHigh;
-	// }
+	public boolean isHigh() {
+		return this.isHigh;
+	}
 	
 	public Command changeRotateOffset(double offset) {
-		return this.runOnce(() -> rotateOffset += offset);
-	}
-
-	public Command changeExtendOffset(double offset) {
 		return this.runOnce(() -> rotateOffset += offset);
 	}
 }
