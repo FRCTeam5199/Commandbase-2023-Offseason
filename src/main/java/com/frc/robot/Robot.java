@@ -5,6 +5,7 @@
 package com.frc.robot;
 
 import com.frc.robot.utility.AlwaysRunInstantCommand;
+import com.frc.robot.utility.LimelightManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +22,7 @@ public class Robot extends TimedRobot {
   public static final boolean SECOND_TRY = false;
 
   private Command m_autonomousCommand;
+  private LimelightManager limr = new LimelightManager();
 
   private RobotContainer m_robotContainer;
 
@@ -60,7 +62,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    limr.lightOff();
+  }
 
   @Override
   public void disabledPeriodic() {}
