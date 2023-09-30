@@ -137,6 +137,7 @@ public class Auton {
     );
     //Autons must be manually entered into the auton chooser
     autonChooser.setDefaultOption("Nothing", doNothing());
+    autonChooser.setDefaultOption("Taxi and Level", TaxiandLevel());
     autonChooser.addOption("Correct Blue Taxi Cube Level", CBlueTaxiCubeLevel());
     autonChooser.addOption("Correct Red Taxi Cube Level", CRedTaxiCubeLevel());
     autonChooser.addOption("Correct Blue Taxi Cube Level 180", CBlueTaxiCubeLevel180());
@@ -265,7 +266,7 @@ public class Auton {
     List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt2",7,4,true);
     return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), autoBuilder.fullAuto(pathGroup1).alongWith(intake.intake()),intake.retractPiston(), intake.stopSpin(),autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.2), intake.outtake(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(1.5).andThen(intake.deployPiston().andThen(intake.intake()))),intake.retractPiston(),autoBuilder.fullAuto(pathGroup4), intake.outtake());
   }
-  
+
 
   public Command CRedTaxiWallCube(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi HP", 2, 2, true);
@@ -287,6 +288,12 @@ public class Auton {
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), new ChargingStationAuto(drivetrain));
   } 
+
+  public Command TaxiandLevel(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Taxi and Level Blue", 2,2);
+
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), new ChargingStationAuto(drivetrain));
+  }
 
 
   //Wrong Autons
