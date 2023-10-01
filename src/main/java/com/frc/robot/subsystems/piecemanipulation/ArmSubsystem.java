@@ -112,7 +112,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public void rotateHumanPlayer() {
 		// rotatePIDController.setSetpoint(35);
-		this.rotateSetpoint = 35;
+		this.rotateSetpoint = 35.7;
 		this.isFront = true;
 		this.isHigh = false;
 	}

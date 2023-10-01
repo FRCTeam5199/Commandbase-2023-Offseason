@@ -189,7 +189,7 @@ public class Auton {
   }
 
   public Command doNothing(){
-    return new WaitCommand(14);
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(0.3), intake.retractPiston(), new WaitCommand(14));
   }
   
   public Command getAutoCommand(String pathName) {
@@ -304,7 +304,7 @@ public class Auton {
   } 
 
   public Command TaxiandLevel(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Taxi and Level Blue", 2,2);
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Taxi and Level Blue", 1.4,2);
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), new ChargingStationAuto(drivetrain));
   }
