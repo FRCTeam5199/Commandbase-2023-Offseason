@@ -4,6 +4,8 @@
 
 package com.frc.robot;
 
+import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
+
 import com.frc.robot.commands.Auton;
 import com.frc.robot.commands.CompressorCommand;
 import com.frc.robot.commands.DriveCommand;
@@ -17,10 +19,9 @@ import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.IntakeSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.WristSubsystem;
 import com.frc.robot.utility.TagManager;
-
 import com.frc.robot.utility.UserInterface;
+
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -29,9 +30,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import com.frc.robot.utility.UserInterface;
-
-import static com.frc.robot.utility.UserInterface.ROBOT_TAB;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -275,6 +273,14 @@ public class RobotContainer {
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.retractPiston());
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 9).onTrue(wristMoveRight);
     buttonPanel.button(CompConstants.ControllerIds.BUTTON_PANEL_2, 8).onTrue(wristMoveLeft);
+
+    manualControls.leftTrigger().onTrue(new ConditionalCommand(
+      new SequentialCommandGroup(new InstantCommand(() -> arm.setDunkHigh())),
+      new SequentialCommandGroup(new InstantCommand(() -> arm.setDunkMid())),
+      arm::isHigh));
+
+    manualControls.leftTrigger().onFalse(new InstantCommand(() -> arm.resetDunk()));
+    
     // opController.a().onTrue(lowGoalCommandGroup);
     // opController.b().onTrue(midGoalCommandGroup);
 

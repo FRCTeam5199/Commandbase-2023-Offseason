@@ -15,8 +15,11 @@ public class ArmSubsystem extends SubsystemBase {
 	PIDController rotatePIDController;
 	PIDController extendPIDController;
 
+	public double rotateSetpoint = 0;
+	public double dunkOffset = 0;
+
 	private boolean isFront = true;
-	private boolean isRetracted = true;
+	private boolean isHigh = false;
 
 	public ArmSubsystem() {
 	}
@@ -35,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
 	public void periodic() {
 		// This method will be called once per scheduler run
 		// if (!Constants.ARM_ELEVATOR_MANUAL) {
-		rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations()));
+		rotateMotorController.moveAtPercent(rotatePIDController.calculate(rotateMotorController.getRotations(), rotateSetpoint + dunkOffset));
 		if (extendMotorController.getRotations() < 1000) {
 			extendMotorController.moveAtPercent(-extendPIDController.calculate(extendMotorController.getRotations()));
 		} else {
@@ -99,52 +102,68 @@ public class ArmSubsystem extends SubsystemBase {
 	}
 
 	public void rotateHumanPlayer() {
-		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_HUMANPLAYER);
+		this.rotateSetpoint = CompConstants.Setpoints.ARM_ROTATE_SETPOINT_HUMANPLAYER;
 		this.isFront = true;
+		this.isHigh = false;
 	}
 
 	public void rotateStable() {
-		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_STABLE);
+		this.rotateSetpoint = CompConstants.Setpoints.ARM_ROTATE_SETPOINT_STABLE;
 		this.isFront = true;
+		this.isHigh = false;
 	}
 
 	public void rotateHigh() {
-		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_HIGH);
+		this.rotateSetpoint = CompConstants.Setpoints.ARM_ROTATE_SETPOINT_HIGH;
 		this.isFront = false;
+		this.isHigh = true;
 	}
 
 	public void rotateMid() {
-		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_MID);
+		this.rotateSetpoint = CompConstants.Setpoints.ARM_ROTATE_SETPOINT_MID;
 		this.isFront = false;
+		this.isHigh = false;
 	}
 
 	public void rotateLow() {
-		rotatePIDController.setSetpoint(CompConstants.Setpoints.ARM_ROTATE_SETPOINT_LOW);
+		this.rotateSetpoint = CompConstants.Setpoints.ARM_ROTATE_SETPOINT_LOW;
 		this.isFront = false;
+		this.isHigh = false;
 	}
 	
 	public void extendHumanPlayer() {
 		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_HUMANPLAYER);
-		this.isRetracted = false;
 	}
 	
 	public void extendStable() {
 		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_STABLE);
-		this.isRetracted = true;
 	}
 
 	public void extendHigh() {
 		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_HIGH);
-		this.isRetracted = false;
 	}
 
 	public void extendMid() {
 		extendPIDController.setSetpoint(CompConstants.Setpoints.ARM_EXTEND_SETPOINT_MID);
-		this.isRetracted = false;
+	}
+
+	public void setDunkHigh() {
+		dunkOffset = -5;
+	}
+
+	public void setDunkMid() {
+		dunkOffset = -9;
+	}
+
+	public void resetDunk() {
+		dunkOffset = 0;
 	}
 
 	public boolean isFront() {
 		return this.isFront;
 	}
 
+	public boolean isHigh() {
+		return this.isFront;
+	}
 }

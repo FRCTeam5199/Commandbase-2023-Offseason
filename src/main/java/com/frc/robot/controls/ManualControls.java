@@ -104,6 +104,28 @@ public class ManualControls implements DriveCommand.Controls {
    *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
    * @see #a(EventLoop)
    */
+  public Trigger leftTrigger() {
+    return leftTrigger(CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  /**
+   * Constructs an event instance around the A button's digital signal.
+   *
+   * @param loop the event loop instance to attach the event to.
+   * @return an event instance representing the A button's digital signal attached to the given
+   *     loop.
+   */
+  public Trigger leftTrigger(EventLoop loop) {
+    return xbox.leftTrigger(loop).castTo(Trigger::new);
+  }
+
+  /**
+   * Constructs an event instance around the A button's digital signal.
+   *
+   * @return an event instance representing the A button's digital signal attached to the {@link
+   *     CommandScheduler#getDefaultButtonLoop() default scheduler button loop}.
+   * @see #a(EventLoop)
+   */
   public Trigger a() {
     return a(CommandScheduler.getInstance().getDefaultButtonLoop());
   }
