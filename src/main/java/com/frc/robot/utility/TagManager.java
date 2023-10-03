@@ -51,8 +51,8 @@ public class TagManager extends SubsystemBase {
   static final Transform3d campos2 = new Transform3d(new Translation3d(-5.5 * (0.0254), -3 * (0.0254), 0),
           new Rotation3d(0, 0, Math.PI));
 
-  static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(), "apriltags",
-          "2023-chargedup.json");
+  static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(), "deploy",
+          "apriltaglayout.json");
   private static AprilTagFieldLayout tagLayout;
 
   static {
