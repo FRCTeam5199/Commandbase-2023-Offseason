@@ -91,7 +91,7 @@ public class ArmSubsystem extends SubsystemBase {
 		return this.runEnd(() -> rotateMotorController.moveAtPercent(percent),
 				() -> rotateMotorController.moveAtPercent(0));
 	}
-
+	
 	/**
 	 * Moves the Arm Extend by a percent between -1 and 1 and stops it when
 	 * finished.

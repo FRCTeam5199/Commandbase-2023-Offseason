@@ -143,16 +143,16 @@ public final class CompConstants {
     // Arm
     public static final double ARM_ROTATE_SETPOINT_HUMANPLAYER = 23;
     public static final double ARM_ROTATE_SETPOINT_STABLE = 0;
-    public static final double ARM_ROTATE_SETPOINT_HIGH = -63;
+    public static final double ARM_ROTATE_SETPOINT_HIGH = -65;
     public static final double ARM_ROTATE_SETPOINT_MID = -60;
     public static final double ARM_ROTATE_SETPOINT_LOW = -75;
 
-    public static final double ARM_EXTEND_SETPOINT_HUMANPLAYER = 11;
-    public static final double ARM_EXTEND_SETPOINT_STABLE = 8;
-    public static final double ARM_EXTEND_SETPOINT_HIGH = 23;
+    public static final double ARM_EXTEND_SETPOINT_HUMANPLAYER = 9;
+    public static final double ARM_EXTEND_SETPOINT_STABLE = 6;
+    public static final double ARM_EXTEND_SETPOINT_HIGH = 22;
     public static final double ARM_EXTEND_SETPOINT_MID = 0;
     // public static final double ARM_EXTEND_SETPOINT_LOW = 27;
-    
+
     //Elevator
     public static final double ELEVATOR_SETPOINT_HUMANPLAYER = 34;
     public static final double ELEVATOR_SETPOINT_HIGH = 36;
