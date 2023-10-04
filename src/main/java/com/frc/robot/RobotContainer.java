@@ -103,6 +103,8 @@ public class RobotContainer {
     
     compressor.setDefaultCommand(compressorRun);
 
+    tagManager.print();
+
     
       ROBOT_TAB.add(autonChooser);
   }

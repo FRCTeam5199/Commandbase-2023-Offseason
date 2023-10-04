@@ -153,6 +153,7 @@ public class Auton {
     // autonChooser.addOption("Correct Red taxi level", CRedTaxiLevel());
     // autonChooser.addOption("Correct Blue taxi level", CBlueTaxiLevel());
     autonChooser.addOption("Level", Level());
+    autonChooser.addOption("AutonTest", Apriltagtest());
 
 
     //Wrong Autons
@@ -208,6 +209,12 @@ public class Auton {
     return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1));
   }
   */
+
+  public Command Apriltagtest(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("ungadunga", 2,2,true);
+
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1));
+  }
 
   public Command CBlueTaxiCubeLevel(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p1", 2, 2);

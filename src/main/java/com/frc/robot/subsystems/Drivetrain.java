@@ -223,11 +223,10 @@ public class Drivetrain extends SubsystemBase {
         }
 
         public Pose2d getOdometryPose2dAprilTags(){
-                Pose2d deadPose = new Pose2d(new Translation2d(1, 1), new Rotation2d(1));
-                if(tagManager.getEstimatedGlobalPose() == deadPose){
+                if(tagManager.getEstimatedGlobalPose() == null){
                         return getOdometryPose2dNoApriltags();
                 }else{
-                        return tagManager.getEstimatedGlobalPose();
+                        return tagManager.getEstimatedGlobalPose().get().estimatedPose.toPose2d();
                 }
         }
 
@@ -271,15 +270,7 @@ public class Drivetrain extends SubsystemBase {
                 // We will only get valid fused headings if the magnetometer is calibrated
                 // We have to invert the angle of the NavX so that rotating the robot
                 // counter-clockwise makes the angle increase.
-
-                // if pose estimator is null, default to the raw gyro rotation
-                if (poseEstimator == null) {
-                        if (lastPose == null) {
-                                return new Rotation2d();
-                        }
-                        return lastPose.getRotation();
-                }
-
+                
                 return poseEstimator.getEstimatedPosition().getRotation();
                 // return getRawGyroRotation();
         }

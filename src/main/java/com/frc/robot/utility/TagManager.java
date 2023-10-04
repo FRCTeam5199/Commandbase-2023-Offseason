@@ -32,9 +32,6 @@ public class TagManager extends SubsystemBase {
   AprilTagDetector tagDetector;
   AprilTagDetection tagDetection;
 
-  AprilTagPoseEstimate poseEstimate;
-  PhotonPoseEstimator poseEstimator;
-  PhotonPoseEstimator poseEstimator2;
 
   PoseStrategy poseStrategy;
 
@@ -51,30 +48,31 @@ public class TagManager extends SubsystemBase {
   static final Transform3d campos2 = new Transform3d(new Translation3d(-5.5 * (0.0254), -3 * (0.0254), 0),
           new Rotation3d(0, 0, Math.PI));
 
-  static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(), "deploy",
+  static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(),
           "apriltaglayout.json");
   private static AprilTagFieldLayout tagLayout;
 
   static {
     try {
-      tagLayout = new AprilTagFieldLayout(aprilPath);
+      tagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
     } catch (Exception e) {
       System.err.println("Input sucks L + Ratio");
     }
   }
 
+  public PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera1, campos1);
+  public PhotonPoseEstimator poseEstimator2 = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera2, campos2);
+
+
   public void init() {
 
     photonCamera1 = new PhotonCamera("Global_Shutter_Camera");
-    photonCamera1.setPipelineIndex(0);
 
     camspos = new ArrayList<Pair<PhotonCamera, Transform3d>>();
     camspos.add(new Pair<>(photonCamera1, campos1));
     camspos.add(new Pair<>(photonCamera2, campos2));
 
     poseStrategy = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP;
-    poseEstimator = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera1, campos1);
-    poseEstimator2 = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera2, campos2);
     poseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
 
 
@@ -96,7 +94,7 @@ public class TagManager extends SubsystemBase {
   }
 
 
-  public Pose2d getEstimatedGlobalPose() {
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
     poseEstimator.setReferencePose(lastPose);
 
 
@@ -106,22 +104,20 @@ public class TagManager extends SubsystemBase {
     // return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(),
     // currentTime - result.get().getSecond());
     if (result1.isEmpty() && result2.isEmpty()) {
-      lastPose = new Pose2d(new Translation2d(1, 1), new Rotation2d(1));
-      return lastPose;
+      return null;
     }else{
       if(result1.isPresent()){
-        lastPose = result1.get().estimatedPose.toPose2d();
-        return lastPose;
+        return poseEstimator.update();
       }else{
         lastPose = result2.get().estimatedPose.toPose2d();
-        return lastPose;
+        return poseEstimator.update();
       }
     }
   }
 
   public void update(){
-    SmartDashboard.putNumber("Position X: ", getEstimatedGlobalPose().getX());
-    SmartDashboard.putNumber("Postion Y: ", getEstimatedGlobalPose().getY());
+    SmartDashboard.putNumber("Position X: ", poseEstimator.update().get().estimatedPose.getX());
+    SmartDashboard.putNumber("Postion Y: ", poseEstimator.update().get().estimatedPose.getY());
   }
 
   public Command print() {
