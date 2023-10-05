@@ -1,5 +1,6 @@
 package com.frc.robot.utility;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -29,100 +31,47 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TagManager extends SubsystemBase {
-  AprilTagDetector tagDetector;
-  AprilTagDetection tagDetection;
 
-
-  PoseStrategy poseStrategy;
-
-  PhotonCamera photonCamera1;
+  PhotonCamera photonCamera;
   PhotonCamera photonCamera2;
+  PhotonPoseEstimator poseEstimator;
+  PhotonPoseEstimator poseEstimator2;
+  public TagManager(){
 
-
-  ArrayList<Pair<PhotonCamera, Transform3d>> camspos;
-  public Pose2d lastPose = new Pose2d();
-
-
-  static final Transform3d campos1 = new Transform3d(new Translation3d(18 * (0.0254), 4 * (0.0254), 0),
-          new Rotation3d(0, 0.262, 0));
-  static final Transform3d campos2 = new Transform3d(new Translation3d(-5.5 * (0.0254), -3 * (0.0254), 0),
-          new Rotation3d(0, 0, Math.PI));
-
-  static Path aprilPath = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(),
-          "apriltaglayout.json");
-  private static AprilTagFieldLayout tagLayout;
-
-  static {
+    photonCamera = new PhotonCamera("Global_Shutter_Camera");
+    photonCamera2 = new PhotonCamera("HD_USB_Camera");
     try {
-      tagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
-    } catch (Exception e) {
-      System.err.println("Input sucks L + Ratio");
+      // Attempt to load the AprilTagFieldLayout that will tell us where the tags are on the field.
+      AprilTagFieldLayout fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+      // Create pose estimator
+      System.out.println("created");
+      poseEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP, photonCamera, new Transform3d(new Translation3d(18 * (0.0254), 4 * (0.0254), 0), new Rotation3d(0, 0.262, 0))); 
+      poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+      poseEstimator2 = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP, photonCamera2, new Transform3d(new Translation3d(-5.5 * (0.0254), -3 * (0.0254), 0), new Rotation3d(0, 0, Math.PI)));
+      poseEstimator2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    } catch (IOException e) {
+      // The AprilTagFieldLayout failed to load. We won't be able to estimate poses if we don't know
+      // where the tags are.
+      System.out.println("Not working");
+      DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
+      poseEstimator = null;
     }
   }
 
-  public PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera1, campos1);
-  public PhotonPoseEstimator poseEstimator2 = new PhotonPoseEstimator(tagLayout, poseStrategy, photonCamera2, campos2);
-
-
-  public void init() {
-
-    photonCamera1 = new PhotonCamera("Global_Shutter_Camera");
-
-    camspos = new ArrayList<Pair<PhotonCamera, Transform3d>>();
-    camspos.add(new Pair<>(photonCamera1, campos1));
-    camspos.add(new Pair<>(photonCamera2, campos2));
-
-    poseStrategy = PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP;
-    poseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
-
-
-  }
-
-  public void detectTag() {
-    Pose3d pos = tagLayout.getTags().get(1).pose;
-
-  }
-
-  public boolean detect() {
-    Optional<EstimatedRobotPose> result = poseEstimator.update();
-
-    if (result.isEmpty()) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-    poseEstimator.setReferencePose(lastPose);
-
-
-    double currentTime = Timer.getFPGATimestamp();
-    Optional<EstimatedRobotPose> result1 = poseEstimator.update();
-    Optional<EstimatedRobotPose> result2 = poseEstimator2.update();
-    // return new Pair<Pose2d, Double>(result.get().getFirst().toPose2d(),
-    // currentTime - result.get().getSecond());
-    if (result1.isEmpty() && result2.isEmpty()) {
-      return null;
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    if (poseEstimator.update() == null && poseEstimator2 == null) {
+        // The field layout failed to load, so we cannot estimate poses.
+        System.out.println("Null position");
+        return Optional.empty();
     }else{
-      if(result1.isPresent()){
+      poseEstimator.setReferencePose(prevEstimatedRobotPose);
+      poseEstimator2.setReferencePose(prevEstimatedRobotPose);
+      if(poseEstimator2 == null){
         return poseEstimator.update();
       }else{
-        lastPose = result2.get().estimatedPose.toPose2d();
-        return poseEstimator.update();
+        return poseEstimator2.update();
       }
     }
   }
-
-  public void update(){
-    SmartDashboard.putNumber("Position X: ", poseEstimator.update().get().estimatedPose.getX());
-    SmartDashboard.putNumber("Postion Y: ", poseEstimator.update().get().estimatedPose.getY());
-  }
-
-  public Command print() {
-    return this.run(() -> update());
-
-  }
-
 }

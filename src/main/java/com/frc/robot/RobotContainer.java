@@ -61,7 +61,7 @@ public class RobotContainer {
 
   public final CompressorSubsystem compressor = new CompressorSubsystem();
 
-  public final TagManager tagManager = new TagManager();
+  public final TagManager tagManager;
 
   public final Auton auton;
 
@@ -76,6 +76,7 @@ public class RobotContainer {
     driveCommand = new DriveCommand(drivetrain, manualControls);
     drivetrain.setDefaultCommand(driveCommand);
     LimelightManager limelight = new LimelightManager();
+    tagManager = new TagManager();
 
     compressor.init();
 
@@ -89,9 +90,7 @@ public class RobotContainer {
 
     intake.init();
 
-    tagManager.init();
 
-    tagManager.print();
 
     auton = new Auton(drivetrain, arm, intake, elevator, claw, wrist);
 
@@ -102,8 +101,6 @@ public class RobotContainer {
     CompressorCommand compressorRun = new CompressorCommand(compressor);
     
     compressor.setDefaultCommand(compressorRun);
-
-    tagManager.print();
 
     
       ROBOT_TAB.add(autonChooser);

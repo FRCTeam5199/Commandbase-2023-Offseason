@@ -26,8 +26,10 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
 import static com.frc.robot.Constants.*;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.photonvision.EstimatedRobotPose;
 
 import com.frc.robot.Constants;
 import com.frc.robot.utility.NetworkTable.NtValueDisplay;
@@ -223,10 +225,27 @@ public class Drivetrain extends SubsystemBase {
         }
 
         public Pose2d getOdometryPose2dAprilTags(){
-                if(tagManager.getEstimatedGlobalPose() == null){
-                        return getOdometryPose2dNoApriltags();
+
+                SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(m_kinematics,
+                getRawGyroRotation(), getModulePositions(), new Pose2d(), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(.115, .115, .115), new MatBuilder<N3, N1>(Nat.N3(), Nat.N1()).fill(1.6, 1.6, 1.6));
+
+                poseEstimator.update(getGyroscopeRotation(), getModulePositions());
+                Optional<EstimatedRobotPose> result =
+                tagManager.getEstimatedGlobalPose(odometry.getPoseMeters());
+
+                Pose2d estimatedPose = odometry.getPoseMeters();
+
+                if (result.isPresent()) {
+                        System.out.println("Apriltags");
+                        EstimatedRobotPose robotPose = result.get();
+                        System.out.println(robotPose.estimatedPose.getX());
+                        poseEstimator.addVisionMeasurement(robotPose.estimatedPose.toPose2d(), -1);
+                        estimatedPose = odometry.getPoseMeters();
+                        return estimatedPose;                       
                 }else{
-                        return tagManager.getEstimatedGlobalPose().get().estimatedPose.toPose2d();
+                        System.out.println("Odometry");
+                        return odometry.getPoseMeters();
+        
                 }
         }
 
