@@ -135,6 +135,7 @@ public class IntakeSubsystem extends SubsystemBase {
       }
       else {
         keeperSpin = true;
+        
       }
     }
     ///////////
@@ -182,7 +183,7 @@ public class IntakeSubsystem extends SubsystemBase {
       stopBottomIntake = false;
     }
 // balls
-    public Command spinBottomWithLimit() { 
+    public Command spinBottomWithLimit() { //driver intake
       return this.runOnce(() -> runTheIntakeWithLimit());
     }
 //runs spinBottomWithLimit
@@ -235,9 +236,9 @@ public class IntakeSubsystem extends SubsystemBase {
       return intake().andThen(new WaitCommand(2).andThen(retractPiston()).andThen(stopSpin()));
       
     }
-    public Command fastOutake(){
-      bottomIntake.setCurrentLimit(50);
-      return this.run(()-> bottomIntake.moveAtPercent(-.8));
+    public Command fastOutake(){ //driver outtake
+      bottomIntake.setCurrentLimit(50);//50
+      return this.run(()-> bottomIntake.moveAtPercent(-50));
 
     }
 

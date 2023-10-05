@@ -61,7 +61,7 @@ public class RobotContainer {
 
   public final Auton auton;
 
-  SendableChooser<Command> autonChooser = new SendableChooser<>();
+  //SendableChooser<Command> autonChooser = new SendableChooser<>();
 
   // final AprilTagManager tagManager = new AprilTagManager();
 
@@ -104,19 +104,19 @@ public class RobotContainer {
 
     compressor.setDefaultCommand(compressorRun);
     
-      autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
-      autonChooser.addOption("Nothing", auton.nothingCommand());
-      //autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
-      autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
-      //autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
-      autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
-      autonChooser.addOption("Red TaxiCubeWall", auton.RedTaxiWallCubeShootCube());
-      autonChooser.addOption("Blue TaxiCubeWall", auton.BlueTaxiWallCubeShoot());
-      autonChooser.addOption("TaxiWall", auton.TaxiWall());
+      // autonChooser.setDefaultOption("Taxi and Level", auton.TaxiandLevel());
+      // autonChooser.addOption("Nothing", auton.nothingCommand());
+      // //autonChooser.addOption("Red TaxiCubeLevel", auton.RedTaxiCubeLevel());
+      // autonChooser.addOption("Blue TaxiCubeLevel", auton.BlueTaxiCubeLevel());
+      // //autonChooser.addOption("Red TaxiCubeLevel180", auton.RedTaxiCubeLevel180());
+      // autonChooser.addOption("Blue TaxiCubeLevel180", auton.BlueTaxiCubeLevel180());
+      // autonChooser.addOption("Red TaxiCubeWall", auton.RedTaxiWallCubeShootCube());
+      // autonChooser.addOption("Blue TaxiCubeWall", auton.BlueTaxiWallCubeShoot());
+      // autonChooser.addOption("TaxiWall", auton.TaxiWall());
 
 
 
-      ROBOT_TAB.add(autonChooser);
+      //ROBOT_TAB.add(autonChooser);
   }
 
   private void createControllers() {
