@@ -18,10 +18,10 @@ public class ArmSubsystem extends SubsystemBase {
 	private boolean isFront = true;
 	private boolean isHigh = false;
 	public double rotateSetpoint = 0;
-	public double rotateOffset = 0;
+	public double rotateOffset = .7;
 	public double extendSetpoint = 0;
 	public double extendOffset = 0;
-	
+	 
 	private double dunkOffset = 0;
 
 	public ArmSubsystem() {
@@ -112,7 +112,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 	public void rotateHumanPlayer() {
 		// rotatePIDController.setSetpoint(35);
-		this.rotateSetpoint = 35.7;
+		this.rotateSetpoint = 35;
 		this.isFront = true;
 		this.isHigh = false;
 	}
