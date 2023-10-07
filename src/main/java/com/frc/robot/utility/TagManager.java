@@ -65,12 +65,16 @@ public class TagManager extends SubsystemBase {
         System.out.println("Null position");
         return Optional.empty();
     }else{
+      var result = photonCamera.getLatestResult();
+      var result2 = photonCamera2.getLatestResult();
       poseEstimator.setReferencePose(prevEstimatedRobotPose);
       poseEstimator2.setReferencePose(prevEstimatedRobotPose);
-      if(poseEstimator2 == null){
+      if(result.hasTargets()){
         return poseEstimator.update();
-      }else{
+      }else if(result2.hasTargets()){
         return poseEstimator2.update();
+      }else{
+        return Optional.empty();
       }
     }
   }
