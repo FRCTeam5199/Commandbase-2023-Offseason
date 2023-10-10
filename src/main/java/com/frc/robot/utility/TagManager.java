@@ -60,11 +60,7 @@ public class TagManager extends SubsystemBase {
   }
 
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-    if (poseEstimator.update() == null && poseEstimator2 == null) {
-        // The field layout failed to load, so we cannot estimate poses.
-        System.out.println("Null position");
-        return Optional.empty();
-    }else{
+  
       var result = photonCamera.getLatestResult();
       var result2 = photonCamera2.getLatestResult();
       poseEstimator.setReferencePose(prevEstimatedRobotPose);
@@ -76,6 +72,5 @@ public class TagManager extends SubsystemBase {
       }else{
         return Optional.empty();
       }
-    }
   }
 }

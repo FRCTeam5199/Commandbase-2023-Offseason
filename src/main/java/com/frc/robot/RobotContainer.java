@@ -232,6 +232,29 @@ public class RobotContainer {
         ),
       arm::isFront);
     
+      ConditionalCommand hp1CommandGroup =
+      new ConditionalCommand(
+        new ParallelCommandGroup(
+          new InstantCommand(() -> elevator.humanPlayer()),
+          new InstantCommand(() -> arm.rotateHumanPlayer()),
+          new InstantCommand(() -> arm.extendHumanPlayer1())
+        ),
+        new ParallelCommandGroup(
+          new SequentialCommandGroup(
+            new InstantCommand(() -> arm.retract()),
+            new InstantCommand(() -> elevator.low()),
+            new InstantCommand(() -> arm.rotateHumanPlayer()),
+            new WaitCommand(0.8),
+            new InstantCommand(() -> elevator.humanPlayer()),
+            new InstantCommand(() -> arm.extendHumanPlayer1())
+          ),
+          new SequentialCommandGroup(
+              new InstantCommand(() -> wrist.moveLeft()),
+              new WaitCommand(0.5),
+              new InstantCommand(() -> wrist.stopRotation())
+          )
+        ),
+      arm::isFront);
     // Map position commands to button panel triggers
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 12).onTrue(humanPlayerCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 7).onTrue(stableCommandGroup);
@@ -239,6 +262,7 @@ public class RobotContainer {
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 9).onTrue(highGoalCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 10).onTrue(midGoalCommandGroup);
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 11).onTrue(lowGoalCommandGroup);
+    buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_2, 11).onTrue(hp1CommandGroup);
 
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 3).onTrue(intake.ManualRetract());
 

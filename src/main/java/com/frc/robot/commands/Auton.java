@@ -145,12 +145,13 @@ public class Auton {
     autonChooser.addOption("Correct Red Taxi Cube Level 180", CRedTaxiCubeLevel180());
     autonChooser.addOption("Correct Blue Taxi Wall", CBlueTaxiWall());
     autonChooser.addOption("Correct Red Taxi Wall", CRedTaxiWall());
-    autonChooser.addOption("Correct Blue Taxi Wall Cube", CBlueTaxiWallCube());
+    autonChooser.addOption("Correct Blue Taxi Wall Cube", CBlueTaxiWallCube()); 
     autonChooser.addOption("Correct Red Taxi Wall Cube", CRedTaxiWallCube());
     autonChooser.addOption("Correct Blue Taxi HP Cube", CBlueTaxiHPCube());
     autonChooser.addOption("Correct Red Taxi HP Cube", CRedTaxiHPCube());
     autonChooser.addOption("Correct Red Taxi HP 3 piece", CRedTaxiHPCubeCube());
     autonChooser.addOption("Correct Red Taxi Wall 3 piece", CRedTaxiWallCubeCube());
+    autonChooser.addOption("Correct Blue Taxi Wall 3 piece",CBlueTaxiCubeCubeLevel());
     // autonChooser.addOption("Correct Red taxi level", CRedTaxiLevel());
     // autonChooser.addOption("Correct Blue taxi level", CBlueTaxiLevel());
     autonChooser.addOption("Level", Level());
@@ -247,6 +248,11 @@ public class Auton {
     return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), intake.slowIntake(), intake.retractPiston(), new ChargingStationAuto180(drivetrain), autoBuilder.fullAuto(pathGroup3), intake.fastOutake().alongWith(new ChargingStationAuto(drivetrain)));
 
   }
+  public Command CBlueTaxiCubeCubeLevel(){
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Correct Blue Taxi Wall pt2",5.5,3);
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Correct Blue Taxi Wall pt3",6.5,5);
+    return new SequentialCommandGroup(CBlueTaxiWallCube(),autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(1).andThen(intake.deployPiston().andThen(intake.intake()))),intake.retractPiston(),intake.stopSpin(),autoBuilder.fullAuto(pathGroup4), intake.outtake(), new WaitCommand(.2), intake.stopSpin());
+  }
 
   public Command CBlueTaxiWall(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi Wall", 2, 2);
@@ -306,8 +312,8 @@ public class Auton {
   }
 
   public Command CBlueTaxiWallCube(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi Wall", 2, 2);
-    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Blue Taxi Back Wall", 2, 2);
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi Wall", 4, 3);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Blue Taxi Back Wall", 3,2 );
 
     return new SequentialCommandGroup(intake.deployPiston(), intake.intake().alongWith(autoBuilder.fullAuto(pathGroup1)), intake.slowIntake(), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
 
