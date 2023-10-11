@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TagManager extends SubsystemBase {
+
+  /* 
   AprilTagDetector tagDetector;
   AprilTagDetection tagDetection;
 
@@ -117,5 +119,6 @@ public class TagManager extends SubsystemBase {
     return this.run(() -> update());
 
   }
+  */
 
 }

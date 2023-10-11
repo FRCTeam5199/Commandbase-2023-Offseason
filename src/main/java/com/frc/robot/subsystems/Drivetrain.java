@@ -58,7 +58,7 @@ public class Drivetrain extends SubsystemBase {
         public static final double MAX_VOLTAGE = 12.0;
 
         private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(GYRO_ID);
-        private final TagManager tagManager = new TagManager();
+        //private final TagManager tagManager = new TagManager();
 
         private final SwerveModule m_frontLeftModule;
         private final SwerveModule m_frontRightModule;
@@ -223,12 +223,13 @@ public class Drivetrain extends SubsystemBase {
         }
 
         public Pose2d getOdometryPose2dAprilTags(){
-                Pose2d deadPose = new Pose2d(new Translation2d(1, 1), new Rotation2d(1));
+                /*Pose2d deadPose = new Pose2d(new Translation2d(1, 1), new Rotation2d(1));
                 if(tagManager.getEstimatedGlobalPose() == deadPose){
                         return getOdometryPose2dNoApriltags();
                 }else{
                         return tagManager.getEstimatedGlobalPose();
-                }
+                }*/
+                return null;
         }
 
         public SwerveModulePosition[] getModulePositions() {

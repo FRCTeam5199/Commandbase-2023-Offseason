@@ -56,7 +56,7 @@ public class RobotContainer {
 
   public final CompressorSubsystem compressor = new CompressorSubsystem();
 
-  public final TagManager tagManager = new TagManager();
+  //public final TagManager tagManager = new TagManager();
   public UserInterface uI;
 
   public final Auton auton;
