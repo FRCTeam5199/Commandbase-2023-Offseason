@@ -3,6 +3,7 @@ package com.frc.robot.commands;
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.HashMap;
 import java.util.List;
@@ -155,6 +156,8 @@ public class Auton {
     // autonChooser.addOption("Correct Red taxi level", CRedTaxiLevel());
     // autonChooser.addOption("Correct Blue taxi level", CBlueTaxiLevel());
     autonChooser.addOption("Level", Level());
+    autonChooser.addOption("Red 3 Piece and Level", Red3PieceandLevel());
+    autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
 
 
     //Wrong Autons
@@ -216,6 +219,29 @@ public class Auton {
 
     return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1));
   }
+
+  public Command Blue3PieceandLevel(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2.5 Piece and Level p1", 4, 2);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("2.5 Piece and Level p2", 4, 2);
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("2.5 Piece and Level p3", 4, 2);
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("2.5 Piece and Level p4", 4, 2);
+
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1).alongWith(new WaitCommand(3).andThen(intake.deployPiston().andThen(intake.intake()))), autoBuilder.fullAuto(pathGroup2).alongWith(intake.retractPiston()), intake.outtake(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(2).andThen(intake.deployPiston().andThen(intake.intake()))), autoBuilder.fullAuto(pathGroup4).alongWith(intake.retractPiston()), intake.outtake(), new ChargingStationAuto(drivetrain));
+
+
+  }
+
+  public Command Red3PieceandLevel(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2.5 Piece and Level p1", 4, 2, true);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("2.5 Piece and Level p2", 4, 2, true);
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("2.5 Piece and Level p3", 4, 2, true);
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("2.5 Piece and Level p4", 4, 2, true);
+
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1).alongWith(new WaitCommand(3).andThen(intake.deployPiston().andThen(intake.intake()))), autoBuilder.fullAuto(pathGroup2).alongWith(intake.retractPiston()), intake.outtake(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(2).andThen(intake.deployPiston().andThen(intake.intake()))), autoBuilder.fullAuto(pathGroup4).alongWith(intake.retractPiston()), intake.outtake(), new ChargingStationAuto(drivetrain));
+
+
+  }
+
 
   public Command CBlueTaxiCubeLevel(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p1", 2, 2);
