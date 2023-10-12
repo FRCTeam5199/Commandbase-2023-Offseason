@@ -67,6 +67,8 @@ public class Auton {
    * An instance of SwerveAutoBuilder used to generate path following commands.
    */
   private SwerveAutoBuilder autoBuilder;
+  private SwerveAutoBuilder autoBuilder2;
+
 
   private Time timer = new Time();
 
@@ -123,6 +125,7 @@ public class Auton {
         true,
         drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
     );
+
 
     teleopAutoBuilder = new SwerveAutoBuilder(
         () -> drivetrain.getPose(), // Pose2d supplier
@@ -313,11 +316,23 @@ public class Auton {
   }
 
   public Command CRedTaxiHPCubeCube(){
+    autoBuilder2 = new SwerveAutoBuilder(
+      () -> drivetrain.getOdometryPose2dAprilTags(),
+      (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
+      Constants.m_kinematics, // SwerveDriveKinematics
+      new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(3, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
+                                                        // subsystem
+      eventMap,
+      true,
+      drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
+  );
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Red Taxi HP", 5, 3, false);
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Blue Taxi HP Back", 5, 3,true);
-    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt1",4,4,false);
-    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt2",4,4,false);
-    return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), autoBuilder.fullAuto(pathGroup1).alongWith(intake.intake()),intake.retractPiston(), intake.stopSpin(),autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.2), intake.stopSpin(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(1.5).andThen(intake.deployPiston().andThen(intake.intake()))),intake.retractPiston(),autoBuilder.fullAuto(pathGroup4), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt1",4,2,false);
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt2",4,2,false);
+    return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), autoBuilder2.fullAuto(pathGroup1).alongWith(intake.intake()),intake.retractPiston(), intake.stopSpin(),autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.2), intake.stopSpin(), autoBuilder2.fullAuto(pathGroup3).alongWith(new WaitCommand(1.5).andThen(intake.deployPiston().andThen(intake.intake()))),intake.retractPiston(),autoBuilder2.fullAuto(pathGroup4), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
   }
 
   
