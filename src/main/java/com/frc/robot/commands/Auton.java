@@ -313,19 +313,24 @@ public class Auton {
   }
 
   public Command CRedTaxiHPCubeCube(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Red Taxi HP", 4, 3, true);
-    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Red Taxi HP Back", 5, 3,true);
-    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt1",8,4,true);
-    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt2",7,4,true);
-    return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), autoBuilder.fullAuto(pathGroup1).alongWith(intake.intake()),intake.retractPiston(), intake.stopSpin(),autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.2), intake.stopSpin(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(1.5).andThen(intake.deployPiston().andThen(intake.intake()))),intake.retractPiston(),autoBuilder.fullAuto(pathGroup4), intake.outtake());
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Red Taxi HP", 5, 3, false);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Blue Taxi HP Back", 5, 3,true);
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt1",4,4,false);
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt2",4,4,false);
+    return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), autoBuilder.fullAuto(pathGroup1).alongWith(intake.intake()),intake.retractPiston(), intake.stopSpin(),autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.2), intake.stopSpin(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(1.5).andThen(intake.deployPiston().andThen(intake.intake()))),intake.retractPiston(),autoBuilder.fullAuto(pathGroup4), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
   }
 
+  
 
   public Command CRedTaxiWallCube(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi HP", 3, 3, true);
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Correct Blue Taxi HP Back", 4, 2.5, true);
 
     return new SequentialCommandGroup(intake.deployPiston(), intake.intake().alongWith(autoBuilder.fullAuto(pathGroup1)), intake.slowIntake(), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
+  }
+  public Command test(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("test", 1,1,true);
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1));
   }
 
   public Command CRedTaxiWallCubeCube(){
