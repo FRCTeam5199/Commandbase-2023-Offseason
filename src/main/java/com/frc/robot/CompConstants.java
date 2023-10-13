@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
  */
 public final class CompConstants {
 
-  public static final int robotNum = 9995;
+  public static final int robotNum = 9970;
 
   public static final int GYRO_ID = 22;
 
@@ -96,7 +96,7 @@ public final class CompConstants {
   public static final String DRIVE_MOTOR_CANBUS = "rio";
   public static final double CTRE_SENSOR_UNITS_PER_ROTATION = 2048;
   
-  public static final int RobotNum = 9995;
+  public static final int RobotNum = 9970;
 
   // Pneumatics Control Module
   public static final int PCM_ID = 50;
