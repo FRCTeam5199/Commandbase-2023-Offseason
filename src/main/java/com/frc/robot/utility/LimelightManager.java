@@ -39,6 +39,10 @@ public class LimelightManager extends SubsystemBase {
 
         return table.getEntry("ty").getDouble(0);
     }
+    
+    public double getRotation(){
+        return table.getEntry("ts").getDouble(0);
+    }
 
     public void lightOn(){
         table.getEntry("ledMode").setNumber(3);

@@ -13,7 +13,7 @@ import com.frc.robot.utility.LimelightManager;
 
 public class LimeLightCommand extends CommandBase {
     
-    public double x, y;
+    public double x, y, z;
     public boolean a;
     private final Drivetrain drivetrain;
     LimelightManager limelight;
@@ -28,7 +28,7 @@ public class LimeLightCommand extends CommandBase {
         this.limelight = limelight;
         this.controls = controls;
 
-        limepid = new PIDController(0.2, 0, 0);
+        limepid = new PIDController(1, 0, 0);
     
     }
 
