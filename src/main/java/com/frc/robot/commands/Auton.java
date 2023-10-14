@@ -238,7 +238,7 @@ public class Auton {
   }
 
   public Command CBlueTaxiHP(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Correct Blue Taxi HP", 4, 2);
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Corrected Blue Taxi HP", 4, 2);
     return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), autoBuilder.fullAuto(pathGroup1));
   }
   public Command CRedTaxiHP(){
