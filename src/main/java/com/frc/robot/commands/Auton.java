@@ -158,6 +158,7 @@ public class Auton {
     autonChooser.addOption("Correct Red Taxi HP Cube", CRedTaxiHPCube());
     autonChooser.addOption("Correct Red Taxi HP 3 piece", CRedTaxiHPCubeCube());
     autonChooser.addOption("Correct Red Taxi HP", CRedTaxiHP());
+    autonChooser.addOption("Correct Blue Taxi HP", CBlueTaxiHP());
     // autonChooser.addOption("Correct Red taxi level", CRedTaxiLevel());
     // autonChooser.addOption("Correct Blue taxi level", CBlueTaxiLevel());
     autonChooser.addOption("Level", Level());
