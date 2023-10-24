@@ -106,7 +106,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
     public void runBottomIntake() {
         if(bottomIntake.getCurrent() < 13.5) {
-          bottomIntake.moveAtPercent(-0.5);
+          bottomIntake.moveAtPercent(-0.8);
           if  (biggerIfTimer) {
             OnceTimer = true;
             biggerIfTimer = false;
@@ -147,7 +147,7 @@ public class IntakeSubsystem extends SubsystemBase {
         TimerResetKeeper(false);
         }
         if (spinBottomToKeep.get() > 2){
-          bottomIntake.moveAtPercent(-0.5);
+          bottomIntake.moveAtPercent(-0.8);
           if(bottomIntake.getCurrent() > 14.5) {
             bottomIntake.moveAtPercent(0);
             TimerResetKeeper(true);

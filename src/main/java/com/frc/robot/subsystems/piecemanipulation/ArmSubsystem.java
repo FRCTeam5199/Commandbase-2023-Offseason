@@ -22,6 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
 	public double extendSetpoint = 0;
 	public double extendOffset = 0;
 	
+	
 	private double dunkOffset = 0;
 
 	public ArmSubsystem() {
@@ -155,7 +156,6 @@ public class ArmSubsystem extends SubsystemBase {
 		this.extendSetpoint = 2.5;
 		// this.isRetracted = false;
 	}
-	
 	public void extendLow() {
 		// extendPIDController.setSetpoint(4);
 		this.extendSetpoint = 4;
@@ -194,4 +194,8 @@ public class ArmSubsystem extends SubsystemBase {
 	public Command changeRotateOffset(double offset) {
 		return this.runOnce(() -> rotateOffset += offset);
 	}
+	public Command changeExention(double offset){
+		return this.runOnce(()-> extendOffset += offset);
+	}
+
 }

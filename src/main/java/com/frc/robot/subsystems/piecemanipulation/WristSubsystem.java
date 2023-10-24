@@ -77,14 +77,14 @@ public class WristSubsystem extends SubsystemBase{
     public Command moveLeftManual(){
         return new SequentialCommandGroup(
             new InstantCommand(() -> moveLeft()),
-            new WaitCommand(0.5),
+            new WaitCommand(1),
             new InstantCommand(() -> stopRotation())
         );
     }
     public Command moveRigthManual(){
         return new SequentialCommandGroup(
             new InstantCommand(() -> moveRight()),
-            new WaitCommand(0.5),
+            new WaitCommand(1),
             new InstantCommand(() -> stopRotation())
         );
     }
