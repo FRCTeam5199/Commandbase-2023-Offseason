@@ -117,8 +117,8 @@ public class Auton {
         () -> drivetrain.getOdometryPose2dAprilTags(), // Pose2d supplier TODO: possibly revert back to no apriltags
         (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
         Constants.m_kinematics, // SwerveDriveKinematics
-        new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-        new PIDConstants(0.8, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        new PIDConstants(1.5, 0.02, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(0.8, 0.03, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
                                                           // subsystem
         eventMap,
@@ -161,6 +161,7 @@ public class Auton {
     autonChooser.addOption("Level", Level());
     autonChooser.addOption("Red 3 Piece and Level", Red3PieceandLevel());
     autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
+    autonChooser.addOption("New Dawm", RedHP3Piece());
 
 
     //Wrong Autons
@@ -235,14 +236,12 @@ public class Auton {
   }
 
   public Command Red3PieceandLevel(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2.5 Piece and Level p1", 4, 2, true);
-    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("2.5 Piece and Level p2", 4, 2, true);
-    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("2.5 Piece and Level p3", 4, 2, true);
-    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("2.5 Piece and Level p4", 4, 2, true);
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2.5 Piece and Level p1", 4, 2);
+    List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("2.5 Piece and Level p2", 4, 2);
+    List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("2.5 Piece and Level p3", 4, 2);
+    List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("2.5 Piece and Level p4", 4, 2);
 
-    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1).alongWith(new WaitCommand(3).andThen(intake.deployPiston().andThen(intake.intake()))), autoBuilder.fullAuto(pathGroup2).alongWith(intake.retractPiston()), intake.outtake(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(2).andThen(intake.deployPiston().andThen(intake.intake()))), autoBuilder.fullAuto(pathGroup4).alongWith(intake.retractPiston()), intake.outtake(), new ChargingStationAuto(drivetrain));
-
-
+    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1), intake.deployPiston(), autoBuilder.fullAuto(pathGroup2).alongWith(intake.intake()), intake.retractPiston(), new WaitCommand(.3), intake.outtake(), autoBuilder.fullAuto(pathGroup3).alongWith(new WaitCommand(2)).andThen(intake.deployPiston()), intake.intake(), autoBuilder.fullAuto(pathGroup4).alongWith(intake.intake()), intake.retractPiston(), new WaitCommand(.3), intake.outtake(), new ChargingStationAuto(drivetrain));
   }
 
 
@@ -320,8 +319,8 @@ public class Auton {
       () -> drivetrain.getOdometryPose2dAprilTags(),
       (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
       Constants.m_kinematics, // SwerveDriveKinematics
-      new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-      new PIDConstants(3, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      new PIDConstants(1, 0.01, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(4, 0.1, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
       (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
                                                         // subsystem
       eventMap,
@@ -333,6 +332,17 @@ public class Auton {
     List<PathPlannerTrajectory> pathGroup3 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt1",4,2,false);
     List<PathPlannerTrajectory> pathGroup4 = PathPlanner.loadPathGroup("Correct Blue HP 3 piece pt2",4,2,false);
     return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), autoBuilder2.fullAuto(pathGroup1).alongWith(intake.intake()),intake.retractPiston(), intake.stopSpin(),autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.2), intake.stopSpin(), autoBuilder2.fullAuto(pathGroup3).alongWith(new WaitCommand(1.5).andThen(intake.deployPiston().andThen(intake.intake()))),intake.retractPiston(),autoBuilder2.fullAuto(pathGroup4), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
+  }
+
+  public Command RedHP3Piece(){
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("new Dawm", 7,2);
+    eventMap.put("intake", intake.deployPiston().andThen(intake.intake()));
+    eventMap.put("intakeup", intake.retractPiston().andThen(intake.stopSpin()));
+    eventMap.put("outtake", intake.outtake());
+    eventMap.put("intake2", intake.intake());
+    eventMap.put("intakeup2", intake.retractPiston().andThen(intake.stopSpin()));
+    eventMap.put("outtake2", intake.outtake());
+    return new FollowPathWithEvents(autoBuilder.followPathGroup(pathGroup1), pathGroup1.get(0).getMarkers(), eventMap));
   }
 
   
