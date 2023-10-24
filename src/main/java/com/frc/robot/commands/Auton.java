@@ -114,7 +114,7 @@ public class Auton {
 
 
     autoBuilder = new SwerveAutoBuilder(
-        () -> drivetrain.getOdometryPose2dAprilTags(), // Pose2d supplier TODO: possibly revert back to no apriltags
+        () -> drivetrain.getOdometryPose2dNoApriltags(), // Pose2d supplier TODO: possibly revert back to no apriltags
         (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
         Constants.m_kinematics, // SwerveDriveKinematics
         new PIDConstants(1.5, 0.02, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
