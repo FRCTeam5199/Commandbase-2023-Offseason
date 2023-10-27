@@ -114,11 +114,11 @@ public class Auton {
 
 
     autoBuilder = new SwerveAutoBuilder(
-        () -> drivetrain.getOdometryPose2dNoApriltags(), // Pose2d supplier TODO: possibly revert back to no apriltags
+        () -> drivetrain.getOdometryPose2dAprilTags(), // Pose2d supplier TODO: possibly revert back to no apriltags
         (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
         Constants.m_kinematics, // SwerveDriveKinematics
-        new PIDConstants(1.5, 0.02, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-        new PIDConstants(0.8, 0.03, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        new PIDConstants(1.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
                                                           // subsystem
         eventMap,
@@ -162,6 +162,7 @@ public class Auton {
     autonChooser.addOption("Red 3 Piece and Level", Red3PieceandLevel());
     autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
     autonChooser.addOption("New Dawm", RedHP3Piece());
+    autonChooser.addOption("test", test());
 
 
     //Wrong Autons
@@ -342,7 +343,7 @@ public class Auton {
     eventMap.put("intake2", intake.intake());
     eventMap.put("intakeup2", intake.retractPiston().andThen(intake.stopSpin()));
     eventMap.put("outtake2", intake.outtake());
-    return new FollowPathWithEvents(autoBuilder.followPathGroup(pathGroup1), pathGroup1.get(0).getMarkers(), eventMap));
+    return new FollowPathWithEvents(autoBuilder.followPathGroup(pathGroup1), pathGroup1.get(0).getMarkers(), eventMap);
   }
 
   
@@ -354,8 +355,9 @@ public class Auton {
     return new SequentialCommandGroup(intake.deployPiston(), autoBuilder.fullAuto(pathGroup1).alongWith(intake.intake()), intake.slowIntake(), intake.retractPiston(), autoBuilder.fullAuto(pathGroup2), intake.outtake(), new WaitCommand(.3), intake.stopSpin());
   }
   public Command test(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("test", 1,1,true);
-    return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1));
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("test", 0.1,0.1,true);
+    eventMap.put("event", intake.intake());
+    return new SequentialCommandGroup(autoBuilder.followPathWithEvents(pathGroup1.get(0)));
   }
 
   public Command CRedTaxiWallCubeCube(){
