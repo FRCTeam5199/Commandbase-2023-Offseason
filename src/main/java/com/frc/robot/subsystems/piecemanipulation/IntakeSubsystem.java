@@ -88,7 +88,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void bottomIntakeMotorInit() {
       if (Constants.RobotNum == 5199) {
-        bottomIntake = new SparkMotorController(Constants.BottomIntakeMotor_ID, MotorType.kBrushed);
+        bottomIntake = new SparkMotorController(Constants.BottomIntakeMotor_ID, MotorType.kBrushless);
       }
       // if (Constants.RobotNum == 9199) {
       //   bottomIntake = new Victor
@@ -240,10 +240,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command fastOutake(){
-      spinWithCube = false;
       bottomIntake.setCurrentLimit(50);
       return this.runOnce(()-> bottomIntake.moveAtPercent(100));
       
+    }
+    public Command stopSpinToKeep(){
+      return this.run(()-> spinWithCube = false);
     }
 
     public Command slowIntake(){

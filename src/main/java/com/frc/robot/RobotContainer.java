@@ -288,7 +288,7 @@ public class RobotContainer {
     if (Constants.ENABLE_INTAKE) {
         // manualControls.b().onTrue(intake.spinOutakeOnBottom(false)).onFalse(intake.spinOutakeOnBottom(true));
         manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
-        manualControls.b().onTrue(intake.fastOutake()).onFalse((intake.stopSpin()));
+        manualControls.b().onTrue(intake.fastOutake().andThen(intake.stopSpinToKeep())).onFalse((intake.stopSpin()));
     }
 
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 1).onTrue(arm.changeRotateOffset(1));
