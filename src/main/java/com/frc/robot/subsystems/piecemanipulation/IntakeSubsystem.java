@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import com.frc.robot.Constants;
 import com.frc.robot.AbstractMotorInterfaces.SparkMotorController;
-import com.pathplanner.lib.PathPlannerTrajectory.StopEvent;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -212,6 +211,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command outtake(){
         return runOnce(()-> bottomIntake.moveAtPercent(5));
+    }
+    public Command slowOutake(){
+       return runOnce(()-> bottomIntake.moveAtPercent(.4));
     }
 
 
