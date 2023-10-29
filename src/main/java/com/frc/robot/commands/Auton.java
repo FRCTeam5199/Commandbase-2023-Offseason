@@ -126,8 +126,7 @@ public class Auton {
         true,
         drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
     );
-
-
+    
     teleopAutoBuilder = new SwerveAutoBuilder(
       () -> drivetrain.getOdometryPose2dAprilTags(), // Pose2d supplier TODO: possibly revert back to no apriltags
       (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
@@ -152,6 +151,8 @@ public class Auton {
     drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
 );
 
+    autoBuilder3 = new SwerveAutoBuilder(()-> drivetrain.getOdometryPose2dAprilTags(), (pose) -> drivetrain.resetOdometry(pose), Constants.m_kinematics, new PIDConstants(.1,0,0), new PIDConstants(1,0,0),(states)->drivetrain.autoSetChassisState(states), eventMap,false,drivetrain);
+
     //Autons must be manually entered into the auton chooser
     autonChooser.setDefaultOption("Nothing", doNothing());
     autonChooser.setDefaultOption("Taxi and Level", TaxiandLevel());
@@ -175,6 +176,9 @@ public class Auton {
     autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
     autonChooser.addOption("RedHP3Piece", RedHP3Piece());
     autonChooser.addOption("RedHP2Piece", RedHP2Piece());
+    autonChooser.addOption("Red 2 Piece Bump Side", TwoPieceRedB());
+    autonChooser.addOption("Red 3 Piece Bump Side", ThreePieceRedB());
+
     autonChooser.addOption("test", test());
 
     //Wrong Autons
@@ -241,6 +245,19 @@ public class Auton {
 
     return new SequentialCommandGroup(autoBuilder.fullAuto(pathGroup1));
   }
+
+  public Command TwoPieceRedB(){
+    PathPlannerTrajectory path = PathPlanner.loadPath("2Piece Bump Red", 2, 2);
+
+    return new SequentialCommandGroup(autoBuilder.fullAuto(path));
+  }
+
+  public Command ThreePieceRedB(){
+    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Red", 2, 2);
+
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+  }
+
 
   public Command Blue3PieceandLevel(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2.5 Piece and Level p1", 4, 2);
