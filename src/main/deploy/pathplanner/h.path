@@ -1,0 +1,170 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 14.66267754218818,
+        "y": 4.17394215672882
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 11.758071219423467,
+        "y": 5.100214251783711
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Drop Intake",
+          "Intake"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 9.711124243931797,
+        "y": 4.608489559347165
+      },
+      "prevControl": {
+        "x": 9.242786661144853,
+        "y": 4.536437623533788
+      },
+      "nextControl": {
+        "x": 10.454429011568436,
+        "y": 4.722844138983571
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 14.6398066262609,
+        "y": 5.020166046038226
+      },
+      "prevControl": {
+        "x": 14.982870365170117,
+        "y": 5.020166046038226
+      },
+      "nextControl": {
+        "x": 9.4610716460435,
+        "y": 5.020166046038226
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 9.482415084658985,
+        "y": 3.5221210528013063
+      },
+      "prevControl": {
+        "x": 9.136880410689143,
+        "y": 2.8246529146029244
+      },
+      "nextControl": {
+        "x": 10.09992981469558,
+        "y": 4.768585970838132
+      },
+      "holonomicAngle": -90.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 14.628371168297264,
+        "y": 4.414086773965274
+      },
+      "prevControl": {
+        "x": 12.0210867525872,
+        "y": 4.848634176583617
+      },
+      "nextControl": null,
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Outtake"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 1.8618181818181845,
+      "names": [
+        "Pick Up Intake",
+        "Outtake"
+      ]
+    },
+    {
+      "position": 2.67636363636347,
+      "names": [
+        "Deploy Intake",
+        "Intake"
+      ]
+    },
+    {
+      "position": 3.4909090909089056,
+      "names": [
+        "Up"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "Drop Intake",
+        "Intake"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "Drop Intake",
+        "Intake"
+      ]
+    },
+    {
+      "position": 4.0,
+      "names": [
+        "Outtake"
+      ]
+    }
+  ]
+}
