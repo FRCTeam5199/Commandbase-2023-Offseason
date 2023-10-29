@@ -151,55 +151,25 @@ public class Auton {
     drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
 );
 
-    autoBuilder3 = new SwerveAutoBuilder(()-> drivetrain.getOdometryPose2dAprilTags(), (pose) -> drivetrain.resetOdometry(pose), Constants.m_kinematics, new PIDConstants(.1,0,0), new PIDConstants(1,0,0),(states)->drivetrain.autoSetChassisState(states), eventMap,false,drivetrain);
-
     //Autons must be manually entered into the auton chooser
     autonChooser.setDefaultOption("Nothing", doNothing());
     autonChooser.setDefaultOption("Taxi and Level", TaxiandLevel());
     autonChooser.addOption("Correct Blue Taxi Cube Level", CBlueTaxiCubeLevel());
     autonChooser.addOption("Correct Red Taxi Cube Level", CRedTaxiCubeLevel());
-    autonChooser.addOption("Correct Blue Taxi Cube Level 180", CBlueTaxiCubeLevel180());
-    autonChooser.addOption("Correct Red Taxi Cube Level 180", CRedTaxiCubeLevel180());
     autonChooser.addOption("Correct Blue Taxi Wall", CBlueTaxiWall());
     autonChooser.addOption("Correct Red Taxi Wall", CRedTaxiWall());
-    autonChooser.addOption("Correct Blue Taxi Wall Cube", CBlueTaxiWallCube()); 
-    autonChooser.addOption("Correct Red Taxi Wall Cube", CRedTaxiWallCube());
-    autonChooser.addOption("Correct Blue Taxi HP Cube", CBlueTaxiHPCube());
-    autonChooser.addOption("Correct Red Taxi HP Cube", CRedTaxiHPCube());
-    autonChooser.addOption("Correct Red Taxi HP 3 piece", CRedTaxiHPCubeCube());
-    autonChooser.addOption("Correct Red Taxi Wall 3 piece", CRedTaxiWallCubeCube());
-    autonChooser.addOption("Correct Blue Taxi Wall 3 piece",CBlueTaxiCubeCubeLevel());
-    // autonChooser.addOption("Correct Red taxi level", CRedTaxiLevel());
-    // autonChooser.addOption("Correct Blue taxi level", CBlueTaxiLevel());
+
     autonChooser.addOption("Level", Level());
-    autonChooser.addOption("Red 3 Piece and Level", Red3PieceandLevel());
-    autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
     autonChooser.addOption("RedHP3Piece", RedHP3Piece());
     autonChooser.addOption("RedHP2Piece", RedHP2Piece());
     autonChooser.addOption("Red 2 Piece Bump Side", TwoPieceRedB());
+    autonChooser.addOption("Blue 2 Piece Bump Side", TwoPieceBlueB());
     autonChooser.addOption("Red 3 Piece Bump Side", ThreePieceRedB());
+    autonChooser.addOption("Blue 3 Piece Bump Side", ThreePieceBlueB());
+
 
     autonChooser.addOption("test", test());
 
-    //Wrong Autons
-    // autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
-    // autonChooser.addOption("Blue Taxi Cube Level", BlueTaxiCubeLevel());
-    // autonChooser.addOption("Red Taxi Wall", RedTaxiWall());
-    // autonChooser.addOption("Blue Taxi Wall", BlueTaxiWall());
-    // autonChooser.addOption("Red Taxi Wall Cube", RedTaxiWallCube());
-    // autonChooser.addOption("Red Taxi Wall Cube Shoot", RedTaxiWallCubeShoot());
-    // autonChooser.addOption("Blue Taxi Wall Cube Shoot", BlueTaxiWallCubeShoot());
-    // autonChooser.addOption("Red Taxi Cube Level 180", RedTaxiCubeLevel180());
-    // autonChooser.addOption("Blue Taxi Cube Level 180", BlueTaxiCubeLevel180());
-    // autonChooser.addOption("Red Taxi Over Charge", RedTaxiOverCharge());
-    // autonChooser.addOption("Blue Taxi Over Charge", BlueTaxiOverCharge());
-    // autonChooser.addOption("Red Taxi Over Charge Level", RedTaxiOverChargeLevel());
-    // autonChooser.addOption("Blue Taxi Over Charge Level", BlueTaxiOverChargeLevel());
-    // autonChooser.addOption("Blue Taxi HP Cube Shoot", BlueTaxiHPCubeShoot());
-    // autonChooser.addOption("Red Taxi Wall Cube Shoot Cube", RedTaxiWallCubeShootCube());
-    // autonChooser.addOption("Red Taxi Wall Cube Shoot Cube Shoot", RedTaxiWallCubeShootCubeShoot());
-    // autonChooser.addOption("Red Taxi HP", RedTaxiHP());
-    // autonChooser.addOption("Red Taxi HP Cube", RedTaxiHPCube());
     eventMap.put("up", intake.retractPiston());
     eventMap.put("down", intake.deployPiston());
     eventMap.put("spin", intake.intake());
@@ -256,6 +226,19 @@ public class Auton {
     PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Red", 2, 2);
 
     return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+  }
+
+  public Command TwoPieceBlueB(){
+    PathPlannerTrajectory path = PathPlanner.loadPath("2Piece Bump Blue", 2,2);
+
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+  }
+
+  public Command ThreePieceBlueB(){
+    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Blue", 2,2);
+
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+
   }
 
 
