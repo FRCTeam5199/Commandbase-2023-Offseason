@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "drop",
+          "down",
           "spin"
         ],
         "executionBehavior": "parallel",
@@ -28,15 +28,15 @@
     {
       "anchorPoint": {
         "x": 9.55102783244083,
-        "y": 4.436957689892555
+        "y": 4.35
       },
       "prevControl": {
         "x": 9.682768673853031,
-        "y": 4.183234587913501
+        "y": 4.096276898020945
       },
       "nextControl": {
         "x": 8.933513102404238,
-        "y": 5.626245318111178
+        "y": 5.539287628218623
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -53,15 +53,15 @@
     {
       "anchorPoint": {
         "x": 13.015971595423935,
-        "y": 4.951553298256383
+        "y": 4.8
       },
       "prevControl": {
         "x": 9.825478823568204,
-        "y": 5.168826999565554
+        "y": 5.017273701309171
       },
       "nextControl": {
         "x": 9.825478823568204,
-        "y": 5.168826999565554
+        "y": 5.017273701309171
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -148,5 +148,65 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.0909090909090682,
+      "names": [
+        "stop spin",
+        "up"
+      ]
+    },
+    {
+      "position": 1.927272727272681,
+      "names": [
+        "outtake"
+      ]
+    },
+    {
+      "position": 1.9636363636362508,
+      "names": [
+        "stop spin"
+      ]
+    },
+    {
+      "position": 2.509090909090789,
+      "names": [
+        "spin",
+        "down"
+      ]
+    },
+    {
+      "position": 2.00000000000002,
+      "names": [
+        "up",
+        "stop spin"
+      ]
+    },
+    {
+      "position": 3.163636363636187,
+      "names": [
+        "stop spin",
+        "up"
+      ]
+    },
+    {
+      "position": 4.872727272727254,
+      "names": [
+        "slow outtake"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "down",
+        "spin"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "event"
+      ]
+    }
+  ]
 }

@@ -126,17 +126,6 @@ public class Auton {
         true,
         drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
     );
-    autoBuilder3 = new SwerveAutoBuilder(() -> drivetrain.getOdometryPose2dAprilTags(), // Pose2d supplier TODO: possibly revert back to no apriltags
-    (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
-    Constants.m_kinematics, // SwerveDriveKinematics
-    new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-    new PIDConstants(0.8, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-    (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
-                                                      // subsystem
-    eventMap,
-    false,
-    drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
-);
 
 
     teleopAutoBuilder = new SwerveAutoBuilder(
@@ -151,6 +140,17 @@ public class Auton {
       false,
       drivetrain 
     );
+    autoBuilder3 = new SwerveAutoBuilder(() -> drivetrain.getOdometryPose2dAprilTags(), // Pose2d supplier TODO: possibly revert back to no apriltags
+    (pose) -> drivetrain.resetOdometry(pose), // Pose2d consumer, used to reset odometry at the beginning of auto
+    Constants.m_kinematics, // SwerveDriveKinematics
+    new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+    new PIDConstants(0.8, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+    (state) -> drivetrain.autoSetChassisState(state), // Module states consumer used to output to the drive
+                                                      // subsystem
+    eventMap,
+    false,
+    drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
+);
 
     //Autons must be manually entered into the auton chooser
     autonChooser.setDefaultOption("Nothing", doNothing());
@@ -354,12 +354,16 @@ public class Auton {
 
   public Command RedHP2Piece(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2 piece one path red hp", 4,3);
-    // return new SequentialCommandGroup(autoBuilderRed.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25).andThen(intake.outtake())))));
-    return autoBuilder3.followPathGroupWithEvents(pathGroup1);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.10).andThen(intake.outtake())))));
+    // return autoBuilder3.followPathGroupWithEvents(pathGroup1);
   }
   public Command RedHP3Piece(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("3 piece one path red hp", 4,2);
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25)).andThen(intake.outtake()).andThen(new WaitCommand(0.3)).andThen(intake.stopSpin()).andThen(new WaitCommand(0.5)).andThen(intake.deployPiston()).andThen(intake.intake()).andThen(new WaitCommand(4)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(5)).andThen(intake.slowOutake())));
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("3 piece one path red hp", 4,2);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path1));
+    // return new SequentialCommandGroup(autoBuilder3.fullAuto(path1).alongWith(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.10).andThen(intake.outtake()).andThen(intake.stopSpin()).andThen(new WaitCommand(2).andThen(intake.deployPiston()).andThen(intake.intake()).andThen(new WaitCommand(1).andThen(intake.stopSpin().andThen(intake.retractPiston()).andThen(new WaitCommand(3)).andThen(intake.slowOutake())))))));
+    // alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25)).andThen(intake.outtake()).andThen(new WaitCommand(0.3)).andThen(intake.stopSpin()).andThen(new WaitCommand(0.5)).andThen(intake.deployPiston()).andThen(intake.intake()).andThen(new WaitCommand(4)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(5)).andThen(intake.slowOutake())));
+    // return new SequentialCommandGroup(autoBuilder3.followPathWithEvents(path1));
+    // return autoBuilder3.followPathGroupWithEvents(path1);
   }
   
 
