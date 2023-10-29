@@ -68,7 +68,7 @@ public class Auton {
    */
   private SwerveAutoBuilder autoBuilder;
   private SwerveAutoBuilder autoBuilder2;
-  private SwerveAutoBuilder autoBuilderRed;
+  private SwerveAutoBuilder autoBuilder3;
 
 
   private Time timer = new Time();
@@ -196,7 +196,12 @@ public class Auton {
     // autonChooser.addOption("Red Taxi Wall Cube Shoot Cube Shoot", RedTaxiWallCubeShootCubeShoot());
     // autonChooser.addOption("Red Taxi HP", RedTaxiHP());
     // autonChooser.addOption("Red Taxi HP Cube", RedTaxiHPCube());
-  
+    eventMap.put("up", intake.retractPiston());
+    eventMap.put("down", intake.deployPiston());
+    eventMap.put("spin", intake.intake());
+    eventMap.put("stop spin", intake.stopSpin());
+    eventMap.put("outtake", intake.outtake());
+    eventMap.put("slow outtake", intake.slowOutake());
 
     Shuffleboard.getTab("Auton").add("Auton Style",autonChooser)
             .withWidget(BuiltInWidgets.kComboBoxChooser)
@@ -349,11 +354,12 @@ public class Auton {
 
   public Command RedHP2Piece(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2 piece one path red hp", 4,3);
-    return new SequentialCommandGroup(autoBuilderRed.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25).andThen(intake.outtake())))));
+    // return new SequentialCommandGroup(autoBuilderRed.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25).andThen(intake.outtake())))));
+    return autoBuilder3.followPathGroupWithEvents(pathGroup1);
   }
   public Command RedHP3Piece(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("3 piece one path red hp", 4,2);
-    return new SequentialCommandGroup(autoBuilderRed.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25).andThen(intake.outtake()).andThen(new WaitCommand(0.3)).andThen(intake.stopSpin()).andThen(new WaitCommand(0.5)).andThen(intake.deployPiston()).andThen(intake.intake()).andThen(new WaitCommand(1)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(4)).andThen(intake.slowOutake())))));
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25)).andThen(intake.outtake()).andThen(new WaitCommand(0.3)).andThen(intake.stopSpin()).andThen(new WaitCommand(0.5)).andThen(intake.deployPiston()).andThen(intake.intake()).andThen(new WaitCommand(4)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(5)).andThen(intake.slowOutake())));
   }
   
 
