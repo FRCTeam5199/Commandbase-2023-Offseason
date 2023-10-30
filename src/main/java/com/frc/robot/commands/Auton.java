@@ -19,6 +19,7 @@ import com.pathplanner.lib.PathPlannerTrajectory.StopEvent.WaitBehavior;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.server.PathPlannerServer;
 import com.frc.robot.subsystems.Drivetrain;
 import com.frc.robot.subsystems.piecemanipulation.ClawSubsystem;
 import com.frc.robot.subsystems.piecemanipulation.ElevatorSubsystem;
@@ -166,6 +167,7 @@ public class Auton {
     autonChooser.addOption("Blue 2 Piece Bump Side", TwoPieceBlueB());
     autonChooser.addOption("Red 3 Piece Bump Side", ThreePieceRedB());
     autonChooser.addOption("Blue 3 Piece Bump Side", ThreePieceBlueB());
+    autonChooser.addOption("3 Piece Level Red", ThreePieceLevelRed());
 
 
     autonChooser.addOption("test", test());
@@ -176,6 +178,7 @@ public class Auton {
     eventMap.put("stop spin", intake.stopSpin());
     eventMap.put("outtake", intake.outtake());
     eventMap.put("slow outtake", intake.slowOutake());
+    eventMap.put("startCommand", intake.deployPiston().andThen(new WaitCommand(.1).andThen(intake.retractPiston())));
 
     Shuffleboard.getTab("Auton").add("Auton Style",autonChooser)
             .withWidget(BuiltInWidgets.kComboBoxChooser)
@@ -223,7 +226,7 @@ public class Auton {
   }
 
   public Command ThreePieceRedB(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Red", 2, 2);
+    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Red", 3, 2);
 
     return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
   }
@@ -239,6 +242,12 @@ public class Auton {
 
     return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
 
+  }
+
+  public Command ThreePieceLevelRed(){
+    PathPlannerTrajectory path = PathPlanner.loadPath("3 Piece Level Red", 2,2);
+
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path), new ChargingStationAuto(drivetrain));
   }
 
 
