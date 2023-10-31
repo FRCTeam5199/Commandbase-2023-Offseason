@@ -252,37 +252,37 @@ public class Auton {
   public Command LeftTwoPieceCenterLevel(){
     PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red", 1,2);
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d(0,0,new Rotation2d(180))));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
   }
 
   public Command RightTwoPieceCenterLevel(){
     PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red",  1,2, true);
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d(0,0,new Rotation2d(180))));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
   }
 
   public Command TwoPieceRedB(){
     PathPlannerTrajectory path = PathPlanner.loadPath("2Piece Bump Red", 2, 2, false);
 
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
   }
 
   public Command ThreePieceRedB(){
     PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Red", 3, 2);
 
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
   }
 
   public Command TwoPieceBlueB(){
     PathPlannerTrajectory path = PathPlanner.loadPath("2Piece Bump Blue", 2,2);
 
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
   }
 
   public Command ThreePieceBlueB(){
     PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Blue", 2,2);
 
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(path));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
 
   }
 

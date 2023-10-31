@@ -151,13 +151,6 @@
   ],
   "markers": [
     {
-      "position": 0.0,
-      "names": [
-        "down",
-        "spin"
-      ]
-    },
-    {
       "position": 0.8872727272726848,
       "names": [
         "up"
