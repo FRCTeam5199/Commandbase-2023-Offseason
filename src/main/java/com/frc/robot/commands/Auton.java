@@ -250,15 +250,15 @@ public class Auton {
   }
 
   public Command LeftTwoPieceCenterLevel(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red", 2,2);
+    PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red", 1,2);
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d(0,0,new Rotation2d(180))));
   }
 
   public Command RightTwoPieceCenterLevel(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red", 2,2, true);
+    PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red",  1,2, true);
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d(0,0,new Rotation2d(180))));
   }
 
   public Command TwoPieceRedB(){
@@ -315,14 +315,14 @@ public class Auton {
 
 
   public Command CBlueTaxiCubeLevel(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p1", 2, 2);
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p1", 1, 2);
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p2", 2,2);
 
     return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), new ChargingStationAuto(drivetrain));
   }
 
   public Command CRedTaxiCubeLevel(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p1", 2, 2, true);
+    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p1", 1, 2, true);
     List<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup("Blue Taxi Cube Level p2", 2,2, true);
 
     return new SequentialCommandGroup(intake.deployPiston(),new WaitCommand(.2), intake.retractPiston(), autoBuilder.fullAuto(pathGroup1), intake.deployPiston(), intake.dropAndStop().alongWith(autoBuilder.fullAuto(pathGroup2)), new ChargingStationAuto(drivetrain));

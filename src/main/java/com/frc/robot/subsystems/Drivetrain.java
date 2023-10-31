@@ -272,6 +272,10 @@ public class Drivetrain extends SubsystemBase {
                 odometry.resetPosition(getRawGyroRotation(), getModulePositions(), pose);
         }
 
+        public Command resetOdom(Pose2d pose){
+                return runOnce(()-> resetOdometry(pose));
+        }
+
         // Sets the gyroscope angle to zero. This can be used to set the direction the
         // robot is currently facing to the 'forwards' direction.
         public void zeroGyroscope() {
