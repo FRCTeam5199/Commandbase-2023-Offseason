@@ -177,8 +177,8 @@ public class Auton {
     autonChooser.addOption("Red 3 Piece Bump Side", ThreePieceRedB());
     autonChooser.addOption("Blue 3 Piece Bump Side", ThreePieceBlueB());
     autonChooser.addOption("3 Piece Level Red", ThreePieceLevelRed());
-    autonChooser.addOption("Left 2 Piece Center", LeftTwoPieceCenterLevel());
-    autonChooser.addOption("Right 2 Piece Center", RightTwoPieceCenterLevel());
+    // autonChooser.addOption("Left 2 Piece Center", LeftTwoPieceCenterLevel());
+    // autonChooser.addOption("Right 2 Piece Center", RightTwoPieceCenterLevel());
 
 
 
@@ -414,7 +414,7 @@ public class Auton {
     
   }
   public Command RedHP3Piece(){
-    PathPlannerTrajectory path1 = PathPlanner.loadPath("3 piece one path red hp", 4,2);
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("3 piece one path red hp", 4,3);
     return new SequentialCommandGroup(autoBuilder3.fullAuto(path1));
   }
   public Command RedHP4Piece(){
