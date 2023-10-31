@@ -164,9 +164,6 @@ public class Auton {
 
     autonChooser.addOption("Level", Level());
 
-    autonChooser.addOption("RedHP3Piece", RedHP3Piece());
-    autonChooser.addOption("RedHP2Piece", RedHP2Piece());
-
     autonChooser.addOption("Red 3 Piece and Level", Red3PieceandLevel());
     autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
     autonChooser.addOption("Red 4 Piece HP", RedHP4Piece());

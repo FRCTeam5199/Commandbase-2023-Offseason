@@ -7,8 +7,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.239565597533478,
-        "y": 5.28318157920196
+        "x": 13.644921783424168,
+        "y": 5.67198714996574
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -20,7 +20,7 @@
           "drop",
           "spin"
         ],
-        "executionBehavior": "sequential",
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -31,12 +31,12 @@
         "y": 4.55
       },
       "prevControl": {
-        "x": 9.682768673853031,
-        "y": 4.296276898020945
+        "x": 9.814043365604563,
+        "y": 4.013845745237853
       },
       "nextControl": {
-        "x": 8.933513102404238,
-        "y": 5.739287628218623
+        "x": 8.960843452843342,
+        "y": 5.753084328933407
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -52,15 +52,40 @@
     },
     {
       "anchorPoint": {
-        "x": 13.107455259133058,
-        "y": 4.894376008438179
+        "x": 12.924487931714811,
+        "y": 4.974424214183664
       },
       "prevControl": {
-        "x": 9.916962487277328,
-        "y": 5.111649709747351
+        "x": 9.802607907640922,
+        "y": 5.306052495129241
+      },
+      "nextControl": {
+        "x": 9.802607907640922,
+        "y": 5.306052495129241
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 13.610615409533246,
+        "y": 4.951553298256383
+      },
+      "prevControl": {
+        "x": 13.221809838769467,
+        "y": 4.9972951301109445
       },
       "nextControl": null,
-      "holonomicAngle": 180.0,
+      "holonomicAngle": -172.30394827798332,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -75,16 +100,23 @@
   ],
   "markers": [
     {
-      "position": 1.2509090909090248,
+      "position": 1.1345454545454157,
       "names": [
         "up",
         "stop spin"
       ]
     },
     {
-      "position": 1.9781818181817523,
+      "position": 1.9781818181817121,
       "names": [
         "outtake"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "down",
+        "spin"
       ]
     }
   ]

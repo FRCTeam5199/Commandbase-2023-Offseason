@@ -16,10 +16,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "down",
-          "spin"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
@@ -141,6 +138,13 @@
       "position": 2.072727272727267,
       "names": [
         "stop spin"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "down",
+        "spin"
       ]
     }
   ]
