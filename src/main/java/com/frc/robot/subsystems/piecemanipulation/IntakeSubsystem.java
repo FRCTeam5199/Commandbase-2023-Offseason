@@ -203,7 +203,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command intake(){
-        return runOnce(()-> bottomIntake.moveAtPercent(-1));
+        return runOnce(()-> bottomIntake.moveAtPercent(-0.6));
     }
     public boolean intakeFinished(){
         return intake().isFinished();

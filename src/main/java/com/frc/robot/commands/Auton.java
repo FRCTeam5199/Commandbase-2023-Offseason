@@ -152,6 +152,8 @@ public class Auton {
     drivetrain // The drive subsystem. Used to properly set the requirements of path following commands
 );
 
+    autoBuilder3 = new SwerveAutoBuilder(()-> drivetrain.getOdometryPose2dAprilTags(), (pose) -> drivetrain.resetOdometry(pose), Constants.m_kinematics, new PIDConstants(.1,0,0), new PIDConstants(1,0,0),(states)->drivetrain.autoSetChassisState(states), eventMap,false,drivetrain);
+
     //Autons must be manually entered into the auton chooser
     autonChooser.setDefaultOption("Nothing", doNothing());
     autonChooser.setDefaultOption("Taxi and Level", TaxiandLevel());
@@ -161,24 +163,52 @@ public class Auton {
     autonChooser.addOption("Correct Red Taxi Wall", CRedTaxiWall());
 
     autonChooser.addOption("Level", Level());
+
     autonChooser.addOption("RedHP3Piece", RedHP3Piece());
     autonChooser.addOption("RedHP2Piece", RedHP2Piece());
+
+    autonChooser.addOption("Red 3 Piece and Level", Red3PieceandLevel());
+    autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
+    autonChooser.addOption("Red 4 Piece HP", RedHP4Piece());
+    autonChooser.addOption("Red 3 Piece HP", RedHP3Piece());
+    autonChooser.addOption("Red 2 Piece HP charge", RedHP2PieceCharge());
+    autonChooser.addOption("Red 2 Piece HP", RedHP2Piece());
+    autonChooser.addOption("Blue 3 Piece HP", BlueHP3Piece());
+    autonChooser.addOption("Blue 2 Piece HP", BlueHP2Piece());
     autonChooser.addOption("Red 2 Piece Bump Side", TwoPieceRedB());
     autonChooser.addOption("Blue 2 Piece Bump Side", TwoPieceBlueB());
     autonChooser.addOption("Red 3 Piece Bump Side", ThreePieceRedB());
     autonChooser.addOption("Blue 3 Piece Bump Side", ThreePieceBlueB());
     autonChooser.addOption("3 Piece Level Red", ThreePieceLevelRed());
-
+    
 
     autonChooser.addOption("test", test());
 
+    //Wrong Autons
+    // autonChooser.addOption("Red Taxi Cube Level", RedTaxiCubeLevel());
+    // autonChooser.addOption("Blue Taxi Cube Level", BlueTaxiCubeLevel());
+    // autonChooser.addOption("Red Taxi Wall", RedTaxiWall());
+    // autonChooser.addOption("Blue Taxi Wall", BlueTaxiWall());
+    // autonChooser.addOption("Red Taxi Wall Cube", RedTaxiWallCube());
+    // autonChooser.addOption("Red Taxi Wall Cube Shoot", RedTaxiWallCubeShoot());
+    // autonChooser.addOption("Blue Taxi Wall Cube Shoot", BlueTaxiWallCubeShoot());
+    // autonChooser.addOption("Red Taxi Cube Level 180", RedTaxiCubeLevel180());
+    // autonChooser.addOption("Blue Taxi Cube Level 180", BlueTaxiCubeLevel180());
+    // autonChooser.addOption("Red Taxi Over Charge", RedTaxiOverCharge());
+    // autonChooser.addOption("Blue Taxi Over Charge", BlueTaxiOverCharge());
+    // autonChooser.addOption("Red Taxi Over Charge Level", RedTaxiOverChargeLevel());
+    // autonChooser.addOption("Blue Taxi Over Charge Level", BlueTaxiOverChargeLevel());
+    // autonChooser.addOption("Blue Taxi HP Cube Shoot", BlueTaxiHPCubeShoot());
+    // autonChooser.addOption("Red Taxi Wall Cube Shoot Cube", RedTaxiWallCubeShootCube());
+    // autonChooser.addOption("Red Taxi Wall Cube Shoot Cube Shoot", RedTaxiWallCubeShootCubeShoot());
+    // autonChooser.addOption("Red Taxi HP", RedTaxiHP());
+    // autonChooser.addOption("Red Taxi HP Cube", RedTaxiHPCube());
     eventMap.put("up", intake.retractPiston());
     eventMap.put("down", intake.deployPiston());
     eventMap.put("spin", intake.intake());
     eventMap.put("stop spin", intake.stopSpin());
     eventMap.put("outtake", intake.outtake());
     eventMap.put("slow outtake", intake.slowOutake());
-    eventMap.put("startCommand", intake.deployPiston().andThen(new WaitCommand(.1).andThen(intake.retractPiston())));
 
     Shuffleboard.getTab("Auton").add("Auton Style",autonChooser)
             .withWidget(BuiltInWidgets.kComboBoxChooser)
@@ -362,17 +392,31 @@ public class Auton {
   }
 
   public Command RedHP2Piece(){
-    List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("2 piece one path red hp", 4,3);
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1).alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.10).andThen(intake.outtake())))));
-    // return autoBuilder3.followPathGroupWithEvents(pathGroup1);
+    PathPlannerTrajectory pathGroup1 = PathPlanner.loadPath("2 piece one path red hp", 4,3);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1));
+    
+  }
+  public Command RedHP2PieceCharge(){
+    PathPlannerTrajectory pathGroup1 = PathPlanner.loadPath("2 piece one path red hp charge", 5,3);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1), new ChargingStationAuto(drivetrain));
+    
   }
   public Command RedHP3Piece(){
     PathPlannerTrajectory path1 = PathPlanner.loadPath("3 piece one path red hp", 4,2);
     return new SequentialCommandGroup(autoBuilder3.fullAuto(path1));
-    // return new SequentialCommandGroup(autoBuilder3.fullAuto(path1).alongWith(intake.intake()).andThen(new WaitCommand(2.5).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.10).andThen(intake.outtake()).andThen(intake.stopSpin()).andThen(new WaitCommand(2).andThen(intake.deployPiston()).andThen(intake.intake()).andThen(new WaitCommand(1).andThen(intake.stopSpin().andThen(intake.retractPiston()).andThen(new WaitCommand(3)).andThen(intake.slowOutake())))))));
-    // alongWith(intake.deployPiston().andThen(intake.intake()).andThen(new WaitCommand(2.5)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(2.25)).andThen(intake.outtake()).andThen(new WaitCommand(0.3)).andThen(intake.stopSpin()).andThen(new WaitCommand(0.5)).andThen(intake.deployPiston()).andThen(intake.intake()).andThen(new WaitCommand(4)).andThen(intake.stopSpin()).andThen(intake.retractPiston()).andThen(new WaitCommand(5)).andThen(intake.slowOutake())));
-    // return new SequentialCommandGroup(autoBuilder3.followPathWithEvents(path1));
-    // return autoBuilder3.followPathGroupWithEvents(path1);
+  }
+  public Command RedHP4Piece(){
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("4 piece one path red hp", 5,4.5);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path1));
+  }
+  public Command BlueHP2Piece(){
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("2 piece one path blue hp", 4,2);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path1));
+  }
+  public Command BlueHP3Piece(){
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("3 piece one path blue hp", 4,2);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path1));
+    
   }
   
 
