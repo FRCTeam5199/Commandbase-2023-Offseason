@@ -281,7 +281,7 @@ public class Auton {
   }
 
   public Command ThreePieceBlueB(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Blue", 3,2);
+    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Blue", 4,3);
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()),drivetrain.stopDrive());
 
