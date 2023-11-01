@@ -27,6 +27,7 @@ import com.frc.robot.utility.LimelightManager;
 import com.frc.robot.utility.TagManager;
 import com.frc.robot.utility.UserInterface;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -304,6 +305,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return auton.getAuton();
+    return new SequentialCommandGroup(auton.getAuton().andThen(drivetrain.stopDrive()));
   }
 }

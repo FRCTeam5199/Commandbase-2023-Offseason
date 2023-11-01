@@ -269,7 +269,7 @@ public class Auton {
   }
 
   public Command ThreePieceRedB(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Red", 3, 2);
+    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Red", 4, 3);
 
     return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
   }
@@ -281,9 +281,9 @@ public class Auton {
   }
 
   public Command ThreePieceBlueB(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Blue", 2,2);
+    PathPlannerTrajectory path = PathPlanner.loadPath("3Piece Bump Blue", 3,2);
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.intake(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()),drivetrain.stopDrive());
 
   }
 
@@ -407,7 +407,7 @@ public class Auton {
 
   public Command RedHP2Piece(){
     PathPlannerTrajectory pathGroup1 = PathPlanner.loadPath("2 piece one path red hp", 4,3);
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1));
+    return new SequentialCommandGroup(intake.deployPiston(), autoBuilder3.fullAuto(pathGroup1));
     
   }
   public Command RedHP2PieceCharge(){
@@ -416,8 +416,8 @@ public class Auton {
     
   }
   public Command RedHP3Piece(){
-    PathPlannerTrajectory path1 = PathPlanner.loadPath("3 piece one path red hp", 4,3);
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(path1));
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("3 piece one path red hp", 3,3);
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.3),autoBuilder3.fullAuto(path1));
   }
   public Command RedHP4Piece(){
     PathPlannerTrajectory path1 = PathPlanner.loadPath("4 piece one path red hp", 5,4.5);

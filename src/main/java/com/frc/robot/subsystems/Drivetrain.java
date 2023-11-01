@@ -325,6 +325,9 @@ public class Drivetrain extends SubsystemBase {
         public Command zeroHeading(double zero){
                 return runOnce(()-> drive(new ChassisSpeeds(0,0, zero)));
         }
+        public Command stopDrive(){
+                return runOnce(()-> drive(new ChassisSpeeds(0,0,0)));
+              }
 
 
 }
