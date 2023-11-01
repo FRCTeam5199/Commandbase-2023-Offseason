@@ -161,11 +161,10 @@ public class Auton {
     autonChooser.addOption("Correct Red Taxi Cube Level", CRedTaxiCubeLevel());
     autonChooser.addOption("Correct Blue Taxi Wall", CBlueTaxiWall());
     autonChooser.addOption("Correct Red Taxi Wall", CRedTaxiWall());
+    autonChooser.addOption("2 Piece Level Red", RightTwoPieceCenterLevel());
 
     autonChooser.addOption("Level", Level());
 
-    autonChooser.addOption("Red 3 Piece and Level", Red3PieceandLevel());
-    autonChooser.addOption("Blue 3 Piece and Level", Blue3PieceandLevel());
     autonChooser.addOption("Red 4 Piece HP", RedHP4Piece());
     autonChooser.addOption("Red 3 Piece HP", RedHP3Piece());
     autonChooser.addOption("Red 2 Piece HP charge", RedHP2PieceCharge());
@@ -209,6 +208,8 @@ public class Auton {
     eventMap.put("stop spin", intake.stopSpin());
     eventMap.put("outtake", intake.outtake());
     eventMap.put("slow outtake", intake.slowOutake());
+    eventMap.put("charge", new ChargingStationAuto(drivetrain));
+  
 
     Shuffleboard.getTab("Auton").add("Auton Style",autonChooser)
             .withWidget(BuiltInWidgets.kComboBoxChooser)
@@ -250,15 +251,15 @@ public class Auton {
   }
 
   public Command LeftTwoPieceCenterLevel(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red", 1,2);
+    PathPlannerTrajectory path = PathPlanner.loadPath("2 Piece Center Level", 1,2);
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(),  autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()), new ChargingStationAuto(drivetrain).alongWith(intake.outtake()));
   }
 
   public Command RightTwoPieceCenterLevel(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("Left 2 Piece Center Red",  1,2, true);
+    PathPlannerTrajectory path = PathPlanner.loadPath("2 Piece Center Level",  1.5,2, true);
 
-    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()));
+    return new SequentialCommandGroup(intake.deployPiston(), new WaitCommand(.2), intake.retractPiston(), autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()), new ChargingStationAuto(drivetrain).alongWith(intake.outtake()));
   }
 
   public Command TwoPieceRedB(){
@@ -287,10 +288,11 @@ public class Auton {
   }
 
   public Command ThreePieceLevelRed(){
-    PathPlannerTrajectory path = PathPlanner.loadPath("3 Piece Level Red", 2,2);
-
-    return new SequentialCommandGroup(autoBuilder3.fullAuto(path), new ChargingStationAuto(drivetrain));
+    PathPlannerTrajectory path = PathPlanner.loadPath("3 Piece Level Red", 1.7,4);
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(path), drivetrain.resetOdom(new Pose2d()), new ChargingStationAuto(drivetrain));
   }
+
+  
 
 
   public Command Blue3PieceandLevel(){

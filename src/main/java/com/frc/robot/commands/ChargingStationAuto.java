@@ -1,9 +1,13 @@
 package com.frc.robot.commands;
 
     import com.frc.robot.subsystems.Drivetrain;
-    import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
     import edu.wpi.first.wpilibj.DriverStation;
-    import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class ChargingStationAuto extends CommandBase {
 
@@ -31,16 +35,17 @@ public class ChargingStationAuto extends CommandBase {
 
   @Override
   public void initialize() {
-  }
+
+}
 
   @Override
   public void execute() {
-    double speedMultiplier = 1.7;
+    double speedMultiplier = 1.5;
 
     roll = Math.hypot(drivetrain.getPitch().getDegrees() - pitchOffsetDegrees, drivetrain.getRoll().getDegrees() - rollOffsetDegrees) > 1.5;
 
     if(!rolledOver){
-      speedMultiplier = 1.7;
+      speedMultiplier = 1.5;
 
       if(!roll){
         rolledOver = true;
@@ -54,23 +59,25 @@ public class ChargingStationAuto extends CommandBase {
       speed_y = (drivetrain.getPitch().getDegrees() - pitchOffsetDegrees) * k * speedMultiplier;
     }
 
+
     drivetrain.drive(
         ChassisSpeeds.fromFieldRelativeSpeeds(
             speed_x,
             speed_y,
             0,
             drivetrain.getGyroscopeRotation()));
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     return !DriverStation.isAutonomousEnabled();
   }
 }

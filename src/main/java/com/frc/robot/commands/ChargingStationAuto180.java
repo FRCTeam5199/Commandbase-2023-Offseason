@@ -35,12 +35,12 @@ public class ChargingStationAuto180 extends CommandBase {
 
   @Override
   public void execute() {
-    double speedMultiplier = 2;
+    double speedMultiplier = -2;
 
     roll = Math.hypot(drivetrain.getPitch().getDegrees() - pitchOffsetDegrees, drivetrain.getRoll().getDegrees() - rollOffsetDegrees) > 1.5;
 
     if(!rolledOver){
-      speedMultiplier = 2;
+      speedMultiplier = -2;
 
       if(!roll){
         rolledOver = true;
@@ -71,7 +71,7 @@ public class ChargingStationAuto180 extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return !roll || !DriverStation.isAutonomousEnabled();
+    return !DriverStation.isAutonomousEnabled();
   }
 }
 
