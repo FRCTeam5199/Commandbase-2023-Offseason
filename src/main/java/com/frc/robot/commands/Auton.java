@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj.shuffleboard.*;
@@ -219,8 +220,8 @@ public class Auton {
   }
 
   public Command getAuton(){
+    
     return autonChooser.getSelected();
-
   }
 
   public Command doNothing(){
@@ -443,7 +444,7 @@ public class Auton {
   public Command test(){
     List<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup("test", 2,1);
     
-    return new SequentialCommandGroup(autoBuilder.followPathGroup(pathGroup1));
+    return new SequentialCommandGroup(autoBuilder3.fullAuto(pathGroup1));
   }
 
   public Command CRedTaxiWallCubeCube(){

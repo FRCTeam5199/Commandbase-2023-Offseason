@@ -16,10 +16,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "down",
-          "spin"
-        ],
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -27,16 +24,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.93230795876713,
-        "y": 4.665666849165367
+        "x": 6.749340631348881,
+        "y": 4.642795933238086
       },
       "prevControl": {
-        "x": 5.179143217295285,
-        "y": 4.4986987785490005
+        "x": 4.989129733405448,
+        "y": 4.586916222192263
       },
       "nextControl": {
-        "x": 8.6133202794223,
-        "y": 4.825763260656336
+        "x": 8.190208334767593,
+        "y": 4.688537765092649
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -85,6 +82,13 @@
       "position": 1.9636363636363439,
       "names": [
         "outtake"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "down",
+        "spin"
       ]
     }
   ]

@@ -5,6 +5,7 @@
 package com.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 // WPI & REV & SYSTEM:
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,6 +29,8 @@ import static com.frc.robot.Constants.*;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import javax.sound.sampled.SourceDataLine;
 
 import org.photonvision.EstimatedRobotPose;
 
@@ -326,7 +329,7 @@ public class Drivetrain extends SubsystemBase {
                 return runOnce(()-> drive(new ChassisSpeeds(0,0, zero)));
         }
         public Command stopDrive(){
-                return runOnce(()-> drive(new ChassisSpeeds(0,0,0)));
+                return runOnce(()-> drive(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0,getGyroscopeRotationNoApriltags())));
               }
 
 

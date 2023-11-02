@@ -291,7 +291,7 @@ public class RobotContainer {
         manualControls.x().toggleOnTrue(intake.spinBottomWithLimit());
         manualControls.b().onTrue(intake.fastOutake().andThen(intake.stopSpinToKeep())).onFalse((intake.stopSpin()));
     }
-
+  
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 1).onTrue(arm.changeRotateOffset(1));
     buttonPanel.button(Constants.ControllerIds.BUTTON_PANEL_1, 2).onTrue(arm.changeRotateOffset(-1));
     
@@ -305,6 +305,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new SequentialCommandGroup(auton.getAuton().andThen(drivetrain.stopDrive()));
+    return auton.getAuton();
   }
 }
