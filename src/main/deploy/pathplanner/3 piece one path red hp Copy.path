@@ -31,15 +31,15 @@
         "y": 4.562747727492601
       },
       "prevControl": {
-        "x": 10.237155310259267,
-        "y": 4.619925017310805
+        "x": 10.240691252794024,
+        "y": 4.536884785676612
       },
       "nextControl": {
-        "x": 10.237155310259267,
-        "y": 4.619925017310805
+        "x": 8.727674859058707,
+        "y": 4.642795933238086
       },
       "holonomicAngle": 0,
-      "isReversal": true,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
